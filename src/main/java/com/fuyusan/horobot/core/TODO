@@ -1,0 +1,23 @@
+- Add Patreon plugs everyyywhheerreeeeee~!
+
+- Change the kick/ban commands
+    - Make the output in chat prettier
+    - Store data about the ban such as the reason in db
+    - Create a custom role with the case id with the reason in the description
+
+- Gag, mute etc commands
+
+- Measurement converter command
+    -Something like: .horoconv 15ft m
+
+- Calculator command
+    - Should be relatively simple, figure it out along the way ^^
+
+- Code eval command
+    - Write code in chat, compile at runtime and execute it
+
+- Implement an about this bot command
+    - Just a few generic things about myself, the bot and stuff
+
+- Implement a music function
+    - Load songs from youtube using some dependency because you're a lazy fuck
