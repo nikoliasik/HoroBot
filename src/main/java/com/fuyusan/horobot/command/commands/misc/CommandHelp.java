@@ -36,19 +36,95 @@ public class CommandHelp implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		try {
 			if (args.length == 0) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("```\n");
-				builder.append(Localisation.getPMMessage("help-list") + "\n\n");
-				for (String key : Main.commands.keySet()) {
-					builder.append(".horo" + key + "\n" + "    * " + Localisation.getPMMessage(key + "-help") + "\n\n");
-				}
-				builder.append("```\n");
 
-				String commands = builder.toString();
 
 				String tags[] = { "holo" };
 				Message.sendPMPic(HTMLHandler.requestKona(tags, KONA_RATING.SAFE), event);
-				event.getAuthor().getOrCreatePMChannel().sendMessage(commands);
+				event.getAuthor().getOrCreatePMChannel().sendMessage(
+						"```\n" +
+						"Here's a list of my commands:\n" +
+						"\n" +
+						".horops\n" +
+						"    * Usage: .horops - This is your pornstar name\n" +
+						"\n" +
+						".horoping\n" +
+						"    * Usage: .horoping - Returns pong and the ping in ms\n" +
+						"\n" +
+						".horochannel\n" +
+						"    * Usage: .horochannel [channel name/id] [modifier] - Adds a modifier to a channel. Valid modifiers are: ecchi, nsfw\n" +
+						"\n" +
+						".horolanguage\n" +
+						"    * Usage: .horolanguage [en/nl] - Changes the language HoroBot speaks\n" +
+						"\n" +
+						".horopurge\n" +
+						"    * Usage: .horopurge [count] - Deletes x messages from the channel\n" +
+						"\n" +
+						".hororemove\n" +
+						"    * Usage: .hororemove [user] [role] - Remove someones role\n" +
+						"\n" +
+						".horowoop\n" +
+						"    * Usage: .horowoop - WOOP~! WOOP~!\n" +
+						"\n" +
+						".horoban\n" +
+						"    * Usage: .horoban [user] [reason] - Bans a user with an optional reason\n" +
+						"\n" +
+						".horostats\n" +
+						"    * Usage: .horostats - See what my current stats are\n" +
+						"\n" +
+						".hororate\n" +
+						"    * Usage: .hororate - Horo will rate whatever you ask her to!\n" +
+						"\n" +
+						".horocat\n" +
+						"    * Usage: .horocat - A random image of a cute kitty~! Nyaa~!\n" +
+						"\n" +
+						".horoshoot\n" +
+						"    * Usage: .horoshoot [person] - Shoot at someone and see how you fare\n" +
+						"\n" +
+						".hororeboot\n" +
+						"    * This is a dev only command, it is not for the public\n" +
+						"\n" +
+						".horogithub\n" +
+						"    * Usage: .horogithub - Returns a link to the GitHub repository\n" +
+						"\n" +
+						".horokawaii\n" +
+						"    * Usage: .horokawaii [person] - See how kawaii someone is\n" +
+						"\n" +
+						".horokona\n" +
+						"    * Usage: .horokona [tags] - Search for a cute picture with given tags\n" +
+						"\n" +
+						".horonsfw\n" +
+						"    * Usage: .horonsfw [tags] - Search for an NSFW(18+) picture with given tags\n" +
+						"\n" +
+						".horosay\n" +
+						"    * Usage: .horosay [sentence] - Make me say what you want\n" +
+						"\n" +
+						".horocoinflip\n" +
+						"    * Usage: .horocoinflip - Flip a coin~! What will it be? Heads or tails?\n" +
+						"\n" +
+						".horohelp\n" +
+						"    * Usage: .horohelp or .horohelp [command] - Lists all commands or describes the command\n" +
+						"```");
+				event.getAuthor().getOrCreatePMChannel().sendMessage(
+						"```\n" +
+						".horo8ball\n" +
+						"    * Usage: .horo8ball [question] - Ask away~!\n" +
+						"\n" +
+						".horokick\n" +
+						"    * Usage: .horokick [user] [reason] - Kicks a user with an optional reason\n" +
+						"\n" +
+						".horoecchi\n" +
+						"    * Usage: .horoecchi [tags] - Search for an ecchi picture with given tags\n" +
+						"\n" +
+						".horoinvite\n" +
+						"    * Usage: .horoinvite - PMs an invite link for the bot\n" +
+						"\n" +
+						".horohug\n" +
+						"    * Usage: .horohug [@mention] - Give someone a big hug\n" +
+						"\n" +
+						".horoassign\n" +
+						"    * Usage: .horoassign [user] [role] - Assign a role to someone\n" +
+						"\n" +
+						"```");
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {
 				if(!event.getMessage().getChannel().isPrivate()) {
