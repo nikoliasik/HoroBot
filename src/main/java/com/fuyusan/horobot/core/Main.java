@@ -89,6 +89,7 @@ public class Main {
 		commands.put("rate", new CommandRate());
 		commands.put("purge", new CommandPurge());
 		commands.put("hug", new CommandHug());
+		commands.put("prefix", new CommandPrefix());
 
 		/*colors.put("black", Color.BLACK);
 		colors.put("blue", Color.BLUE);

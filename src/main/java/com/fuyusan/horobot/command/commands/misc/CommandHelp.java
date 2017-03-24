@@ -124,6 +124,8 @@ public class CommandHelp implements Command {
 						".horoassign\n" +
 						"    * Usage: .horoassign [user] [role] - Assign a role to someone\n" +
 						"\n" +
+						".horoprefix\n" +
+						"	* Usage: .horoprefix [prefix] - Change the prefix Horo uses, you will always be able to use .horo\n" +
 						"```");
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {

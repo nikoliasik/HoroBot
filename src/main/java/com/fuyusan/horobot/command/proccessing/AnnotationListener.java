@@ -43,7 +43,7 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
-		DataBase.insertGuild(event.getGuild().getID(), "en", ".horo", "Welcome~!");
+		DataBase.insertGuild(event.getGuild().getID());
 		if(event.getClient().isReady()) {
 			try {
 				event.getGuild().getChannels().get(0).sendMessage("This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
@@ -60,8 +60,13 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
-		if(event.getMessage().getContent().startsWith(".horo") && event.getMessage().getAuthor() != event.getClient().getOurUser()) {
-			Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), event));
+		if(event.getMessage().getAuthor() != event.getClient().getOurUser()) {
+			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
+			if(event.getMessage().getContent().startsWith(".horo")) {
+				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
+			} else if(event.getMessage().getContent().startsWith(prefix)) {
+				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+			}
 		}
 		Utility.messagesReceived++;
 	}

@@ -23,17 +23,17 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import java.util.ArrayList;
 
 public class CommandParser {
-	public CommandContainer parse(String rw, MessageReceivedEvent event) {
+	public CommandContainer parse(String rw, String prefix, MessageReceivedEvent event) {
 		ArrayList<String> split = new ArrayList<String>();
 		String raw = rw;
-		String beheaded = raw.replaceFirst(".horo", "");
+		String beheaded = beheaded = raw.replaceFirst(prefix, "");
 		String[] splitBeheaded = beheaded.split(" ");
 		
 		for(String s : splitBeheaded)
 			split.add(s);
 		
 		String invoke = split.get(0);
-		beheaded = raw.replaceFirst(".horo" + invoke, "");
+		beheaded = raw.replaceFirst(prefix + invoke, "");
 		String[] args = new String[split.size() - 1];
 		split.subList(1, split.size()).toArray(args);
 		

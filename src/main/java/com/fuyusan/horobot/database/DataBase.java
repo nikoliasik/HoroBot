@@ -58,14 +58,11 @@ public class DataBase {
 		}
 	}
 
-	public static void insertGuild(String guildID, String language, String prefix, String welcome) {
+	public static void insertGuild(String guildID) {
 		try {
 			Statement statement = con.createStatement();
-			String sql = String.format("INSERT INTO guilds.guild (id, language, prefix, welcome) VALUES ('%s', '%s', '%s', '%s') ON CONFLICT DO NOTHING;",
-										guildID,
-										language,
-										prefix,
-										welcome);
+			String sql = String.format("INSERT INTO guilds.guild (id, language, prefix, welcome) VALUES ('%s', 'en', '.horo', 'Welcome~!') ON CONFLICT DO NOTHING;",
+										guildID);
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
