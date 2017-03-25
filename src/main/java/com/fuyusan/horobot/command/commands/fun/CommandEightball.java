@@ -47,7 +47,7 @@ public class CommandEightball implements Command {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.withColor(Color.CYAN);
 			builder.appendField(raw, Localisation.getMessage(event.getGuild().getID(), "8ball-" + index), false);
-			builder.withAuthorName(event.getAuthor().getDisplayName(event.getGuild()));
+			builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
 			builder.withAuthorIcon(event.getAuthor().getAvatarURL());
 
 			event.getChannel().sendMessage("", builder.build(), false);

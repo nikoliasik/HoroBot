@@ -43,20 +43,21 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
-		DataBase.insertGuild(event.getGuild().getID());
-		if(event.getClient().isReady()) {
-			try {
-				event.getGuild().getChannels().get(0).sendMessage("This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
-			} catch (Exception e) {
-				e.printStackTrace();
+		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
+			System.out.println("nope, not there");
+			if (event.getClient().isReady()) {
+				try {
+					event.getGuild().getChannels().get(0).sendMessage("This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		DataBase.insertGuild(event.getGuild().getID()); // Just to be sure ;)
 	}
 	
 	@EventSubscriber
-	public void onGuildLeaveEvent(GuildLeaveEvent event) {
-		Localisation.removeGuild(event.getGuild().getID());
-	}
+	public void onGuildLeaveEvent(GuildLeaveEvent event) { DataBase.deleteGuild(event.getGuild().getID()); }
 	
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {

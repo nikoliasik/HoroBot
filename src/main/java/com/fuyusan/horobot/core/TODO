@@ -1,11 +1,6 @@
-- Add Patreon plugs everyyywhheerreeeeee~!
-
-- Change the kick/ban commands
-    - Make the output in chat prettier
-    - Store data about the ban such as the reason in db
-    - Create a custom role with the case id with the reason in the description
-
 - Gag, mute etc commands
+
+- Translator
 
 - Measurement converter command
     -Something like: .horoconv 15ft m

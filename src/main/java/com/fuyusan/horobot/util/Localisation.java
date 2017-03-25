@@ -31,10 +31,6 @@ public class Localisation {
 		return DataBase.guildQuery(guildID, "language");
 	}
 
-	public static void removeGuild(String guildID) {
-		DataBase.deleteGuild(guildID);
-	}
-
 	public static boolean changeLanguage (String guildID, String language) {
 		if (language.equals("en")) {
 			updateGuildLanguage(guildID, "en");

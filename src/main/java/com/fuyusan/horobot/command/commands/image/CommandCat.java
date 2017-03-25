@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.fuyusan.horobot.command.commands.fun;
+package com.fuyusan.horobot.command.commands.image;
 
 import com.fuyusan.horobot.util.HTMLHandler;
 import com.fuyusan.horobot.util.Message;
@@ -38,6 +38,8 @@ public class CommandCat implements Command {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.withImage(HTMLHandler.requestCat());
 			builder.withColor(Color.CYAN);
+			builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
+			builder.withAuthorIcon(event.getAuthor().getAvatarURL());
 
 			event.getChannel().sendMessage("", builder.build(), false);
 		} else {

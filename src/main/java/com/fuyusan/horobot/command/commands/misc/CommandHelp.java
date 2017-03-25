@@ -126,6 +126,18 @@ public class CommandHelp implements Command {
 						"\n" +
 						".horoprefix\n" +
 						"	* Usage: .horoprefix [prefix] - Change the prefix Horo uses, you will always be able to use .horo\n" +
+						"\n" +
+						".horopatreon\n" +
+						"	* Usage: .horopatreon = Get a link to the HoroBot Patreon page\n" +
+						"\n" +
+						".horoanime\n" +
+						"	* Usage: .horoanime [anime name] - Fetches information about the anime given\n" +
+						"\n" +
+						".horomanga\n" +
+						"	* Usage: .horomanga [manga name] - Search for a manga on MAL\n" +
+						"\n" +
+						".horourban\n" +
+						"	* Usage: .horourban [term] - Search for a term on UrbanDictionary\n" +
 						"```");
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {

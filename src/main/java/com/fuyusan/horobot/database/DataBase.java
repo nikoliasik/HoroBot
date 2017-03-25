@@ -115,11 +115,13 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = String.format("SELECT * FROM guilds.guild WHERE id='%s';", guildID);
 			ResultSet set = statement.executeQuery(sql);
-			while(set.next()) {
+			if(set.next()) {
 				return set.getString(index);
+			} else {
+				set.close();
+				statement.close();
+				return null;
 			}
-			set.close();
-			statement.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

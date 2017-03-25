@@ -23,6 +23,7 @@ import java.util.HashMap;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
+import com.fuyusan.horobot.command.commands.image.CommandCat;
 import com.fuyusan.horobot.command.commands.image.CommandEcchi;
 import com.fuyusan.horobot.command.commands.image.CommandExplicit;
 import com.fuyusan.horobot.command.commands.image.CommandKona;
@@ -40,7 +41,7 @@ import sx.blah.discord.api.events.EventDispatcher;
 
 public class Main {
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 	
 	public static ClientManager INSTANCE;
 	
@@ -80,7 +81,6 @@ public class Main {
 		commands.put("coinflip", new CommandCoinFlip());
 		commands.put("invite", new CommandInvite());
 		commands.put("cat", new CommandCat());
-		//commands.put("perm", new CommandPerm());
 		commands.put("ping", new CommandPing());
 		commands.put("github", new CommandGitHub());
 		commands.put("channel", new CommandChannel());
@@ -90,6 +90,11 @@ public class Main {
 		commands.put("purge", new CommandPurge());
 		commands.put("hug", new CommandHug());
 		commands.put("prefix", new CommandPrefix());
+		commands.put("patreon", new CommandPatreon());
+		commands.put("invert", new CommandInvert());
+		commands.put("anime", new CommandAnime());
+		commands.put("manga", new CommandManga());
+		commands.put("urban", new CommandUrban());
 
 		/*colors.put("black", Color.BLACK);
 		colors.put("blue", Color.BLUE);
