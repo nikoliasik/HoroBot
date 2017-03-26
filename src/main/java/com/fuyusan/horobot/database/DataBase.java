@@ -58,6 +58,30 @@ public class DataBase {
 		}
 	}
 
+	public static void createQueueSchema() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE SCHEMA IF NOT EXISTS queue;";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void createQueueTable() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS queue.queued (" +
+					"id TEXT PRIMARY KEY NOT NULL," +
+					"mod TEXT DEFAULT 'none');";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void insertGuild(String guildID) {
 		try {
 			Statement statement = con.createStatement();

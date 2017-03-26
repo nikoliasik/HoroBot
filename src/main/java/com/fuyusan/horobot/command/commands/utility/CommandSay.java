@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.fuyusan.horobot.command.commands.fun;
+package com.fuyusan.horobot.command.commands.utility;
 
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;

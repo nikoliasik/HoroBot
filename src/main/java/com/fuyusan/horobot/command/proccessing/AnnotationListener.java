@@ -22,6 +22,7 @@ import com.fuyusan.horobot.database.DataBase;
 import com.fuyusan.horobot.util.Localisation;
 import com.fuyusan.horobot.core.Main;
 import com.fuyusan.horobot.util.Utility;
+import com.fuyusan.horobot.util.music.MusicUtils;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
@@ -44,7 +45,6 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
 		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
-			System.out.println("nope, not there");
 			if (event.getClient().isReady()) {
 				try {
 					event.getGuild().getChannels().get(0).sendMessage("This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
@@ -57,7 +57,10 @@ public class AnnotationListener {
 	}
 	
 	@EventSubscriber
-	public void onGuildLeaveEvent(GuildLeaveEvent event) { DataBase.deleteGuild(event.getGuild().getID()); }
+	public void onGuildLeaveEvent(GuildLeaveEvent event) {
+		MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
+		DataBase.deleteGuild(event.getGuild().getID());
+	}
 	
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {

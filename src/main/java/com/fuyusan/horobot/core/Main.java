@@ -19,6 +19,7 @@
 package com.fuyusan.horobot.core;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
@@ -28,25 +29,36 @@ import com.fuyusan.horobot.command.commands.image.CommandEcchi;
 import com.fuyusan.horobot.command.commands.image.CommandExplicit;
 import com.fuyusan.horobot.command.commands.image.CommandKona;
 import com.fuyusan.horobot.command.commands.misc.*;
+import com.fuyusan.horobot.command.commands.music.*;
+import com.fuyusan.horobot.command.commands.utility.CommandInvert;
+import com.fuyusan.horobot.command.commands.utility.CommandSay;
+import com.fuyusan.horobot.command.commands.utility.CommandTranslate;
+import com.fuyusan.horobot.command.commands.utility.CommandUrban;
 import com.fuyusan.horobot.command.proccessing.AnnotationListener;
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.command.proccessing.CommandContainer;
 import com.fuyusan.horobot.command.proccessing.CommandParser;
 import com.fuyusan.horobot.database.DataBase;
-import com.fuyusan.horobot.util.Localisation;
 import com.fuyusan.horobot.util.Message;
+import com.fuyusan.horobot.util.music.GuildMusicManager;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
 
 public class Main {
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 	
 	public static ClientManager INSTANCE;
 	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
 	public static final CommandParser parser = new CommandParser();
+
+	public static AudioPlayerManager playerManager;
+	public static Map<String, GuildMusicManager> musicManagers;
 	
 	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
 	
@@ -95,6 +107,22 @@ public class Main {
 		commands.put("anime", new CommandAnime());
 		commands.put("manga", new CommandManga());
 		commands.put("urban", new CommandUrban());
+		commands.put("join", new CommandJoin());
+		commands.put("leave", new CommandLeave());
+		commands.put("play", new CommandPlay());
+		commands.put("pause", new CommandPause());
+		commands.put("unpause", new CommandUnpause());
+		commands.put("skip", new CommandSkip());
+		commands.put("repeat", new CommandRepeat());
+		commands.put("song", new CommandSong());
+		//commands.put("shuffle", new CommandShuffle());
+		//commands.put("loop", new CommandLoop()); // Loop through the song queue endlessly
+		commands.put("translate", new CommandTranslate());
+
+		musicManagers = new HashMap<String, GuildMusicManager>();
+		playerManager = new DefaultAudioPlayerManager();
+		AudioSourceManagers.registerRemoteSources(playerManager);
+		AudioSourceManagers.registerLocalSource(playerManager);
 
 		/*colors.put("black", Color.BLACK);
 		colors.put("blue", Color.BLUE);
@@ -110,7 +138,7 @@ public class Main {
 		colors.put("white", Color.WHITE);
 		colors.put("yellow", Color.YELLOW);*/
 	}
-	
+
 	public static void handleCommand(CommandContainer cmd) {
 		if (cmd.event.getMessage().getChannel().isPrivate()) {
 			if(!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
@@ -127,12 +155,12 @@ public class Main {
 				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
 				commands.get(cmd.invoke).executed(safe, cmd.event);
 			} else {
-				Message.reply("insufficient-perms", cmd.event.getMessage());
+				cmd.event.getMessage().addReaction("\uD83D\uDEAB");
 				commands.get(cmd.invoke).executed(safe, cmd.event);
 			}
 		} else {
 			try {
-				Message.replyRaw("`" + cmd.raw + "` " + Localisation.getMessage(cmd.event.getMessage().getGuild().getID(), "no-command"), cmd.event.getMessage());
+				cmd.event.getMessage().addReaction("❓");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

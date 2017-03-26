@@ -1,4 +1,4 @@
-package com.fuyusan.horobot.command.commands.fun;
+package com.fuyusan.horobot.command.commands.utility;
 
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.util.Message;

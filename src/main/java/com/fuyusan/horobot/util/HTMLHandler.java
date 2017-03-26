@@ -31,6 +31,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.*;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -40,6 +41,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Random;
 
@@ -78,6 +80,50 @@ public class HTMLHandler {
 			e.printStackTrace();
 		}
 		return "Error";
+	}
+
+	public static String searchYouTube(String search) {
+		try {
+			String temp = URLEncoder.encode(search, "UTF-8");
+			String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + temp + "&maxResults=10&key=" + Config.youtubeKey;
+			HttpResponse<JsonNode> response = Unirest.get(url)
+					.header("Accept", "text/plain")
+					.asJson();
+			if(response.getStatus() == 200) {
+				return "https://www.youtube.com/watch?v=" + response.getBody().getObject().getJSONArray("items").getJSONObject(0).getJSONObject("id").getString("videoId");
+			} else {
+				return null;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static EmbedObject requestTranslation(String from, String to, String text, String author, String authorIcon) {
+		try {
+			String temp = URLEncoder.encode(text, "UTF-8");
+			String url = "http://www.transltr.org/api/translate?text=" + temp + "&to=" + to + "&from=" + from;
+			HttpResponse<JsonNode> response = Unirest.get(url)
+					.header("X-Mashape-Key", Config.mashapeKey)
+					.header("Accept", "text/plain")
+					.asJson();
+
+			if(response.getStatus() == 200) {
+				String translation = response.getBody().getObject().getString("translationText");
+				EmbedBuilder embedBuilder = new EmbedBuilder();
+				embedBuilder.withColor(Color.CYAN);
+				embedBuilder.withAuthorName("Requested by @" + author);
+				embedBuilder.withAuthorIcon(authorIcon);
+				embedBuilder.appendField(text, translation, false);
+				return embedBuilder.build();
+			} else {
+				return null;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static EmbedObject requestUrban(String term, String author, String authorIcon) {
