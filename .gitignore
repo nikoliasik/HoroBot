@@ -45,7 +45,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-*.xml
 *.jar
 *.class
 target/classes/META-INF/MANIFEST.MF
@@ -59,3 +58,5 @@ target/classes/images/hug/1.gif
 target/classes/images/hug/5.gif
 target/classes/images/hug/6.gif
 src/main/java/com/fuyusan/horobot/core/Config.java
+*.xml
+!pom.xml
