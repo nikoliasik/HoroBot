@@ -60,12 +60,12 @@ public class Localisation {
 				return nlLang.getString(str);
 			}
 		}
-		return "Localisation error";
+		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}
 	
 	public static String getPMMessage(String str) {
 		if(enLang.containsKey(str))
 			return enLang.getString(str);
-		return "Localisation error";
+		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}
 }

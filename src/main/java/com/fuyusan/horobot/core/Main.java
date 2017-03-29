@@ -47,10 +47,11 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
+import sx.blah.discord.util.RequestBuffer;
 
 public class Main {
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 
 	public static ClientManager INSTANCE;
 	
@@ -143,7 +144,9 @@ public class Main {
 	public static void handleCommand(CommandContainer cmd) {
 		if (cmd.event.getMessage().getChannel().isPrivate()) {
 			if(!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
-				Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
+				RequestBuffer.request(() -> {
+					Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
+				});
 				commands.get(cmd.invoke).executed(false, cmd.event);
 				return;
 			}
@@ -156,12 +159,16 @@ public class Main {
 				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
 				commands.get(cmd.invoke).executed(safe, cmd.event);
 			} else {
-				cmd.event.getMessage().addReaction("\uD83D\uDEAB");
+				RequestBuffer.request(() -> {
+					cmd.event.getMessage().addReaction("\uD83D\uDEAB");
+				});
 				commands.get(cmd.invoke).executed(safe, cmd.event);
 			}
 		} else {
 			try {
-				cmd.event.getMessage().addReaction("❓");
+				RequestBuffer.request(() -> {
+					cmd.event.getMessage().addReaction("❓");
+				});
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

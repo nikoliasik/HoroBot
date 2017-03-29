@@ -18,8 +18,8 @@ public class CommandJoin implements Command {
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(args.length == 1) {
-			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.VOICE_CONNECT)) {
+		if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.VOICE_CONNECT)) {
+			if (args.length == 1) {
 				IVoiceChannel channel = null;
 				if (channel == null)
 					channel = event.getGuild().getVoiceChannelByID(args[0]);
@@ -31,14 +31,14 @@ public class CommandJoin implements Command {
 
 				if (channel != null) {
 					channel.join();
-					Message.sendMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "joined-voice"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "joined-voice"));
 				} else {
 					Message.reply("no-voice-channel", event.getMessage());
 				}
 			} else {
 				if (event.getAuthor().getVoiceStateForGuild(event.getGuild()).getChannel() != null) {
 					event.getGuild().getVoiceChannelByID(event.getAuthor().getVoiceStateForGuild(event.getGuild()).getChannel().getID()).join();
-					Message.sendMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "joined-voice"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "joined-voice"));
 				} else {
 					Message.reply("no-voice-channel", event.getMessage());
 				}

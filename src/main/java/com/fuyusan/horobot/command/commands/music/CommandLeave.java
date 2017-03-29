@@ -22,7 +22,7 @@ public class CommandLeave implements Command {
 			if(event.getGuild().getConnectedVoiceChannel() != null) {
 				MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
 				event.getGuild().getConnectedVoiceChannel().leave();
-				Message.sendMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "left-voice"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "left-voice"));
 			} else {
 				Message.reply("not-in-channel", event.getMessage());
 			}
