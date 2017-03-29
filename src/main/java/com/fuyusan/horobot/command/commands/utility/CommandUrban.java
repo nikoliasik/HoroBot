@@ -5,6 +5,7 @@ import com.fuyusan.horobot.util.HTMLHandler;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandUrban implements Command {
 
@@ -14,10 +15,10 @@ public class CommandUrban implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
-			try {
-				event.getChannel().sendMessage(HTMLHandler.requestUrban(args[0], event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL()));
-			} catch(Exception e) {
-				e.printStackTrace();
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				Message.sendEmbed(event.getChannel(), "", HTMLHandler.requestUrban(args[0], event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL()), false);
+			} else {
+				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

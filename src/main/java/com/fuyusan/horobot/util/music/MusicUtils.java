@@ -2,6 +2,7 @@ package com.fuyusan.horobot.util.music;
 
 import com.fuyusan.horobot.core.Main;
 import com.fuyusan.horobot.util.Localisation;
+import com.fuyusan.horobot.util.Message;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -79,6 +80,6 @@ public class MusicUtils {
 	}
 
 	public static void sendMessage(MessageReceivedEvent event, String message) {
-		event.getChannel().sendMessage(message);
+		Message.sendRawMessageInChannel(event.getChannel(), message);
 	}
 }

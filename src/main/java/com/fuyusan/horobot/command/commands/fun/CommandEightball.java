@@ -23,6 +23,7 @@ import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.command.proccessing.Command;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
@@ -38,19 +39,23 @@ public class CommandEightball implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
-			Random rand = new Random();
-			int index = 0;
-			while(index == 0) {
-				index = rand.nextInt(responses);
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				Random rand = new Random();
+				int index = 0;
+				while (index == 0) {
+					index = rand.nextInt(responses);
+				}
+
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.withColor(Color.CYAN);
+				builder.appendField(raw, Localisation.getMessage(event.getGuild().getID(), "8ball-" + index), false);
+				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
+				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+
+				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
+			} else {
+				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}
-
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.withColor(Color.CYAN);
-			builder.appendField(raw, Localisation.getMessage(event.getGuild().getID(), "8ball-" + index), false);
-			builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
-			builder.withAuthorIcon(event.getAuthor().getAvatarURL());
-
-			event.getChannel().sendMessage("", builder.build(), false);
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

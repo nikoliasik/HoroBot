@@ -16,7 +16,7 @@ public class CommandSkip implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			MusicUtils.skipTrack(event.getChannel());
-			event.getChannel().sendMessage(Localisation.getMessage(event.getGuild().getID(), "track-skipped"));
+			Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "track-skipped"));
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

@@ -17,9 +17,9 @@ public class CommandUnpause implements Command {
 		if(args.length == 0) {
 			if (event.getGuild().getConnectedVoiceChannel() != null) {
 				MusicUtils.unpause(event.getGuild(), MusicUtils.getGuildAudioPlayer(event.getGuild()));
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "resumed"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "resumed"));
 			} else {
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

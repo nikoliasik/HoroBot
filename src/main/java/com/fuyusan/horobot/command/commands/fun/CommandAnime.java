@@ -6,6 +6,7 @@ import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.Permissions;
 
 
 public class CommandAnime implements Command {
@@ -16,11 +17,15 @@ public class CommandAnime implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
-			EmbedObject anime = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 0);
-			if(anime != null) {
-				event.getChannel().sendMessage(anime);
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				EmbedObject anime = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 0);
+				if (anime != null) {
+					Message.sendEmbed(event.getChannel(), "", anime, false);
+				} else {
+					Message.reply("html-no-results", event.getMessage());
+				}
 			} else {
-				Message.reply("html-no-results", event.getMessage());
+				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

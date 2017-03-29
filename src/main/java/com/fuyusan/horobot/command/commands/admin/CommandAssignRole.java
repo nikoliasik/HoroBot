@@ -38,47 +38,51 @@ public class CommandAssignRole implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
-			IUser user = null;
-			if (event.getMessage().getMentions().size() == 1) {
-				user = event.getMessage().getMentions().get(0);
-			}
-			if (user == null)
-				user = event.getGuild().getUserByID(args[0]);
-			if (user == null) {
-				if (event.getGuild().getUsersByName(args[0]).size() == 1) {
-					user = event.getGuild().getUsersByName(args[0]).get(0);
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_ROLES)) {
+				IUser user = null;
+				if (event.getMessage().getMentions().size() == 1) {
+					user = event.getMessage().getMentions().get(0);
 				}
-			}
-
-			IRole role = null;
-			if (event.getMessage().getRoleMentions().size() == 1) {
-				role = event.getMessage().getRoleMentions().get(0);
-			}
-			if (role == null)
-				role = event.getGuild().getRoleByID(args[1]);
-			if (role == null) {
-				if (event.getGuild().getRolesByName(args[1]).size() == 1) {
-					role = event.getGuild().getRolesByName(args[1]).get(0);
+				if (user == null)
+					user = event.getGuild().getUserByID(args[0]);
+				if (user == null) {
+					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
+						user = event.getGuild().getUsersByName(args[0]).get(0);
+					}
 				}
-			}
 
-			if(role != null) {
-				if (user != null) {
-					if (!user.getRolesForGuild(event.getGuild()).contains(role)) {
-						try {
-							user.addRole(role);
-							Message.reply("user-role-added", event.getMessage());
-						} catch (Exception e) {
-							e.printStackTrace();
+				IRole role = null;
+				if (event.getMessage().getRoleMentions().size() == 1) {
+					role = event.getMessage().getRoleMentions().get(0);
+				}
+				if (role == null)
+					role = event.getGuild().getRoleByID(args[1]);
+				if (role == null) {
+					if (event.getGuild().getRolesByName(args[1]).size() == 1) {
+						role = event.getGuild().getRolesByName(args[1]).get(0);
+					}
+				}
+
+				if (role != null) {
+					if (user != null) {
+						if (!user.getRolesForGuild(event.getGuild()).contains(role)) {
+							try {
+								user.addRole(role);
+								Message.reply("user-role-added", event.getMessage());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						} else {
+							Message.reply("has-role", event.getMessage());
 						}
 					} else {
-						Message.reply("has-role", event.getMessage());
+						Message.reply("user-not-found", event.getMessage());
 					}
 				} else {
-					Message.reply("user-not-found", event.getMessage());
+					Message.reply("no-role", event.getMessage());
 				}
 			} else {
-				Message.reply("no-role", event.getMessage());
+				Message.sendMessageInChannel(event.getChannel(), "missing-manage-roles-perm");
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

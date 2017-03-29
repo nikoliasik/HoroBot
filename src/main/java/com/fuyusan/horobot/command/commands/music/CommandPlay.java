@@ -27,11 +27,11 @@ public class CommandPlay implements Command {
 					if(link != null) {
 						MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
 					} else {
-						event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "html-no-results"));
+						Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "html-no-results"));
 					}
 				}
 			} else {
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

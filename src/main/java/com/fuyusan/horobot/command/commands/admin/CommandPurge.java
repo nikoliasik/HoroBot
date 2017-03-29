@@ -17,11 +17,17 @@ public class CommandPurge implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
-			try {
-				int messages = Integer.parseInt(args[0]);
-				event.getChannel().getMessageHistory(messages).bulkDelete();
-				event.getChannel().sendMessage(String.format(Localisation.getMessage(event.getGuild().getID(), "purged-messages"), messages));
-			} catch(Exception e) { e.printStackTrace(); }
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_MESSAGES)) {
+				try {
+					int messages = Integer.parseInt(args[0]);
+					event.getChannel().getMessageHistory(messages).bulkDelete();
+					Message.sendRawMessageInChannel(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getID(), "purged-messages"), messages));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				Message.sendMessageInChannel(event.getChannel(), "missing-messages-manage-perm");
+			}
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

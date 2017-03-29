@@ -20,11 +20,11 @@ public class CommandPrefix implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			event.getChannel().sendMessage(String.format(Localisation.getMessage(event.getGuild().getID(), "current-prefix"), DataBase.guildQuery(event.getGuild().getID(), "prefix")));
+			Message.sendRawMessageInChannel(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getID(), "current-prefix"), DataBase.guildQuery(event.getGuild().getID(), "prefix")));
 		} else if(args.length == 1) {
 			DataBase.insertGuild(event.getGuild().getID());
 			DataBase.updateGuild(event.getGuild().getID(), "prefix", args[0]);
-			event.getChannel().sendMessage(String.format(Localisation.getMessage(event.getGuild().getID(), "prefix-updated"), args[0]));
+			Message.sendRawMessageInChannel(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getID(), "prefix-updated"), args[0]));
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

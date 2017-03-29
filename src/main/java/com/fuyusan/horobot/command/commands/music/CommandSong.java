@@ -41,12 +41,12 @@ public class CommandSong implements Command {
 					builder.withAuthorIcon(event.getAuthor().getAvatarURL());
 					builder.appendField("Current Song", string.toString(), false);
 
-					event.getChannel().sendMessage(builder.build());
+					Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 				} else {
-					event.getChannel().sendMessage(Localisation.getMessage(event.getGuild().getID(), "no-song-playing"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "no-song-playing"));
 				}
 			} else {
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

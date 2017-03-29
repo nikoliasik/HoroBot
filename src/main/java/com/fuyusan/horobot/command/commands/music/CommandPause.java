@@ -18,9 +18,9 @@ public class CommandPause implements Command {
 		if(args.length == 0) {
 			if (event.getGuild().getConnectedVoiceChannel() != null) {
 				MusicUtils.pause(event.getGuild(), MusicUtils.getGuildAudioPlayer(event.getGuild()));
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "paused"));
+				Message.sendMessageInChannel(event.getChannel(),"paused");
 			} else {
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+				Message.sendMessageInChannel(event.getChannel(), "not-in-channel");
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

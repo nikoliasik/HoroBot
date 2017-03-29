@@ -22,6 +22,9 @@ import com.fuyusan.horobot.core.Config;
 import com.fuyusan.horobot.core.Main;
 import com.fuyusan.horobot.database.DataBase;
 import sx.blah.discord.Discord4J;
+import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
@@ -41,6 +44,10 @@ public class Utility {
 	public static String memory;
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
+
+	public static boolean checkUserPermission(IGuild guild, IUser user, Permissions permission) {
+		return (user.getPermissionsForGuild(guild).contains(permission));
+	}
 
 	public static String getChannelMod(String channelID) {
 		return DataBase.channelQuery(channelID);

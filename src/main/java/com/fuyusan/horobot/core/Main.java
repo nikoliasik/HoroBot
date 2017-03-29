@@ -50,8 +50,8 @@ import sx.blah.discord.api.events.EventDispatcher;
 
 public class Main {
 	
-	public static boolean debug = false;
-	
+	public static boolean debug = true;
+
 	public static ClientManager INSTANCE;
 	
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
@@ -117,9 +117,10 @@ public class Main {
 		commands.put("song", new CommandSong());
 		//commands.put("shuffle", new CommandShuffle());
 		//commands.put("loop", new CommandLoop()); // Loop through the song queue endlessly
+		//commands.put("queue", new CommandQueue());
 		commands.put("translate", new CommandTranslate());
 
-		musicManagers = new HashMap<String, GuildMusicManager>();
+		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		AudioSourceManagers.registerLocalSource(playerManager);

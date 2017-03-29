@@ -21,8 +21,8 @@ package com.fuyusan.horobot.command.commands.misc;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.command.proccessing.Command;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandStats implements Command {
 
@@ -32,7 +32,11 @@ public class CommandStats implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			Message.replyInChannel(Utility.getStats(event.getClient().getOurUser().getShard().getInfo()[0], event.getClient().getShardCount(), event.getClient().getGuilds().size()), event.getMessage());
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				Message.sendRawMessageInChannel(event.getChannel(), Utility.getStats(event.getClient().getOurUser().getShard().getInfo()[0], event.getClient().getShardCount(), event.getClient().getGuilds().size()));
+			} else {
+				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
+			}
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

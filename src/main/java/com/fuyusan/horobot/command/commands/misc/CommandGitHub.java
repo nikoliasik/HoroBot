@@ -31,7 +31,7 @@ public class CommandGitHub implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			Message.replyInChannel("https://github.com/AppleBunnyLife/HoroBot", event.getMessage());
+			Message.sendRawMessageInChannel(event.getChannel(), "https://github.com/AppleBunnyLife/HoroBot");
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

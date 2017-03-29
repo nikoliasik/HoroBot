@@ -60,3 +60,4 @@ target/classes/images/hug/6.gif
 src/main/java/com/fuyusan/horobot/core/Config.java
 *.xml
 !pom.xml
+src/main/java/META-INF/MANIFEST.MF

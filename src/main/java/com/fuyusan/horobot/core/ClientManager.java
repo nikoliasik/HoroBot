@@ -40,11 +40,7 @@ public class ClientManager {
 		
 		ClientBuilder clientBuilder = new ClientBuilder();
 		clientBuilder.withToken(token);
-		if(Main.debug) {
-			clientBuilder.withShards(1);
-		} else {
-			clientBuilder.withShards(2);
-		}
+		clientBuilder.withRecommendedShardCount();
 		
 		try {
 			IDiscordClient client = clientBuilder.login();

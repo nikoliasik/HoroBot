@@ -17,12 +17,12 @@ public class CommandRepeat implements Command {
 		if(args.length == 0) {
 			if (event.getGuild().getConnectedVoiceChannel() != null) {
 				if(MusicUtils.getGuildAudioPlayer(event.getGuild()).scheduler.toggleRepeat()) {
-					event.getChannel().sendMessage(Localisation.getMessage(event.getGuild().getID(), "repeat-on"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "repeat-on"));
 				} else {
-					event.getChannel().sendMessage(Localisation.getMessage(event.getGuild().getID(), "repeat-off"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "repeat-off"));
 				}
 			} else {
-				event.getChannel().sendMessage(Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
 			}
 		} else {
 			Message.reply(help(), event.getMessage());
