@@ -1,7 +1,5 @@
 - Gag, mute etc commands
 
-- Translator
-
 - Measurement converter command
     -Something like: .horoconv 15ft m
 
@@ -13,6 +11,3 @@
 
 - Implement an about this bot command
     - Just a few generic things about myself, the bot and stuff
-
-- Implement a music function
-    - Load songs from youtube using some dependency because you're a lazy fuck

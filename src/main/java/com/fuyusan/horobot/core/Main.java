@@ -30,10 +30,7 @@ import com.fuyusan.horobot.command.commands.image.CommandExplicit;
 import com.fuyusan.horobot.command.commands.image.CommandKona;
 import com.fuyusan.horobot.command.commands.misc.*;
 import com.fuyusan.horobot.command.commands.music.*;
-import com.fuyusan.horobot.command.commands.utility.CommandInvert;
-import com.fuyusan.horobot.command.commands.utility.CommandSay;
-import com.fuyusan.horobot.command.commands.utility.CommandTranslate;
-import com.fuyusan.horobot.command.commands.utility.CommandUrban;
+import com.fuyusan.horobot.command.commands.utility.*;
 import com.fuyusan.horobot.command.proccessing.AnnotationListener;
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.command.proccessing.CommandContainer;
@@ -110,15 +107,16 @@ public class Main {
 		commands.put("urban", new CommandUrban());
 		commands.put("join", new CommandJoin());
 		commands.put("leave", new CommandLeave());
-		commands.put("play", new CommandPlay());
+		commands.put("play", new CommandPlay()); // TODO: Change this to give multiple options to pick from
 		commands.put("pause", new CommandPause());
 		commands.put("unpause", new CommandUnpause());
 		commands.put("skip", new CommandSkip());
 		commands.put("repeat", new CommandRepeat());
 		commands.put("song", new CommandSong());
+		//commands.put("voteskip", new CommandVoteSkip());
 		//commands.put("shuffle", new CommandShuffle());
-		//commands.put("loop", new CommandLoop()); // Loop through the song queue endlessly
-		//commands.put("queue", new CommandQueue());
+		//commands.put("loop", new CommandLoop());
+		//commands.put("queue", new CommandQueue()); // TODO: Fetch a list of all the songs currently in queue
 		commands.put("translate", new CommandTranslate());
 
 		musicManagers = new HashMap<>();
