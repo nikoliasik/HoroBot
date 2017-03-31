@@ -28,6 +28,7 @@ import sx.blah.discord.util.RequestBuffer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 
 public class Message {
 
@@ -65,9 +66,9 @@ public class Message {
 		});
 	}
 
-	public static void sendMessageInChannel(IChannel channel, String message) {
+	public static void sendMessageInChannel(IChannel channel, String message, Object... args) {
 		RequestBuffer.request(() -> {
-			channel.sendMessage(Localisation.getMessage(channel.getGuild().getID(), message));
+			channel.sendMessage(String.format(Localisation.getMessage(channel.getGuild().getID(), message), args));
 		});
 	}
 

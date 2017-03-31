@@ -2,6 +2,7 @@ package com.fuyusan.horobot.command.commands.wolf;
 
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.database.DataBase;
+import com.fuyusan.horobot.util.Localisation;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.wolf.WolfCosmetics;
@@ -38,7 +39,7 @@ public class CommandWolf implements Command {
 						hunger += foodValue;
 						DataBase.updateWolf(event.getAuthor(), "hunger", hunger);
 
-						StringBuilder message = new StringBuilder(String.format("You decide to feed your wolf a %s\n", args[1]));
+						StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", args[1]));
 						if (hunger >= maxHunger) {
 							for(int i = 0; i <= Math.floor(maxHunger / hunger); i++) {
 								int nextHunger = (7 + template.getLevel());
@@ -54,16 +55,22 @@ public class CommandWolf implements Command {
 					}
 				}
 			} else if (args[0].equals("rename")) {
-				DataBase.updateWolf(event.getAuthor(), "name", Arrays.stream(args).skip(1).collect(Collectors.joining(" ")));
-				Message.reply("success", event.getMessage());
+				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
+				if(temp.length() <= 30) {
+					DataBase.updateWolf(event.getAuthor(), "name", temp);
+					Message.sendMessageInChannel(event.getChannel(), "name-success", temp);
+				} else {
+					Message.sendMessageInChannel(event.getChannel(), "name-too-long");
+				}
 			} else if (args[0].equals("background")) {
-				String background = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if(!WolfCosmetics.backgrounds.containsKey(background)) {
-					Message.reply("wrong-background", event.getMessage());
+				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
+				System.out.println(temp);
+				if(!WolfCosmetics.backgrounds.containsKey(temp)) {
+					Message.sendMessageInChannel(event.getChannel(), "wrong-background");
 					return;
 				}
-				DataBase.updateWolf(event.getAuthor(), "background", background);
-				Message.reply("success", event.getMessage());
+				DataBase.updateWolf(event.getAuthor(), "background", WolfCosmetics.backgrounds.get(temp));
+				Message.sendMessageInChannel(event.getChannel(), "background-success", temp);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "no-sub-command");
 			}
@@ -82,14 +89,4 @@ public class CommandWolf implements Command {
 		if (success)
 			Utility.commandsExecuted++;
 	}
-
-	/*
-	 * I sexually Identify as an Attack Helicopter.
-	 * Ever since I was a boy I dreamed of soaring over the oilfields dropping hot sticky loads on disgusting foreigners.
-	 * People say to me that a person being a helicopter is Impossible and I’m fucking retarded but I don’t care, I’m beautiful.
-	 * I’m having a plastic surgeon install rotary blades, 30 mm cannons and AMG-114 Hellfire missiles on my body.
-	 * From now on I want you guys to call me “Apache” and respect my right to kill from above and kill needlessly.
-	 * If you can’t accept me you’re a heliphobe and need to check your vehicle privilege.
-	 * Thank you for being so understanding.
-	 */
 }

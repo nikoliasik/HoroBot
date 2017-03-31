@@ -11,7 +11,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-gb9ce1de-203" level="project" />
-    <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-g5ee006a-212" level="project" />
+    <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-g6f61e96-225" level="project" />
     <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-g6f61e96-225" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.24" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.6" level="project" />
@@ -39,7 +39,8 @@
     <orderEntry type="library" name="Maven: com.googlecode.soundlibs:tritonus-share:0.3.7-3" level="project" />
     <orderEntry type="library" name="Maven: org.tritonus:tritonus-dsp:0.3.6" level="project" />
     <orderEntry type="library" name="Maven: com.vdurmont:emoji-java:3.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.24" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.7" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.7" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.16.1" level="project" />
     <orderEntry type="library" name="Maven: postgresql:postgresql:9.4.1208-jdbc42-atlassian-hosted" level="project" />
     <orderEntry type="library" name="Maven: com.mashape.unirest:unirest-java:1.4.9" level="project" />

@@ -76,7 +76,7 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS wolves.wolf(" +
 					"id TEXT PRIMARY KEY NOT NULL," +
-					"name TEXT NOT NULL DEFAULT 'WolfProfileBuilder'," +
+					"name TEXT NOT NULL DEFAULT 'Wolf'," +
 					"level INTEGER NOT NULL DEFAULT 1," +
 					"hunger INTEGER NOT NULL DEFAULT 0," +
 					"maxHunger INTEGER NOT NULL DEFAULT 8," +

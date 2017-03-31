@@ -115,10 +115,12 @@ public class Main {
 		commands.put("song", new CommandSong());
 		//commands.put("voteskip", new CommandVoteSkip());
 		//commands.put("shuffle", new CommandShuffle());
-		//commands.put("loop", new CommandLoop());
+		//commands.put("loop", new CommandLoop()); // TODO: THIS ONE IS A PRIORITY
 		//commands.put("queue", new CommandQueue()); // TODO: Fetch a list of all the songs currently in queue
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
+
+		// TODO: Make Horo leave all voice channels upon reboot
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
