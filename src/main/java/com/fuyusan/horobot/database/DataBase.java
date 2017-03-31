@@ -1,6 +1,7 @@
 package com.fuyusan.horobot.database;
 
 import com.fuyusan.horobot.core.Config;
+import com.fuyusan.horobot.wolf.WolfTemplate;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.sql.*;
@@ -75,14 +76,15 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS wolves.wolf(" +
 					"id TEXT PRIMARY KEY NOT NULL," +
-					"name TEXT NOT NULL DEFAULT 'wolf'," +
+					"name TEXT NOT NULL DEFAULT 'WolfProfileBuilder'," +
 					"level INTEGER NOT NULL DEFAULT 1," +
 					"hunger INTEGER NOT NULL DEFAULT 0," +
 					"maxHunger INTEGER NOT NULL DEFAULT 8," +
-					"background TEXT NOT NULL DEFAULT 'default'," +
-					"hat TEXT NOT NULL DEFAULT 'none'," +
-					"body TEXT NOT NULL DEFAULT 'none'," +
-					"paws TEXT NOT NULL DEFAULT 'none');";
+					"background TEXT NOT NULL DEFAULT 'Default'," +
+					"hat TEXT NOT NULL DEFAULT 'None'," +
+					"body TEXT NOT NULL DEFAULT 'None'," +
+					"paws TEXT NOT NULL DEFAULT 'None'," +
+					"tail TEXT NOT NULL DEFAULT 'None');";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -192,14 +194,42 @@ public class DataBase {
 			String sql = String.format("SELECT * FROM channels.channel WHERE id='%s';", channelID);
 			ResultSet set = statement.executeQuery(sql);
 			while(set.next()) {
-				return set.getString("mod");
+				String mod = set.getString("mod");
+				set.close();
+				statement.close();
+				return mod;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return "none";
+	}
+
+	public static WolfTemplate wolfQuery(IUser user) {
+		WolfTemplate template = null;
+		try {
+			Statement statement = con.createStatement();
+			String sql = String.format("SELECT * FROM wolves.wolf WHERE id='%s'", user.getID());
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				template = new WolfTemplate(
+						set.getString("name"),
+						set.getInt("level"),
+						set.getInt("hunger"),
+						set.getInt("maxHunger"),
+						set.getString("background"),
+						set.getString("hat"),
+						set.getString("body"),
+						set.getString("paws"),
+						set.getString("tail")
+				);
 			}
 			set.close();
 			statement.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return "none";
+		return template;
 	}
 
 	public static void deleteGuild(String guildID) {
