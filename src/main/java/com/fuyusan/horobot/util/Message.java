@@ -20,15 +20,14 @@ package com.fuyusan.horobot.util;
 
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.impl.obj.Embed;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class Message {
 
@@ -42,19 +41,25 @@ public class Message {
 		});
 	}
 
+	public static void sendFile(IChannel channel, String message, String name, InputStream file) {
+		RequestBuffer.request(() -> {
+			channel.sendFile(message, false, file, name);
+		});
+	}
+
 	public static void sendEmbed(IChannel channel, String message, EmbedObject embed, boolean inline) {
 		RequestBuffer.request(() -> {
 			channel.sendMessage(message, embed, inline);
 		});
 	}
 
-	public static void reply (String str, IMessage message) {
+	public static void reply(String str, IMessage message) {
 		RequestBuffer.request(() -> {
 			message.reply(Localisation.getMessage(message.getGuild().getID(), str));
 		});
 	}
-	
-	public static void replyRaw (String str, IMessage message) {
+
+	public static void replyRaw(String str, IMessage message) {
 		RequestBuffer.request(() -> {
 			message.reply(str);
 		});
@@ -65,7 +70,7 @@ public class Message {
 			channel.sendMessage(Localisation.getMessage(channel.getGuild().getID(), message));
 		});
 	}
-	
+
 	public static void sendRawMessageInChannel(IChannel channel, String message) {
 		RequestBuffer.request(() -> {
 			channel.sendMessage(message);
@@ -77,15 +82,15 @@ public class Message {
 			user.getOrCreatePMChannel().sendMessage(Localisation.getPMMessage(message));
 		});
 	}
-	
-	public static void sendRawPM (String message, IUser user) {
+
+	public static void sendRawPM(String message, IUser user) {
 		RequestBuffer.request(() -> {
 			user.getOrCreatePMChannel().sendMessage(message);
 		});
 	}
-	
-	public static void sendPMPic (String message, MessageReceivedEvent event) {
-		String tags[] = { "holo" };
+
+	public static void sendPMPic(String message, MessageReceivedEvent event) {
+		String tags[] = {"holo"};
 		RequestBuffer.request(() -> {
 			event.getMessage().getAuthor().getOrCreatePMChannel().sendMessage(HTMLHandler.requestKona(tags, HTMLHandler.KONA_RATING.SAFE));
 		});

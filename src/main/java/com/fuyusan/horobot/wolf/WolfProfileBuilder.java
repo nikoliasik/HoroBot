@@ -6,6 +6,7 @@ import sx.blah.discord.handle.obj.IUser;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class WolfProfileBuilder {
 	public static final int width = 256;
 	public static final int height = 128;
 
-	public static File generateImage(IUser user) {
+	public static byte[] generateImage(IUser user) {
 		final WolfTemplate wolf = DataBase.wolfQuery(user);
 		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		File file = null;
@@ -75,16 +76,12 @@ public class WolfProfileBuilder {
 				null);
 		graphics.dispose();
 
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		try {
-			file = new File("\\resources\\wolf\\temp\\" + user.getID() + "-wolf.png");
-			if(!file.exists()) {
-				file.getParentFile().mkdirs();
-				file.createNewFile();
-			}
-			ImageIO.write(bufferedImage, "png", file);
+			ImageIO.write(bufferedImage, "png", bytes);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return file;
+		return bytes.toByteArray();
 	}
 }

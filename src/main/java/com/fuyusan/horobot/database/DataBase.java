@@ -94,9 +94,10 @@ public class DataBase {
 
 	public static void insertWolf(IUser user) {
 		try {
-			Statement statement = con.createStatement();
-			String sql = String.format("INSERT INTO wolves.wolf (id) VALUES (%s) ON CONFLICT DO NOTHING;", user.getID());
-			statement.executeUpdate(sql);
+			String sql = "INSERT INTO wolves.wolf (id) VALUES (?) ON CONFLICT DO NOTHING;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, user.getID());
+			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -105,13 +106,10 @@ public class DataBase {
 
 	public static void updateWolf(IUser user, String index, Object value) {
 		try {
-			if (value instanceof String) value = ("'" + value + "'");
-			Statement statement = con.createStatement();
-			String sql = String.format("UPDATE wolves.wolf SET %s=%s WHERE id='%s'",
-					index,
-					value,
-					user.getID());
-			statement.executeUpdate(sql);
+			PreparedStatement statement = con.prepareStatement("UPDATE wolves.wolf SET " + index + " = ? WHERE id = ?");
+			statement.setString(1, value.toString());
+			statement.setString(2, user.getID());
+			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
 			e.printStackTrace();
