@@ -38,17 +38,17 @@ public class CommandWolf implements Command {
 						hunger += foodValue;
 						DataBase.updateWolf(event.getAuthor(), "hunger", hunger);
 
-						String message = String.format("You decide to feed your wolf a %s\n", args[1]);
+						StringBuilder message = new StringBuilder(String.format("You decide to feed your wolf a %s\n", args[1]));
 						if (hunger >= maxHunger) {
 							for(int i = 0; i <= Math.floor(maxHunger / hunger); i++) {
 								int nextHunger = (7 + template.getLevel());
 								DataBase.updateWolf(event.getAuthor(), "hunger", maxHunger - hunger);
 								DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
 								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);
-								message += String.format("**LEVEL UP** Your wolf leveled up and is now level %s\n", template.getLevel() + i + 1);
+								message.append(String.format("**LEVEL UP** Your wolf leveled up and is now level %s\n", template.getLevel() + i + 1));
 							}
 						}
-						Message.sendFile(event.getChannel(), "",
+						Message.sendFile(event.getChannel(), message.toString(),
 								event.getAuthor().getID() + "-wolf.png",
 								new ByteArrayInputStream(WolfProfileBuilder.generateImage(event.getAuthor())));
 					}
