@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 public class WolfCosmetics {
 
+	public static HashMap<String, Integer> foods = new HashMap<>();
+	static {
+		foods.put("cracker", 2);
+	}
+
 	public static HashMap<String, String> backgrounds = new HashMap<>();
 	static {
 		backgrounds.put("Default", "/wolf/bg/default-bg.png");

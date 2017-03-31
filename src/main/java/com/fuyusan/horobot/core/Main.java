@@ -21,7 +21,7 @@ package com.fuyusan.horobot.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fuyusan.horobot.command.commands.Wolf.CommandWolf;
+import com.fuyusan.horobot.command.commands.wolf.CommandWolf;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
