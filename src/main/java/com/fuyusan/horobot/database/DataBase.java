@@ -1,6 +1,7 @@
 package com.fuyusan.horobot.database;
 
 import com.fuyusan.horobot.core.Config;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.sql.*;
 
@@ -49,32 +50,65 @@ public class DataBase {
 		try {
 			Statement statement = con.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS channels.channel (" +
-										"id TEXT PRIMARY KEY NOT NULL," +
-										"mod TEXT DEFAULT 'none');";
-			statement.executeUpdate(sql);
-			statement.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void createQueueSchema() {
-		try {
-			Statement statement = con.createStatement();
-			String sql = "CREATE SCHEMA IF NOT EXISTS queue;";
-			statement.executeUpdate(sql);
-			statement.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void createQueueTable() {
-		try {
-			Statement statement = con.createStatement();
-			String sql = "CREATE TABLE IF NOT EXISTS queue.queued (" +
 					"id TEXT PRIMARY KEY NOT NULL," +
 					"mod TEXT DEFAULT 'none');";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void createWolfSchema() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE SCHEMA IF NOT EXISTS wolves;";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void createWolfTable() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS wolves.wolf(" +
+					"id TEXT PRIMARY KEY NOT NULL," +
+					"name TEXT NOT NULL DEFAULT 'wolf'," +
+					"level INTEGER NOT NULL DEFAULT 1," +
+					"hunger INTEGER NOT NULL DEFAULT 0," +
+					"maxHunger INTEGER NOT NULL DEFAULT 8," +
+					"background TEXT NOT NULL DEFAULT 'default'," +
+					"hat TEXT NOT NULL DEFAULT 'none'," +
+					"body TEXT NOT NULL DEFAULT 'none'," +
+					"paws TEXT NOT NULL DEFAULT 'none');";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void insertWolf(IUser user) {
+		try {
+			Statement statement = con.createStatement();
+			String sql = String.format("INSERT INTO wolves.wolf (id) VALUES (%s) ON CONFLICT DO NOTHING;", user.getID());
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateWolf(IUser user, String index, Object value) {
+		try {
+			if (value instanceof String) value = ("'" + value + "'");
+			Statement statement = con.createStatement();
+			String sql = String.format("UPDATE wolves.wolf SET %s=%s WHERE id='%s'",
+					index,
+					value,
+					user.getID());
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -86,7 +120,7 @@ public class DataBase {
 		try {
 			Statement statement = con.createStatement();
 			String sql = String.format("INSERT INTO guilds.guild (id, language, prefix, welcome) VALUES ('%s', 'en', '.horo', 'Welcome~!') ON CONFLICT DO NOTHING;",
-										guildID);
+					guildID);
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -98,9 +132,9 @@ public class DataBase {
 		try {
 			Statement statement = con.createStatement();
 			String sql = String.format("UPDATE guilds.guild SET %s='%s' WHERE id='%s';",
-										index,
-										value,
-										guildID);
+					index,
+					value,
+					guildID);
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -183,6 +217,17 @@ public class DataBase {
 		try {
 			Statement statement = con.createStatement();
 			String sql = String.format("DELETE FROM channels.channel WHERE id='%s';", channelID);
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void deleteWolf(IUser user) {
+		try {
+			Statement statement = con.createStatement();
+			String sql = String.format("DELETE FROM wolves.wolf WHERE id='%s';" + user.getID());
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {

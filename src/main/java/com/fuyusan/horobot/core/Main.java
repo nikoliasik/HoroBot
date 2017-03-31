@@ -24,10 +24,7 @@ import java.util.Map;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
-import com.fuyusan.horobot.command.commands.image.CommandCat;
-import com.fuyusan.horobot.command.commands.image.CommandEcchi;
-import com.fuyusan.horobot.command.commands.image.CommandExplicit;
-import com.fuyusan.horobot.command.commands.image.CommandKona;
+import com.fuyusan.horobot.command.commands.image.*;
 import com.fuyusan.horobot.command.commands.misc.*;
 import com.fuyusan.horobot.command.commands.music.*;
 import com.fuyusan.horobot.command.commands.utility.*;
@@ -48,7 +45,7 @@ import sx.blah.discord.util.RequestBuffer;
 
 public class Main {
 	
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	public static ClientManager INSTANCE;
 	
@@ -118,6 +115,7 @@ public class Main {
 		//commands.put("loop", new CommandLoop());
 		//commands.put("queue", new CommandQueue()); // TODO: Fetch a list of all the songs currently in queue
 		commands.put("translate", new CommandTranslate());
+		commands.put("wolf", new CommandWolf());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();

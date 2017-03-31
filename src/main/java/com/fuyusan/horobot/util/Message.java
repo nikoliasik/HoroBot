@@ -24,9 +24,23 @@ import sx.blah.discord.handle.impl.obj.Embed;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 public class Message {
+
+	public static void sendFile(IChannel channel, String message, File file) {
+		RequestBuffer.request(() -> {
+			try {
+				channel.sendFile(message, file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		});
+	}
 
 	public static void sendEmbed(IChannel channel, String message, EmbedObject embed, boolean inline) {
 		RequestBuffer.request(() -> {
