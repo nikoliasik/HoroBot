@@ -18,9 +18,8 @@
 
 package com.fuyusan.horobot.command.proccessing;
 
-import com.fuyusan.horobot.database.DataBase;
-import com.fuyusan.horobot.util.Localisation;
 import com.fuyusan.horobot.core.Main;
+import com.fuyusan.horobot.database.DataBase;
 import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.util.music.MusicUtils;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -66,11 +65,11 @@ public class AnnotationListener {
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor() != event.getClient().getOurUser()) {
 			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
-			if(event.getMessage().getContent().startsWith(".horo")) {
-				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-			} else if(event.getMessage().getContent().startsWith(prefix)) {
-				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
-			}
+				if(event.getMessage().getContent().startsWith(".horo")) {
+					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
+				} else if(event.getMessage().getContent().startsWith(prefix)) {
+					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+				}
 		}
 		Utility.messagesReceived++;
 	}

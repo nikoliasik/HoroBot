@@ -18,17 +18,17 @@
 
 package com.fuyusan.horobot.core;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.fuyusan.horobot.command.commands.wolf.CommandWolf;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
-import com.fuyusan.horobot.command.commands.image.*;
+import com.fuyusan.horobot.command.commands.image.CommandCat;
+import com.fuyusan.horobot.command.commands.image.CommandEcchi;
+import com.fuyusan.horobot.command.commands.image.CommandExplicit;
+import com.fuyusan.horobot.command.commands.image.CommandKona;
 import com.fuyusan.horobot.command.commands.misc.*;
 import com.fuyusan.horobot.command.commands.music.*;
 import com.fuyusan.horobot.command.commands.utility.*;
+import com.fuyusan.horobot.command.commands.wolf.CommandWolf;
 import com.fuyusan.horobot.command.proccessing.AnnotationListener;
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.command.proccessing.CommandContainer;
@@ -44,6 +44,9 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
 	
 	public static boolean debug = true;
@@ -54,12 +57,12 @@ public class Main {
 	public static final CommandParser parser = new CommandParser();
 
 	public static AudioPlayerManager playerManager;
+	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	public static Map<String, GuildMusicManager> musicManagers;
-	
+
 	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
-	
+
 	public static void main(String[] args) {
-		Logger logger = LoggerFactory.getLogger(Main.class);
 
 		DataBase.connect();
 		DataBase.createGuildSchema();
@@ -143,36 +146,35 @@ public class Main {
 	}
 
 	public static void handleCommand(CommandContainer cmd) {
-		if (cmd.event.getMessage().getChannel().isPrivate()) {
-			if(!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
-				RequestBuffer.request(() -> {
-					Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
-				});
-				commands.get(cmd.invoke).executed(false, cmd.event);
-				return;
+		try {
+			if (cmd.event.getMessage().getChannel().isPrivate()) {
+				if (!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
+					RequestBuffer.request(() -> Message.sendPM("private-channel", cmd.event.getMessage().getAuthor()));
+					commands.get(cmd.invoke).executed(false, cmd.event);
+					return;
+				}
 			}
-		}
-		if (commands.containsKey(cmd.invoke)) {
-			boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-			if(cmd.event.getAuthor().getID().equals("288996157202497536")) safe = true;
-			
-			if(safe) {
-				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
-				commands.get(cmd.invoke).executed(safe, cmd.event);
+			if (commands.containsKey(cmd.invoke)) {
+				boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
+				if (cmd.event.getAuthor().getID().equals("288996157202497536")) safe = true;
+
+				if (safe) {
+					commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
+					commands.get(cmd.invoke).executed(safe, cmd.event);
+				} else {
+					RequestBuffer.request(() -> cmd.event.getMessage().addReaction("\uD83D\uDEAB"));
+					commands.get(cmd.invoke).executed(safe, cmd.event);
+				}
 			} else {
-				RequestBuffer.request(() -> {
-					cmd.event.getMessage().addReaction("\uD83D\uDEAB");
-				});
-				commands.get(cmd.invoke).executed(safe, cmd.event);
+				try {
+					RequestBuffer.request(() -> cmd.event.getMessage().addReaction("\u2753"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		} else {
-			try {
-				RequestBuffer.request(() -> {
-					cmd.event.getMessage().addReaction("❓");
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			Message.sendMessageInChannel(cmd.event.getChannel(), "error");
+			Main.LOGGER.error("Error in command " + cmd.invoke, e);
 		}
 	}
 }
