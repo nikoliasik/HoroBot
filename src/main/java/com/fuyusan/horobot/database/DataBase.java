@@ -5,6 +5,8 @@ import com.fuyusan.horobot.wolf.WolfTemplate;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataBase {
 
@@ -80,7 +82,8 @@ public class DataBase {
 					"level INTEGER NOT NULL DEFAULT 1," +
 					"hunger INTEGER NOT NULL DEFAULT 0," +
 					"maxHunger INTEGER NOT NULL DEFAULT 8," +
-					"background TEXT NOT NULL DEFAULT 'Default'," +
+					"fedTimes INTEGER NOT NULL DEFAULT 0," +
+					"background TEXT NOT NULL DEFAULT 'None'," +
 					"hat TEXT NOT NULL DEFAULT 'None'," +
 					"body TEXT NOT NULL DEFAULT 'None'," +
 					"paws TEXT NOT NULL DEFAULT 'None'," +
@@ -90,6 +93,75 @@ public class DataBase {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void createUserSchema() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE SCHEMA IF NOT EXISTS users;";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void createItemTable() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS users.item(" +
+					"id TEXT NOT NULL," +
+					"item TEXT NOT NULL," +
+					"PRIMARY KEY (id, item));";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void insertItem(IUser user, String item) {
+		try {
+			String sql = "INSERT INTO users.item (id, item) VALUES (?, ?);";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, user.getID());
+			statement.setString(2, item);
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static boolean queryItem(IUser user, String item) {
+		try {
+			String sql = "SELECT item FROM users.item WHERE id=? AND item=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, user.getID());
+			statement.setString(2, item);
+			ResultSet set = statement.executeQuery();
+			return set.isBeforeFirst();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static List<String> queryItems(IUser user) {
+		try {
+			String sql = "SELECT item FROM users.item WHERE id=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, user.getID());
+			ResultSet set = statement.executeQuery();
+			List<String> list = new ArrayList<>();
+			while (set.next()) {
+				list.add(String.valueOf(set.getString("item")));
+			}
+			return list;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void insertWolf(IUser user) {
@@ -216,6 +288,7 @@ public class DataBase {
 						set.getInt("level"),
 						set.getInt("hunger"),
 						set.getInt("maxHunger"),
+						set.getInt("fedTimes"),
 						set.getString("background"),
 						set.getString("hat"),
 						set.getString("body"),
@@ -264,17 +337,6 @@ public class DataBase {
 		}
 	}
 
-	public static void createCooldownSchema() {
-		try {
-			Statement statement = con.createStatement();
-			String sql = "CREATE SCHEMA IF NOT EXISTS cooldowns;";
-			statement.executeUpdate(sql);
-			statement.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void connect() {
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -289,43 +351,6 @@ public class DataBase {
 			con.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		}
-	}
-
-	public static void createCooldownTable() {
-		try {
-			Statement statement = con.createStatement();
-			String sql = "CREATE TABLE IF NOT EXISTS cooldowns.cooldowns (" +
-					"	bucket TEXT," +
-					"	time BIGINT," +
-					"	usr VARCHAR(20)" +
-					")";
-			statement.executeUpdate(sql);
-			statement.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void insertCooldown(String bucket, IUser user, Long aLong) {
-		try {
-			PreparedStatement statement = con.prepareStatement("INSERT INTO cooldowns.cooldowns (bucket, time, usr) VALUES (?,?,?)");
-			statement.setString(1, bucket);
-			statement.setLong(2, aLong);
-			statement.setString(3, user.getID());
-			statement.executeUpdate();
-			statement.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static ResultSet selectCooldowns() {
-		try {
-			return con.createStatement().executeQuery("SELECT * FROM cooldowns.cooldowns;");
-		} catch(Exception e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 }

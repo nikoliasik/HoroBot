@@ -10,6 +10,7 @@ public class WolfTemplate {
 	private final int level;
 	private final int hunger;
 	private final int maxHunger;
+	private final int fedTimes;
 	private BufferedImage base;
 	private BufferedImage background;
 	private BufferedImage hat;
@@ -17,18 +18,19 @@ public class WolfTemplate {
 	private BufferedImage paws;
 	private BufferedImage tail;
 
-	public WolfTemplate(String name, int level, int hunger, int maxHunger, String background, String hat, String body, String paws, String tail) {
+	public WolfTemplate(String name, int level, int hunger, int maxHunger, int fedTimes, String background, String hat, String body, String paws, String tail) {
 		this.name = name;
 		this.level = level;
 		this.hunger = hunger;
 		this.maxHunger = maxHunger;
+		this.fedTimes = fedTimes;
 		try {
-			this.base = ImageIO.read(new File(getClass().getResource("/wolf/wolf-base.png").toURI()));
-			this.background = ImageIO.read(new File(getClass().getResource(WolfCosmetics.backgrounds.get(background)).toURI()));
-			this.hat = ImageIO.read(new File(getClass().getResource(WolfCosmetics.hats.get(hat)).toURI()));
-			this.body = ImageIO.read(new File(getClass().getResource(WolfCosmetics.bodies.get(body)).toURI()));
-			this.paws = ImageIO.read(new File(getClass().getResource(WolfCosmetics.paws.get(paws)).toURI()));
-			this.tail = ImageIO.read(new File(getClass().getResource(WolfCosmetics.tails.get(tail)).toURI()));
+			this.base = ImageIO.read(getClass().getResourceAsStream("/wolf/wolf-base.png"));
+			this.background = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.backgrounds.get(background)));
+			this.hat = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.hats.get(hat)));
+			this.body = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.bodies.get(body)));
+			this.paws = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.paws.get(paws)));
+			this.tail = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.tails.get(tail)));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -47,6 +49,8 @@ public class WolfTemplate {
 	public int getMaxHunger() {
 		return maxHunger;
 	}
+
+	public int getFedTimes() { return fedTimes; }
 
 	public BufferedImage getBase() { return base; }
 

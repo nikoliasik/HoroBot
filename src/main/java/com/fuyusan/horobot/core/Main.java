@@ -38,6 +38,7 @@ import com.fuyusan.horobot.command.proccessing.CommandParser;
 import com.fuyusan.horobot.database.DataBase;
 import com.fuyusan.horobot.util.FontTemplate;
 import com.fuyusan.horobot.util.Message;
+import com.fuyusan.horobot.util.music.CommandLoop;
 import com.fuyusan.horobot.util.music.GuildMusicManager;
 import com.fuyusan.horobot.wolf.WolfProfileBuilder;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -75,6 +76,8 @@ public class Main {
 		DataBase.createChannelTable();
 		DataBase.createWolfSchema();
 		DataBase.createWolfTable();
+		DataBase.createUserSchema();
+		DataBase.createItemTable();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
@@ -114,20 +117,17 @@ public class Main {
 		commands.put("urban", new CommandUrban());
 		commands.put("join", new CommandJoin());
 		commands.put("leave", new CommandLeave());
-		commands.put("play", new CommandPlay()); // TODO: Change this to give multiple options to pick from
+		commands.put("play", new CommandPlay());
 		commands.put("pause", new CommandPause());
 		commands.put("unpause", new CommandUnpause());
 		commands.put("skip", new CommandSkip());
 		commands.put("repeat", new CommandRepeat());
 		commands.put("song", new CommandSong());
-		//commands.put("voteskip", new CommandVoteSkip());
 		//commands.put("shuffle", new CommandShuffle());
-		//commands.put("loop", new CommandLoop()); // TODO: THIS ONE IS A PRIORITY
-		//commands.put("queue", new CommandQueue()); // TODO: Fetch a list of all the songs currently in queue
+		//commands.put("loop", new CommandLoop());
+		//commands.put("queue", new CommandQueue());
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
-
-		// TODO: Make Horo leave all voice channels upon reboot
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
