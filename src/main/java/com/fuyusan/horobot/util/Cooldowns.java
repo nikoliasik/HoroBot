@@ -3,11 +3,24 @@ package com.fuyusan.horobot.util;
 import com.fuyusan.horobot.database.DataBase;
 import sx.blah.discord.handle.obj.IUser;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Cooldowns {
 
 	private static final HashMap<String, HashMap<String, Long>> COOLDOWNS = new HashMap<>();
+
+	static {
+		ResultSet set = DataBase.selectCooldowns();
+		try {
+			while(set.next())
+				COOLDOWNS.computeIfAbsent(set.getString("bucket"), d -> new HashMap<>())
+						.put(set.getString("usr"), set.getLong("time"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Makes a cooldown for user and bucket

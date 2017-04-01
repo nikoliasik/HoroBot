@@ -318,4 +318,13 @@ public class DataBase {
 			e.printStackTrace();
 		}
 	}
+
+	public static ResultSet selectCooldowns() {
+		try {
+			return con.createStatement().executeQuery("SELECT * FROM cooldowns.cooldowns;");
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
