@@ -63,3 +63,4 @@ src/main/java/com/fuyusan/horobot/core/Config.java
 !pom.xml
 src/main/java/META-INF/MANIFEST.MF
 !/src/main/java/com/fuyusan/horobot/command/commands/wolf/CommandWolf.java
+/latest.log
