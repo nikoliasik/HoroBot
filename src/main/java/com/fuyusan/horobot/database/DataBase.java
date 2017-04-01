@@ -255,8 +255,19 @@ public class DataBase {
 
 	public static void deleteWolf(IUser user) {
 		try {
+			PreparedStatement statement = con.prepareStatement("DELETE FROM wolves.wolf WHERE id=?;");
+			statement.setString(1, user.getID());
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void createCooldownSchema() {
+		try {
 			Statement statement = con.createStatement();
-			String sql = String.format("DELETE FROM wolves.wolf WHERE id='%s';" + user.getID());
+			String sql = "CREATE SCHEMA IF NOT EXISTS cooldowns;";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -278,6 +289,43 @@ public class DataBase {
 			con.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static void createCooldownTable() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS cooldowns.cooldowns (" +
+					"	bucket TEXT," +
+					"	time BIGINT," +
+					"	usr VARCHAR(20)" +
+					")";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void insertCooldown(String bucket, IUser user, Long aLong) {
+		try {
+			PreparedStatement statement = con.prepareStatement("INSERT INTO cooldowns.cooldowns (bucket, time, usr) VALUES (?,?,?)");
+			statement.setString(1, bucket);
+			statement.setLong(2, aLong);
+			statement.setString(3, user.getID());
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static ResultSet selectCooldowns() {
+		try {
+			return con.createStatement().executeQuery("SELECT * FROM cooldowns.cooldowns;");
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
