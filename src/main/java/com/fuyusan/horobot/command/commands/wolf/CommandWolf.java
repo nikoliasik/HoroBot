@@ -12,6 +12,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class CommandWolf implements Command {
@@ -45,13 +46,16 @@ public class CommandWolf implements Command {
 								int nextHunger = (7 + template.getLevel());
 								DataBase.updateWolf(event.getAuthor(), "hunger", maxHunger - hunger);
 								DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
-								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);
+								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + i + 1);
 								message.append(String.format("**LEVEL UP** Your wolf leveled up and is now level %s\n", template.getLevel() + i + 1));
 							}
 						}
+
 						Message.sendFile(event.getChannel(), message.toString(),
 								event.getAuthor().getID() + "-wolf.png",
 								new ByteArrayInputStream(WolfProfileBuilder.generateImage(event.getAuthor())));
+					} else {
+						Message.sendMessageInChannel(event.getChannel(), "no-food");
 					}
 				}
 			} else if (args[0].equals("rename")) {
@@ -64,12 +68,11 @@ public class CommandWolf implements Command {
 				}
 			} else if (args[0].equals("background")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				System.out.println(temp);
 				if(!WolfCosmetics.backgrounds.containsKey(temp)) {
 					Message.sendMessageInChannel(event.getChannel(), "wrong-background");
 					return;
 				}
-				DataBase.updateWolf(event.getAuthor(), "background", WolfCosmetics.backgrounds.get(temp));
+				DataBase.updateWolf(event.getAuthor(), "background", temp);
 				Message.sendMessageInChannel(event.getChannel(), "background-success", temp);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "no-sub-command");

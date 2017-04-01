@@ -21,7 +21,7 @@ public class WolfProfileBuilder {
 		File file = null;
 		Graphics2D graphics = bufferedImage.createGraphics();
 
-		final Font font = new Font("Arial", Font.PLAIN, 16);
+		final Font font = new Font("Roboto", Font.TRUETYPE_FONT, 16);
 		graphics.setFont(font);
 
 		// Calculate some stuff
@@ -29,7 +29,7 @@ public class WolfProfileBuilder {
 		final int stringY = (height - 16 + 10);
 		final int nameWidth = (int) graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getWidth();
 		final int nameHeight = (int) graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getHeight() + 5;
-		graphics.setFont(new Font("Arial", Font.PLAIN, 16));
+		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 16));
 		final int foodWidth = (int) graphics.getFontMetrics().getStringBounds("HUNGER " + wolf.getHunger() + "/" + wolf.getMaxHunger(), graphics).getWidth() + 10;
 		final int foodHeight = (int) graphics.getFontMetrics().getStringBounds("HUNGER " + wolf.getHunger() + "/" + wolf.getMaxHunger(), graphics).getHeight();
 
@@ -45,7 +45,7 @@ public class WolfProfileBuilder {
 				nameHeight + 20);
 
 		// Draw the wolf's name
-		graphics.setFont(new Font("Arial", Font.PLAIN, 16));
+		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 16));
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(
 				wolf.getName(),
@@ -62,9 +62,9 @@ public class WolfProfileBuilder {
 
 		// Draw the wolf's stats
 		graphics.setColor(Color.WHITE);
-		graphics.setFont(new Font("Arial", Font.PLAIN, 32));
+		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 32));
 		graphics.drawString("LVL " + wolf.getLevel(), 4, 32);
-		graphics.setFont(new Font("Arial", Font.PLAIN, 16));
+		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 16));
 		graphics.drawString("HUNGER " + wolf.getHunger() + "/" + wolf.getMaxHunger(), 4, 32 + 2 + 16 + 2);
 
 		// Draw the wolf base

@@ -68,3 +68,43 @@
 [2017.04.01 00:12 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
 [2017.04.01 00:12 HttpClient@358952399-20 INFO ] Websocket Connected.
 [2017.04.01 00:12 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 09:29 main INFO ] Logging initialized @759ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 09:29 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 09:29 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 09:29 HttpClient@56856085-18 INFO ] Websocket Connected.
+[2017.04.01 09:29 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 10:24 main INFO ] Logging initialized @541ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 10:24 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 10:24 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 10:24 HttpClient@1287393351-18 INFO ] Websocket Connected.
+[2017.04.01 10:24 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 10:51 main INFO ] Logging initialized @790ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 10:51 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 10:51 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 10:51 HttpClient@358952399-18 INFO ] Websocket Connected.
+[2017.04.01 10:51 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 10:52 main INFO ] Logging initialized @429ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 10:52 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 10:52 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 10:52 HttpClient@983503550-20 INFO ] Websocket Connected.
+[2017.04.01 10:52 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 11:21 main INFO ] Logging initialized @723ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 11:21 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 11:21 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 11:21 HttpClient@958648995-19 INFO ] Websocket Connected.
+[2017.04.01 11:21 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 11:22 main INFO ] Logging initialized @570ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 11:22 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 11:22 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 11:22 HttpClient@413478567-20 INFO ] Websocket Connected.
+[2017.04.01 11:22 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 11:29 main INFO ] Logging initialized @539ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 11:29 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 11:29 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 11:29 HttpClient@1693845312-19 INFO ] Websocket Connected.
+[2017.04.01 11:29 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.
+[2017.04.01 11:34 main INFO ] Logging initialized @543ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.01 11:34 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.01 11:34 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.01 11:34 HttpClient@1983022021-28 INFO ] Websocket Connected.
+[2017.04.01 11:34 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 2 guilds.

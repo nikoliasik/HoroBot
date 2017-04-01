@@ -6,7 +6,7 @@ public class WolfCosmetics {
 
 	public static HashMap<String, Integer> foods = new HashMap<>();
 	static {
-		foods.put("cracker", 2);
+		foods.put("Cracker", 2);
 	}
 
 	public static HashMap<String, String> backgrounds = new HashMap<>();

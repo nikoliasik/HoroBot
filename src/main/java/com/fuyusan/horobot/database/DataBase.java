@@ -107,7 +107,8 @@ public class DataBase {
 	public static void updateWolf(IUser user, String index, Object value) {
 		try {
 			PreparedStatement statement = con.prepareStatement("UPDATE wolves.wolf SET " + index + " = ? WHERE id = ?");
-			statement.setString(1, value.toString());
+			if(value instanceof String) statement.setString(1, (String) value);
+			if(value instanceof Integer) statement.setInt(1, (int) value);
 			statement.setString(2, user.getID());
 			statement.executeUpdate();
 			statement.close();

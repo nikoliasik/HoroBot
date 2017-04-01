@@ -18,6 +18,8 @@
 
 package com.fuyusan.horobot.core;
 
+import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +36,10 @@ import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.command.proccessing.CommandContainer;
 import com.fuyusan.horobot.command.proccessing.CommandParser;
 import com.fuyusan.horobot.database.DataBase;
+import com.fuyusan.horobot.util.FontTemplate;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.music.GuildMusicManager;
+import com.fuyusan.horobot.wolf.WolfProfileBuilder;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -57,9 +61,12 @@ public class Main {
 	public static Map<String, GuildMusicManager> musicManagers;
 	
 	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
-	
+
 	public static void main(String[] args) {
 		Logger logger = LoggerFactory.getLogger(Main.class);
+
+		FontTemplate template = new FontTemplate();
+		template.loadFont();
 
 		DataBase.connect();
 		DataBase.createGuildSchema();
