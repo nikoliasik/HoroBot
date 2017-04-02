@@ -11,17 +11,6 @@ public class Cooldowns {
 
 	private static final HashMap<String, HashMap<String, Long>> COOLDOWNS = new HashMap<>();
 
-	static {
-		ResultSet set = DataBase.selectCooldowns();
-		try {
-			while(set.next())
-				COOLDOWNS.computeIfAbsent(set.getString("bucket"), d -> new HashMap<>())
-						.put(set.getString("usr"), set.getLong("time"));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Makes a cooldown for user and bucket
 	 *
@@ -29,14 +18,16 @@ public class Cooldowns {
 	 * @param length Length of the cooldown
 	 * @param user The user to cool down
 	 *
-	 * @throws OnCooldownException If the cooldown isn't over
+	 * @returns true if the cooldown isn't over
 	 */
-	public void cooldown(String bucket, long length, IUser user) throws OnCooldownException {
-		DataBase.createCooldownSchema();
-		DataBase.createCooldownTable();
+	public static boolean onCooldown(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-		if(System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L) < length)
-			throw new OnCooldownException();
+		try {
+			if (System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L) < length) return true;
+			return false;
+		} catch(Exception e) {
+			return false;
+		}
 	}
 
 	/**
@@ -45,12 +36,8 @@ public class Cooldowns {
 	 * @param bucket The bucket
 	 * @param user The user
 	 */
-	public void putOnCooldown(String bucket, IUser user){
+	public static void putOnCooldown(String bucket, IUser user){
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
 		bket.put(user.getID(), System.currentTimeMillis());
-		DataBase.insertCooldown(bucket, user, bket.get(user.getID()));
-	}
-
-	private class OnCooldownException extends Exception {
 	}
 }

@@ -22,21 +22,20 @@ import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandEval;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
-import com.fuyusan.horobot.command.commands.image.CommandCat;
-import com.fuyusan.horobot.command.commands.image.CommandEcchi;
-import com.fuyusan.horobot.command.commands.image.CommandExplicit;
-import com.fuyusan.horobot.command.commands.image.CommandKona;
+import com.fuyusan.horobot.command.commands.image.*;
 import com.fuyusan.horobot.command.commands.misc.*;
 import com.fuyusan.horobot.command.commands.music.*;
 import com.fuyusan.horobot.command.commands.utility.*;
-import com.fuyusan.horobot.command.commands.wolf.CommandWolf;
 import com.fuyusan.horobot.command.proccessing.AnnotationListener;
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.command.proccessing.CommandContainer;
 import com.fuyusan.horobot.command.proccessing.CommandParser;
 import com.fuyusan.horobot.database.DataBase;
+import com.fuyusan.horobot.util.FontTemplate;
 import com.fuyusan.horobot.util.Message;
+import com.fuyusan.horobot.util.music.CommandLoop;
 import com.fuyusan.horobot.util.music.GuildMusicManager;
+import com.fuyusan.horobot.wolf.WolfProfileBuilder;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -44,9 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.RequestBuffer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 	
@@ -58,12 +54,15 @@ public class Main {
 	public static final CommandParser parser = new CommandParser();
 
 	public static AudioPlayerManager playerManager;
-	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	public static Map<String, GuildMusicManager> musicManagers;
 
 	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
 
 	public static void main(String[] args) {
+		Logger logger = LoggerFactory.getLogger(Main.class);
+
+		FontTemplate template = new FontTemplate();
+		template.loadFont();
 
 		DataBase.connect();
 		DataBase.createGuildSchema();
@@ -72,6 +71,8 @@ public class Main {
 		DataBase.createChannelTable();
 		DataBase.createWolfSchema();
 		DataBase.createWolfTable();
+		DataBase.createUserSchema();
+		DataBase.createItemTable();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
@@ -111,7 +112,7 @@ public class Main {
 		commands.put("urban", new CommandUrban());
 		commands.put("join", new CommandJoin());
 		commands.put("leave", new CommandLeave());
-		commands.put("play", new CommandPlay()); // TODO: Change this to give multiple options to pick from
+		commands.put("play", new CommandPlay());
 		commands.put("pause", new CommandPause());
 		commands.put("unpause", new CommandUnpause());
 		commands.put("skip", new CommandSkip());
@@ -120,12 +121,11 @@ public class Main {
 		commands.put("eval", new CommandEval());
 		//commands.put("voteskip", new CommandVoteSkip());
 		//commands.put("shuffle", new CommandShuffle());
-		//commands.put("loop", new CommandLoop()); // TODO: THIS ONE IS A PRIORITY
-		//commands.put("queue", new CommandQueue()); // TODO: Fetch a list of all the songs currently in queue
+		//commands.put("loop", new CommandLoop());
+		//commands.put("queue", new CommandQueue());
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
-
-		// TODO: Make Horo leave all voice channels upon reboot
+		commands.put("profile", new CommandProfile());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
@@ -148,35 +148,30 @@ public class Main {
 	}
 
 	public static void handleCommand(CommandContainer cmd) {
-		try {
-			if (cmd.event.getMessage().getChannel().isPrivate()) {
-				if (!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
-					RequestBuffer.request(() -> Message.sendPM("private-channel", cmd.event.getMessage().getAuthor()));
-					commands.get(cmd.invoke).executed(false, cmd.event);
-					return;
-				}
+		if (cmd.event.getMessage().getChannel().isPrivate()) {
+			if(!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
+				Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
+				commands.get(cmd.invoke).executed(false, cmd.event);
+				return;
 			}
-			if (commands.containsKey(cmd.invoke)) {
-				boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-				if (cmd.event.getAuthor().getID().equals("288996157202497536")) safe = true;
+		}
+		if (commands.containsKey(cmd.invoke)) {
+			boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
+			if(cmd.event.getAuthor().getID().equals("288996157202497536")) safe = true;
 
-				if (safe) {
-					commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
-					commands.get(cmd.invoke).executed(safe, cmd.event);
-				} else {
-					RequestBuffer.request(() -> cmd.event.getMessage().addReaction("\uD83D\uDEAB"));
-					commands.get(cmd.invoke).executed(safe, cmd.event);
-				}
+			if(safe) {
+				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
+				commands.get(cmd.invoke).executed(safe, cmd.event);
 			} else {
-				try {
-					RequestBuffer.request(() -> cmd.event.getMessage().addReaction("\u2753"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				RequestBuffer.request(() -> {
+					cmd.event.getMessage().addReaction("\uD83D\uDEAB");
+				});
+				commands.get(cmd.invoke).executed(safe, cmd.event);
 			}
-		} catch (Exception e) {
-			Message.sendMessageInChannel(cmd.event.getChannel(), "error");
-			Main.LOGGER.error("Error in command " + cmd.invoke, e);
+		} else {
+			RequestBuffer.request(() -> {
+				cmd.event.getMessage().addReaction("❓");
+			});
 		}
 	}
 }

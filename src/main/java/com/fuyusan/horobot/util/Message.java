@@ -18,6 +18,7 @@
 
 package com.fuyusan.horobot.util;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
@@ -25,6 +26,7 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -45,6 +47,13 @@ public class Message {
 	public static void sendFile(IChannel channel, String message, String name, InputStream file) {
 		RequestBuffer.request(() -> {
 			channel.sendFile(message, false, file, name);
+		});
+	}
+
+	public static void sendFile(IChannel channel, EmbedObject embed, String message, String name, InputStream file) {
+		RequestBuffer.request(() -> {
+			channel.sendMessage(message);
+			channel.sendFile(embed, file, name);
 		});
 	}
 
