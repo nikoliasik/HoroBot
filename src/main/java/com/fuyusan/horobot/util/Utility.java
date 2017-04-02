@@ -26,14 +26,27 @@ import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
+
+	private static String[] defaults = {
+			"6debd47ed13483642cf09e832ed0bc1b",
+			"322c936a8c8be1b803cd94861bdfa868",
+			"dd4dbc0016779df1378e7812eabaa04d",
+			"0e291f67c9274a1abdddeb3fd919cbaa",
+			"1cbd08c76f8af6dddce02c5138971129"
+	};
 
 	public static String Discord4JVersion = Discord4J.VERSION;
 	public static long commandsExecuted = 0;
@@ -64,7 +77,7 @@ public class Utility {
 
 	public static String getStats(int shard, int shardCount, int serverCount) {
 		updateStats();
-		if(!Main.debug) postStats(shard, shardCount, serverCount);
+		if (!Main.debug) postStats(shard, shardCount, serverCount);
 
 		return "```\n" +
 				"Discord4J version: " + Discord4JVersion + "\n" +
@@ -112,36 +125,36 @@ public class Utility {
 		int minutes = (int) (convert / 60 % 60);
 		int seconds = (int) (convert % 60);
 
-		if(days > 0) {
+		if (days > 0) {
 			builder.append(days);
 			builder.append(":");
 		}
 
-		if(hours > 0) {
-			if(hours < 10)
+		if (hours > 0) {
+			if (hours < 10)
 				builder.append("0");
 			builder.append(hours);
 			builder.append(":");
-		} else if(days > 0) {
+		} else if (days > 0) {
 			builder.append("00:");
 		}
 
-		if(minutes > 0) {
-			if(minutes < 10 && (hours > 0 || days > 0))
+		if (minutes > 0) {
+			if (minutes < 10 && (hours > 0 || days > 0))
 				builder.append("0");
 			builder.append(minutes);
 		} else {
 			builder.append("0");
-			if(hours > 0 || days > 0)
+			if (hours > 0 || days > 0)
 				builder.append("0");
 		}
 
 		builder.append(":");
-		if(seconds < 10)
+		if (seconds < 10)
 			builder.append("0");
 		builder.append(seconds);
 
-		if(convert < 1f && convert > 0f) {
+		if (convert < 1f && convert > 0f) {
 			return "0:0" + String.format("%.3f", Math.max(convert, 0.001f));
 		}
 
@@ -167,5 +180,26 @@ public class Utility {
 		builder.append(format.format((int) allocated / 1048576)).append("Mb / ");
 		builder.append(format.format((int) max / 1048576)).append("Mb");
 		return builder.toString();
+	}
+
+
+	public static String getAvatar(IUser user) {
+		return user.getAvatar() != null ? user.getAvatarURL() : getDefaultAvatar(user);
+	}
+
+	public static String getDefaultAvatar(IUser user) {
+		int discrim = Integer.parseInt(user.getDiscriminator());
+		discrim %= defaults.length;
+		return "https://discordapp.com/assets/" + defaults[discrim] + ".png";
+	}
+
+	public static BufferedImage imageFor(String url) throws IOException {
+		if (url == null)
+			return null;
+		URL urll = new URL(url);
+		URLConnection connection = urll.openConnection();
+		connection.addRequestProperty("User-Agent", "Mozilla/5.0 Apache the Attack Helicopter");
+		connection.connect();
+		return ImageIO.read(connection.getInputStream());
 	}
 }
