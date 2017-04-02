@@ -2,6 +2,7 @@ package com.fuyusan.horobot.command.commands.wolf;
 
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.database.DataBase;
+import com.fuyusan.horobot.scheduler.HoroTask;
 import com.fuyusan.horobot.util.Cooldowns;
 import com.fuyusan.horobot.util.Localisation;
 import com.fuyusan.horobot.util.Message;
@@ -42,7 +43,7 @@ public class CommandWolf implements Command {
 								WolfProfileBuilder.generateImage(
 										event.getAuthor())));
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", "5 minutes");
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Cooldowns.getRemaining("wolf-stats", 300000, event.getAuthor()));
 			}
 		} else if (args.length > 1) {
 			if (args[0].equals("feed")) {
@@ -50,6 +51,12 @@ public class CommandWolf implements Command {
 					if(WolfCosmetics.foods.containsKey(args[1])) {
 						if(!Cooldowns.onCooldown("wolf-feed", 7200000, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed", event.getAuthor());
+							new HoroTask(event.getAuthor().getID() + "-note") {
+								@Override
+								public void run() {
+									Message.sendPM("wolf-ready", event.getAuthor());
+								}
+							}.delay(7200000);
 							WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 							if (template == null) {
 								DataBase.insertWolf(event.getAuthor());

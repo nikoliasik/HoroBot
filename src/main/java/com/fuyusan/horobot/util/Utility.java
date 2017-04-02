@@ -182,7 +182,6 @@ public class Utility {
 		return builder.toString();
 	}
 
-
 	public static String getAvatar(IUser user) {
 		return user.getAvatar() != null ? user.getAvatarURL() : getDefaultAvatar(user);
 	}
