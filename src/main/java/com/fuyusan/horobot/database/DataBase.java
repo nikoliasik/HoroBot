@@ -143,7 +143,7 @@ public class DataBase {
 		try {
 			Statement statement = con.createStatement();
 			String sql = String.format(
-					"INSERT INTO users.user (id) VALUES (%s);",
+					"INSERT INTO users.user (id) VALUES (%s) ON CONFLICT DO NOTHING;",
 					user.getID());
 			statement.executeUpdate(sql);
 			statement.close();
@@ -192,7 +192,7 @@ public class DataBase {
 
 	public static void insertItem(IUser user, String item) {
 		try {
-			String sql = "INSERT INTO users.item (id, item) VALUES (?, ?);";
+			String sql = "INSERT INTO users.item (id, item) VALUES (?, ?) ON CONFLICT DO NOTHING;";
 			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(1, user.getID());
 			statement.setString(2, item);

@@ -556,3 +556,203 @@ java.lang.NullPointerException: null
 [2017.04.02 00:26 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
 [2017.04.02 00:26 HttpClient@127960486-20 INFO ] Websocket Connected.
 [2017.04.02 00:26 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:07 main INFO ] Logging initialized @1187ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:07 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:07 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:07 HttpClient@1113028902-20 INFO ] Websocket Connected.
+[2017.04.02 14:07 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:07 Event Dispatcher Handler ERROR] Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at com.fuyusan.horobot.profile.ProfileBuilder.generateProfileImage(ProfileBuilder.java:41)
+	at com.fuyusan.horobot.command.commands.profile.CommandProfile.action(CommandProfile.java:33)
+	at com.fuyusan.horobot.core.Main.handleCommand(Main.java:167)
+	at com.fuyusan.horobot.command.proccessing.AnnotationListener.onMessageReceivedEvent(AnnotationListener.java:71)
+	at sx.blah.discord.api.events.EventDispatcher$MethodEventHandler.handle(EventDispatcher.java:519)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$15(EventDispatcher.java:455)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1548)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$16(EventDispatcher.java:452)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:07 main INFO ] Logging initialized @777ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:07 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:07 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:07 HttpClient@833764557-21 INFO ] Websocket Connected.
+[2017.04.02 14:07 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:07 Event Dispatcher Handler ERROR] Unhandled exception caught dispatching event MessageReceivedEvent
+java.lang.NullPointerException: null
+	at com.fuyusan.horobot.profile.ProfileBuilder.generateProfileImage(ProfileBuilder.java:41)
+	at com.fuyusan.horobot.command.commands.profile.CommandProfile.action(CommandProfile.java:33)
+	at com.fuyusan.horobot.core.Main.handleCommand(Main.java:168)
+	at com.fuyusan.horobot.command.proccessing.AnnotationListener.onMessageReceivedEvent(AnnotationListener.java:71)
+	at sx.blah.discord.api.events.EventDispatcher$MethodEventHandler.handle(EventDispatcher.java:519)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$null$15(EventDispatcher.java:455)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1548)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at sx.blah.discord.api.events.EventDispatcher.lambda$dispatch$16(EventDispatcher.java:452)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:08 main INFO ] Logging initialized @620ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:08 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:08 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:08 HttpClient@75247599-29 INFO ] Websocket Connected.
+[2017.04.02 14:08 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:08 RequestBuffer Initial Executor WARN ] RequestBuffer handled an uncaught exception!
+sx.blah.discord.util.DiscordException: Error on request to https://discordapp.com/api/channels/289829260431065089/messages. Received response code 400. With response text: {"code": 50006, "message": "Cannot send an empty message"}
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:328)
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:262)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:251)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:205)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:149)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:626)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:607)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:597)
+	at com.fuyusan.horobot.util.Message.lambda$sendFile$2(Message.java:55)
+	at sx.blah.discord.util.RequestBuffer$IVoidRequest.request(RequestBuffer.java:153)
+	at sx.blah.discord.util.RequestBuffer$IVoidRequest.request(RequestBuffer.java:149)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture$RequestCallable.call(RequestBuffer.java:289)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture.run(RequestBuffer.java:264)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture.access$200(RequestBuffer.java:165)
+	at sx.blah.discord.util.RequestBuffer.lambda$request$0(RequestBuffer.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:11 main INFO ] Logging initialized @626ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:11 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:11 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:11 HttpClient@127960486-20 INFO ] Websocket Connected.
+[2017.04.02 14:11 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:11 RequestBuffer Initial Executor WARN ] RequestBuffer handled an uncaught exception!
+sx.blah.discord.util.DiscordException: Error on request to https://discordapp.com/api/channels/289829260431065089/messages. Received response code 400. With response text: {"code": 50006, "message": "Cannot send an empty message"}
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:328)
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:262)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:251)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:205)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:149)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:626)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:607)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:597)
+	at com.fuyusan.horobot.util.Message.lambda$sendFile$2(Message.java:55)
+	at sx.blah.discord.util.RequestBuffer$IVoidRequest.request(RequestBuffer.java:153)
+	at sx.blah.discord.util.RequestBuffer$IVoidRequest.request(RequestBuffer.java:149)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture$RequestCallable.call(RequestBuffer.java:289)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture.run(RequestBuffer.java:264)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture.access$200(RequestBuffer.java:165)
+	at sx.blah.discord.util.RequestBuffer.lambda$request$0(RequestBuffer.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:12 main INFO ] Logging initialized @597ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:12 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:12 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:13 HttpClient@1179997764-21 INFO ] Websocket Connected.
+[2017.04.02 14:13 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:13 RequestBuffer Initial Executor WARN ] RequestBuffer handled an uncaught exception!
+sx.blah.discord.util.DiscordException: Error on request to https://discordapp.com/api/channels/289829260431065089/messages. Received response code 400. With response text: {"code": 50006, "message": "Cannot send an empty message"}
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:328)
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:262)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:251)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:205)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:149)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:626)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:607)
+	at sx.blah.discord.handle.impl.obj.Channel.sendMessage(Channel.java:597)
+	at com.fuyusan.horobot.util.Message.lambda$sendFile$2(Message.java:55)
+	at sx.blah.discord.util.RequestBuffer$IVoidRequest.request(RequestBuffer.java:153)
+	at sx.blah.discord.util.RequestBuffer$IVoidRequest.request(RequestBuffer.java:149)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture$RequestCallable.call(RequestBuffer.java:289)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture.run(RequestBuffer.java:264)
+	at sx.blah.discord.util.RequestBuffer$RequestFuture.access$200(RequestBuffer.java:165)
+	at sx.blah.discord.util.RequestBuffer.lambda$request$0(RequestBuffer.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:13 main INFO ] Logging initialized @588ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:13 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:13 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:13 HttpClient@1320062867-22 INFO ] Websocket Connected.
+[2017.04.02 14:13 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:14 main INFO ] Logging initialized @614ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:14 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:14 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:14 HttpClient@1910278641-20 INFO ] Websocket Connected.
+[2017.04.02 14:14 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:16 main INFO ] Logging initialized @615ms to org.eclipse.jetty.util.log.Slf4jLog
+[2017.04.02 14:16 main INFO ] Discord4J v2.7.1-SNAPSHOT (dev-6f61e96) (https://github.com/austinv11/Discord4J)
+[2017.04.02 14:16 main INFO ] A Java binding for the official Discord API, forked from the inactive https://github.com/nerd/Discord4J. Copyright (c) 2017, Licensed under GNU LGPLv3
+[2017.04.02 14:16 HttpClient@968029265-20 INFO ] Websocket Connected.
+[2017.04.02 14:16 Websocket Dispatch Handler INFO ] Connected to Discord Gateway v5. Receiving 3 guilds.
+[2017.04.02 14:22 Websocket Dispatch Handler ERROR] Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/users/293090176287244289)
+[2017.04.02 14:22 Websocket Dispatch Handler ERROR] Unable to process JSON!
+sx.blah.discord.util.RateLimitException: You are being rate limited.
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:345)
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:262)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:224)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:169)
+	at sx.blah.discord.api.internal.ShardImpl.getUserByID(ShardImpl.java:259)
+	at sx.blah.discord.api.internal.DiscordUtils.getUserFromJSON(DiscordUtils.java:142)
+	at sx.blah.discord.api.internal.DiscordUtils.getMessageFromJSON(DiscordUtils.java:432)
+	at sx.blah.discord.api.internal.DispatchHandler.messageCreate(DispatchHandler.java:242)
+	at sx.blah.discord.api.internal.DispatchHandler.lambda$handle$0(DispatchHandler.java:70)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:22 Websocket Dispatch Handler ERROR] Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/users/293091956286947328)
+[2017.04.02 14:22 Websocket Dispatch Handler ERROR] Unable to process JSON!
+sx.blah.discord.util.RateLimitException: You are being rate limited.
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:345)
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:262)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:224)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:169)
+	at sx.blah.discord.api.internal.ShardImpl.getUserByID(ShardImpl.java:259)
+	at sx.blah.discord.api.internal.DiscordUtils.getUserFromJSON(DiscordUtils.java:142)
+	at sx.blah.discord.api.internal.DiscordUtils.getMessageFromJSON(DiscordUtils.java:432)
+	at sx.blah.discord.api.internal.DispatchHandler.messageCreate(DispatchHandler.java:242)
+	at sx.blah.discord.api.internal.DispatchHandler.lambda$handle$0(DispatchHandler.java:70)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+[2017.04.02 14:22 Websocket Dispatch Handler ERROR] Received 404 error, please notify the developer and include the URL (https://discordapp.com/api/users/293091956286947328)
+[2017.04.02 14:22 Websocket Dispatch Handler ERROR] Unable to process JSON!
+sx.blah.discord.util.RateLimitException: You are being rate limited.
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:345)
+	at sx.blah.discord.api.internal.Requests$Request.request(Requests.java:262)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:224)
+	at sx.blah.discord.api.internal.Requests$Request.makeRequest(Requests.java:169)
+	at sx.blah.discord.api.internal.ShardImpl.getUserByID(ShardImpl.java:259)
+	at sx.blah.discord.api.internal.DiscordUtils.getUserFromJSON(DiscordUtils.java:142)
+	at sx.blah.discord.api.internal.DiscordUtils.getMessageFromJSON(DiscordUtils.java:432)
+	at sx.blah.discord.api.internal.DispatchHandler.messageCreate(DispatchHandler.java:242)
+	at sx.blah.discord.api.internal.DispatchHandler.lambda$handle$0(DispatchHandler.java:70)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)

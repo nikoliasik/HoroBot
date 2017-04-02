@@ -48,7 +48,7 @@ public class CommandWolf implements Command {
 			if (args[0].equals("feed")) {
 				if(args.length == 2) {
 					if(WolfCosmetics.foods.containsKey(args[1])) {
-						if(!Cooldowns.onCooldown("wolf-feed", 1/*7200000*/, event.getAuthor())) {
+						if(!Cooldowns.onCooldown("wolf-feed", 7200000, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed", event.getAuthor());
 							WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 							if (template == null) {

@@ -79,6 +79,7 @@ public class Main {
 		DataBase.createWolfTable();
 		DataBase.createUserSchema();
 		DataBase.createItemTable();
+		DataBase.createUserTable();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();

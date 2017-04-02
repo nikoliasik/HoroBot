@@ -21,7 +21,7 @@ public class ProfileTemplate {
 		this.maxXp = maxXp;
 		this.foxCoins = foxCoins;
 		try {
-			this.background = ImageIO.read(getClass().getResourceAsStream(background));
+			this.background = ImageIO.read(getClass().getResourceAsStream(ProfileCosmetics.backgrounds.get(background)));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
