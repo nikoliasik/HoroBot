@@ -104,6 +104,50 @@ public class Utility {
 		);
 	}
 
+	public static String formatTime(long milliseconds) {
+		StringBuilder builder = new StringBuilder();
+		long convert = (milliseconds / 1000);
+		int days = (int) (convert / (3600 * 24));
+		int hours = (int) (convert / 3600 % 24);
+		int minutes = (int) (convert / 60 % 60);
+		int seconds = (int) (convert % 60);
+
+		if(days > 0) {
+			builder.append(days);
+			builder.append(":");
+		}
+
+		if(hours > 0) {
+			if(hours < 10)
+				builder.append("0");
+			builder.append(hours);
+			builder.append(":");
+		} else if(days > 0) {
+			builder.append("00:");
+		}
+
+		if(minutes > 0) {
+			if(minutes < 10 && (hours > 0 || days > 0))
+				builder.append("0");
+			builder.append(minutes);
+		} else {
+			builder.append("0");
+			if(hours > 0 || days > 0)
+				builder.append("0");
+		}
+
+		builder.append(":");
+		if(seconds < 10)
+			builder.append("0");
+		builder.append(seconds);
+
+		if(convert < 1f && convert > 0f) {
+			return "0:0" + String.format("%.3f", Math.max(convert, 0.001f));
+		}
+
+		return builder.toString();
+	}
+
 	public static String getStartTime() {
 		RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
 		long startTime = rb.getStartTime();

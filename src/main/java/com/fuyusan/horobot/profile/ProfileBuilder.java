@@ -1,7 +1,6 @@
 package com.fuyusan.horobot.profile;
 
 import com.fuyusan.horobot.database.DataBase;
-import com.fuyusan.horobot.wolf.WolfTemplate;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
@@ -40,15 +39,14 @@ public class ProfileBuilder {
 		final BufferedImage avatar;
 
 		// Calculate some stuff
-		final int avatarX = ((width / 2) - (avatar.getWidth() / 2));
-		final int avatarY = ((height / 4) + (height / 2));
-
+		//final int avatarX = ((width / 2) - (avatar.getWidth() / 2));
+		//final int avatarY = ((height / 4) + (height / 2));
 
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
 
 		// Draw profile picture
-		graphics.drawImage(avatar, 0, 0, width, height, null);
+		//graphics.drawImage(avatar, 0, 0, width, height, null);
 
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

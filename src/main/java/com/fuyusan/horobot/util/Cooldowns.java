@@ -30,6 +30,16 @@ public class Cooldowns {
 		}
 	}
 
+	public static long getRemaining(String bucket, long length, IUser user) {
+		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
+		try {
+			return (length - (System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L)));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 	/**
 	 * Puts user onto a cooldown in bucket
 	 *

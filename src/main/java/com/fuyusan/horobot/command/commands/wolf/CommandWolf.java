@@ -30,7 +30,7 @@ public class CommandWolf implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			if(!Cooldowns.onCooldown("wolf-stats", 300000, event.getAuthor())) {
+			if(!Cooldowns.onCooldown("wolf-stats", 1/*300000*/, event.getAuthor())) {
 				Cooldowns.putOnCooldown("wolf-stats", event.getAuthor());
 				DataBase.insertWolf(event.getAuthor());
 				Message.sendFile(
@@ -64,7 +64,7 @@ public class CommandWolf implements Command {
 
 							StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", args[1]));
 							if (hunger >= maxHunger) {
-								int nextHunger = (7 + template.getLevel());
+								int nextHunger = (8);
 								DataBase.updateWolf(event.getAuthor(), "hunger", 0);
 								DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
 								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);
@@ -91,7 +91,7 @@ public class CommandWolf implements Command {
 											WolfProfileBuilder.generateImage(
 													event.getAuthor())));
 						} else {
-							Message.sendMessageInChannel(event.getChannel(), "on-cooldown", "2 hours");
+							Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed", 7200000, event.getAuthor())));
 						}
 					} else {
 						Message.sendMessageInChannel(event.getChannel(), "no-food");

@@ -29,10 +29,28 @@ public class CommandEval implements com.fuyusan.horobot.command.proccessing.Comm
 		ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
 		engine.put("event", event);
 		engine.put("client", event.getClient());
+		engine.put("guild", event.getGuild());
+		engine.put("channel", event.getChannel());
+
 		try {
-			event.getChannel().sendMessage(String.format("```groovy\n%s```", engine.eval(raw)));
+			StringBuilder builder = new StringBuilder();
+			builder.append("import java.lang.*;\n" +
+					"import java.util.*;\n" +
+					"import java.io.*;\n" +
+					"import java.net.*;\n" +
+					"import groovy.lang.*;\n" +
+					"import groovy.util.*;\n" +
+					"import java.math.BigInteger;\n" +
+					"import java.math.BigDecimal;\n" +
+					"import sx.blah.discord.handle.obj.*;\n" +
+					"import sx.blah.discord.util.*;\n" +
+					"import sx.blah.discord.api.internal.json.objects.*;\n" +
+					"import java.awt.*;\n" +
+					"import com.fuyusan.horobot.util.*;\n");
+			builder.append(raw);
+			event.getChannel().sendMessage(String.format("```groovy\n%s```", engine.eval(builder.toString())));
 		} catch (ScriptException e) {
-			event.getChannel().sendMessage(e.getMessage());
+			event.getChannel().sendMessage(String.format("```groovy\n%s```", e.getMessage()));
 		}
 	}
 
