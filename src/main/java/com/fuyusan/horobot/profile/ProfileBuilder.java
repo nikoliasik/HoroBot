@@ -46,26 +46,36 @@ public class ProfileBuilder {
 
 		// Calculate some stuff
 		final int avatarX = ((width / 2) - (avatar.getWidth() / 2));
-		final int avatarY = ((height / 4) - (avatar.getHeight() / 2));
+		final int avatarY = ((height / 3) - (avatar.getHeight() / 2));
 
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
 
-		// Draw profile picture border
-		graphics.fillRect(avatarX, avatarY, avatar.getWidth(), avatar.getHeight());
-		graphics.setColor(Color.GRAY);
-		float thickness = 5;
-		Stroke old = graphics.getStroke();
-		graphics.setStroke(new BasicStroke(thickness));
-		graphics.drawRect(avatarX, avatarY, avatar.getWidth(), avatar.getHeight());
-		graphics.setStroke(old);
+		// Draw the stats background
+		graphics.setColor(new Color(255, 255, 255, 175));
+		graphics.fillRect(20, (height / 2), width - 40, (height / 2 - 20));
+
+		// Draw the status border
+		graphics.setStroke(new BasicStroke(3));
+		graphics.setColor(new Color(128, 128, 128, 255));
+		//graphics.drawRect(20, (height / 2), width - 40, (height / 2 - 20));
+		graphics.drawLine(20, (height / 2), (width / 2) - (avatar.getWidth() / 2), (height / 2));
+		graphics.drawLine((width / 2) + (avatar.getWidth() / 2), (width / 2), (width - 20), (height / 2));
+		graphics.drawLine(20, (height / 2), 20, (height - 20));
+		graphics.drawLine(20, (height - 20), width - 20, (height - 20));
+		graphics.drawLine((width - 20), (height - 20), (width - 20), (height / 2));
+
+		// Draw profile picture background
+		graphics.setColor(new Color(255, 255, 255, 175));
+		graphics.fillRect(avatarX, avatarY, avatar.getWidth(), avatar.getHeight() - 14);
 
 		// Draw profile picture
 		graphics.drawImage(avatar, avatarX, avatarY, 128, 128, null);
 
-		// Draw the stats background
-		graphics.setColor(new Color(128, 128, 128, 175));
-		graphics.fillRect(10, (height / 2 + 10), width - 20, (height / 2 - 20));
+		// Draw profile picture border
+		graphics.setStroke(new BasicStroke(3));
+		graphics.setColor(new Color(128, 128, 128, 255));
+		graphics.drawRect(avatarX, avatarY, avatar.getWidth(), avatar.getHeight());
 
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

@@ -88,7 +88,7 @@ public class ProfileCosmetics {
 	}
 
 	public static boolean hasItem(IUser user, String item) {
-		return DataBase.queryItem(user, item);
+		return (DataBase.queryItem(user, item) != null);
 	}
 
 	public static boolean hasAllItems(IUser user) {
