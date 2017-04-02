@@ -33,8 +33,7 @@ public class CommandEval implements com.fuyusan.horobot.command.proccessing.Comm
 		engine.put("channel", event.getChannel());
 
 		try {
-			StringBuilder builder = new StringBuilder();
-			builder.append("import java.lang.*;\n" +
+			String builder = "import java.lang.*;\n" +
 					"import java.util.*;\n" +
 					"import java.io.*;\n" +
 					"import java.net.*;\n" +
@@ -46,9 +45,9 @@ public class CommandEval implements com.fuyusan.horobot.command.proccessing.Comm
 					"import sx.blah.discord.util.*;\n" +
 					"import sx.blah.discord.api.internal.json.objects.*;\n" +
 					"import java.awt.*;\n" +
-					"import com.fuyusan.horobot.util.*;\n");
-			builder.append(raw);
-			event.getChannel().sendMessage(String.format("```groovy\n%s```", engine.eval(builder.toString())));
+					"import com.fuyusan.horobot.util.*;\n" +
+					raw;
+			event.getChannel().sendMessage(String.format("```groovy\n%s```", engine.eval(builder)));
 		} catch (ScriptException e) {
 			event.getChannel().sendMessage(String.format("```groovy\n%s```", e.getMessage()));
 		}
