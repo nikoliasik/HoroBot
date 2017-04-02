@@ -203,18 +203,20 @@ public class DataBase {
 		}
 	}
 
-	public static boolean queryItem(IUser user, String item) {
+	public static String queryItem(IUser user, String item) {
 		try {
 			String sql = "SELECT item FROM users.item WHERE id=? AND item=?;";
 			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(1, user.getID());
 			statement.setString(2, item);
 			ResultSet set = statement.executeQuery();
-			return set.isBeforeFirst();
+			if(!set.next())
+				return null;
+			return set.getString("item");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 
 	public static List<String> queryItems(IUser user) {

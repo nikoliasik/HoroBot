@@ -154,10 +154,19 @@ public class WolfCosmetics {
 	}
 
 	public static boolean hasItem(IUser user, String item) {
-		return DataBase.queryItem(user, item);
+		return DataBase.queryItem(user, item) != null;
 	}
 
 	public static boolean hasAllItems(IUser user) {
 		return (DataBase.queryItems(user).size() >= totalItems);
+	}
+
+	public static String getType(String item) {
+		return backgrounds.containsKey(item) ? "background" :
+				hats.containsKey(item) ? "hat" :
+				paws.containsKey(item) ? "paws" :
+				bodies.containsKey(item) ? "body" :
+				tails.containsKey(item) ? "tail" :
+				null;
 	}
 }

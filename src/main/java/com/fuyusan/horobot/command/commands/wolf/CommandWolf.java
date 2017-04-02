@@ -9,12 +9,8 @@ import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.wolf.WolfCosmetics;
 import com.fuyusan.horobot.wolf.WolfProfileBuilder;
 import com.fuyusan.horobot.wolf.WolfTemplate;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.util.EmbedBuilder;
 
-import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.Random;
@@ -105,14 +101,11 @@ public class CommandWolf implements Command {
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "name-too-long");
 				}
-			} else if (args[0].equals("background")) {
+			} else if (args[0].equals("equip")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if(!WolfCosmetics.backgrounds.containsKey(temp)) {
-					Message.sendMessageInChannel(event.getChannel(), "wrong-background");
-					return;
-				}
-				if(DataBase.queryItem(event.getAuthor(), temp)) {
-					DataBase.updateWolf(event.getAuthor(), "background", temp);
+				String item;
+				if((item = DataBase.queryItem(event.getAuthor(), temp)) != null) {
+					DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), temp);
 					Message.sendMessageInChannel(event.getChannel(), "background-success", temp);
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "no-item");
