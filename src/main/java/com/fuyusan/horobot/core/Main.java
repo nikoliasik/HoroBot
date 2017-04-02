@@ -19,6 +19,7 @@
 package com.fuyusan.horobot.core;
 
 import com.fuyusan.horobot.command.commands.admin.*;
+import com.fuyusan.horobot.command.commands.dev.CommandEval;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
 import com.fuyusan.horobot.command.commands.image.CommandCat;
@@ -116,6 +117,7 @@ public class Main {
 		commands.put("skip", new CommandSkip());
 		commands.put("repeat", new CommandRepeat());
 		commands.put("song", new CommandSong());
+		commands.put("eval", new CommandEval());
 		//commands.put("voteskip", new CommandVoteSkip());
 		//commands.put("shuffle", new CommandShuffle());
 		//commands.put("loop", new CommandLoop()); // TODO: THIS ONE IS A PRIORITY

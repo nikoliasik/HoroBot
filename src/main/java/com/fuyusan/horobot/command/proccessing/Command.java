@@ -18,12 +18,15 @@
 
 package com.fuyusan.horobot.command.proccessing;
 
+import com.fuyusan.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 public interface Command {
-	
-	public boolean called(String[] args, MessageReceivedEvent event);
-	public void action(String[] args, String raw, MessageReceivedEvent event);
-	public String help();
-	public void executed(boolean success, MessageReceivedEvent event);
+	boolean called(String[] args, MessageReceivedEvent event);
+	void action(String[] args, String raw, MessageReceivedEvent event);
+	String help();
+	default void executed(boolean success, MessageReceivedEvent event) {
+		if(success)
+			Utility.commandsExecuted++;
+	}
 }

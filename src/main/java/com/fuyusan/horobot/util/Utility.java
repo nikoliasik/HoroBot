@@ -66,22 +66,19 @@ public class Utility {
 		updateStats();
 		if(!Main.debug) postStats(shard, shardCount, serverCount);
 
-		StringBuilder builder = new StringBuilder();
-		builder.append("```\n");
-		builder.append("Discord4J version: " + Discord4JVersion + "\n");
-		builder.append("Shards: " + shardCount + "\n");
-		builder.append("Guilds: " + serverCount + "\n");
-		builder.append("Commands executed: " + commandsExecuted + "\n");
-		builder.append("Total commands available: " + totalCommands + "\n");
-		builder.append("App start date: " + runStart + "\n");
-		builder.append("App up time: " + runTime + "\n");
-		builder.append("Reconnected times: " + reconnectedTimes + "\n");
-		builder.append("Memory usage: " + memory + "\n");
-		builder.append("Messages received: " + messagesReceived + "\n");
-		builder.append("Messages sent: " + messagesSent + "\n");
-		builder.append("```");
-
-		return builder.toString();
+		return "```\n" +
+				"Discord4J version: " + Discord4JVersion + "\n" +
+				"Shards: " + shardCount + "\n" +
+				"Guilds: " + serverCount + "\n" +
+				"Commands executed: " + commandsExecuted + "\n" +
+				"Total commands available: " + totalCommands + "\n" +
+				"App start date: " + runStart + "\n" +
+				"App up time: " + runTime + "\n" +
+				"Reconnected times: " + reconnectedTimes + "\n" +
+				"Memory usage: " + memory + "\n" +
+				"Messages received: " + messagesReceived + "\n" +
+				"Messages sent: " + messagesSent + "\n" +
+				"```";
 	}
 
 	public static void updateStats() {
@@ -99,13 +96,12 @@ public class Utility {
 		int hours = (int) TimeUnit.MILLISECONDS.toHours(uptime) - (days * 24);
 		int minutes = (int) (TimeUnit.MILLISECONDS.toMinutes(uptime) - (TimeUnit.MILLISECONDS.toHours(uptime) * 60));
 		int seconds = (int) (TimeUnit.MILLISECONDS.toSeconds(uptime) - (TimeUnit.MILLISECONDS.toMinutes(uptime) * 60));
-		String string = String.format("%d days, %d hours, %d minutes, %d seconds",
+		return String.format("%d days, %d hours, %d minutes, %d seconds",
 				days,
 				hours,
 				minutes,
 				seconds
 		);
-		return string;
 	}
 
 	public static String getStartTime() {
@@ -114,8 +110,7 @@ public class Utility {
 
 		Date date = new Date(startTime);
 		SimpleDateFormat format = new SimpleDateFormat();
-		String dateString = format.format(date);
-		return dateString;
+		return format.format(date);
 	}
 
 	public static String getMemoryUsage() {
@@ -125,9 +120,8 @@ public class Utility {
 
 		long max = runtime.maxMemory();
 		long allocated = runtime.totalMemory();
-		builder.append(format.format((int) allocated / 1048576) + "Mb / ");
-		builder.append(format.format((int) max / 1048576) + "Mb");
-		String memory = builder.toString();
-		return memory;
+		builder.append(format.format((int) allocated / 1048576)).append("Mb / ");
+		builder.append(format.format((int) max / 1048576)).append("Mb");
+		return builder.toString();
 	}
 }
