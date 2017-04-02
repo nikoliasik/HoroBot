@@ -48,8 +48,7 @@ public class CommandWolf implements Command {
 			if (args[0].equals("feed")) {
 				if(args.length == 2) {
 					if(WolfCosmetics.foods.containsKey(args[1])) {
-						if(!Cooldowns.onCooldown("wolf-feed", 7200000, event.getAuthor())) {
-							// TODO: Change this cooldown once the command is finished
+						if(!Cooldowns.onCooldown("wolf-feed", 1/*7200000*/, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed", event.getAuthor());
 							WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 							if (template == null) {
@@ -65,13 +64,11 @@ public class CommandWolf implements Command {
 
 							StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", args[1]));
 							if (hunger >= maxHunger) {
-								for (int i = 1; i <= Math.floor(maxHunger / hunger); i++) {
-									int nextHunger = (7 + template.getLevel());
-									DataBase.updateWolf(event.getAuthor(), "hunger", maxHunger - hunger);
-									DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
-									DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + i);
-									message.append(String.format("**LEVEL UP!** Your wolf leveled up and is now level **%s**!\n", template.getLevel() + i));
-								}
+								int nextHunger = (7 + template.getLevel());
+								DataBase.updateWolf(event.getAuthor(), "hunger", 0);
+								DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
+								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);
+								message.append(String.format("**LEVEL UP!** Your wolf leveled up and is now level **%s**!\n", template.getLevel() + 1));
 							}
 
 							Random rand = new Random();
@@ -79,8 +76,10 @@ public class CommandWolf implements Command {
 							if(drop <= 10) {
 								drop = rand.nextInt(4);
 								String result = WolfCosmetics.drop(event.getAuthor(), drop);
-								DataBase.insertItem(event.getAuthor(), result);
-								if(result != null) message.append("**ITEM DROP!** You got **" + result + "**!");
+								if(result != null) {
+									DataBase.insertItem(event.getAuthor(), result);
+									message.append("**ITEM DROP!** You got **" + result + "**!");
+								}
 							}
 
 							Message.sendFile(

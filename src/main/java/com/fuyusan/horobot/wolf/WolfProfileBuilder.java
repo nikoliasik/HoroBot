@@ -20,7 +20,7 @@ public class WolfProfileBuilder {
 	public static final int height = 128;
 
 	public static EmbedObject generateEmbed(IGuild guild, IUser user) {
-		WolfTemplate template = DataBase.wolfQuery(user);
+		final WolfTemplate template = DataBase.wolfQuery(user);
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withAuthorIcon(user.getAvatarURL());

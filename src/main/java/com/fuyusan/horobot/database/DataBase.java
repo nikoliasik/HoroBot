@@ -1,6 +1,7 @@
 package com.fuyusan.horobot.database;
 
 import com.fuyusan.horobot.core.Config;
+import com.fuyusan.horobot.profile.ProfileTemplate;
 import com.fuyusan.horobot.wolf.WolfTemplate;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -120,6 +121,75 @@ public class DataBase {
 		}
 	}
 
+	public static void createUserTable() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS users.user(" +
+					"id TEXT PRIMARY KEY NOT NULL," +
+					"description TEXT NOT NULL DEFAULT 'I like trains'," +
+					"level INTEGER NOT NULL DEFAULT 1," +
+					"xp INTEGER NOT NULL DEFAULT 0," +
+					"maxXp INTEGER NOT NULL DEFAULT 300," +
+					"foxCoins INTEGER NOT NULL DEFAULT 0," +
+					"background TEXT NOT NULL DEFAULT 'None');";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void insertUser(IUser user) {
+		try {
+			Statement statement = con.createStatement();
+			String sql = String.format(
+					"INSERT INTO users.user (id) VALUES (%s);",
+					user.getID());
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateUser(IUser user, String index, Object value) {
+		try {
+			PreparedStatement statement = con.prepareStatement("UPDATE users.user SET " + index + " = ? WHERE id = ?");
+			if(value instanceof String) statement.setString(1, (String) value);
+			if(value instanceof Integer) statement.setInt(1, (int) value);
+			statement.setString(2, user.getID());
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static ProfileTemplate queryUser(IUser user) {
+		ProfileTemplate template = null;
+		try {
+			Statement statement = con.createStatement();
+			String sql = String.format(
+					"SELECT * FROM users.user WHERE id='%s'",
+					user.getID());
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				template = new ProfileTemplate(
+						user.getName(),
+						set.getString("description"),
+						set.getInt("level"),
+						set.getInt("xp"),
+						set.getInt("maxXp"),
+						set.getInt("foxCoins"),
+						set.getString("background"));
+			}
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return template;
+	}
+
 	public static void insertItem(IUser user, String item) {
 		try {
 			String sql = "INSERT INTO users.item (id, item) VALUES (?, ?);";
@@ -192,7 +262,8 @@ public class DataBase {
 	public static void insertGuild(String guildID) {
 		try {
 			Statement statement = con.createStatement();
-			String sql = String.format("INSERT INTO guilds.guild (id, language, prefix, welcome) VALUES ('%s', 'en', '.horo', 'Welcome~!') ON CONFLICT DO NOTHING;",
+			String sql = String.format(
+					"INSERT INTO guilds.guild (id, language, prefix, welcome) VALUES ('%s', 'en', '.horo', 'Welcome~!') ON CONFLICT DO NOTHING;",
 					guildID);
 			statement.executeUpdate(sql);
 			statement.close();

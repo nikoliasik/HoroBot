@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fuyusan.horobot.command.commands.profile.CommandProfile;
 import com.fuyusan.horobot.command.commands.wolf.CommandWolf;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
@@ -128,6 +129,7 @@ public class Main {
 		//commands.put("queue", new CommandQueue());
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
+		commands.put("profile", new CommandProfile());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
@@ -152,9 +154,7 @@ public class Main {
 	public static void handleCommand(CommandContainer cmd) {
 		if (cmd.event.getMessage().getChannel().isPrivate()) {
 			if(!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
-				RequestBuffer.request(() -> {
-					Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
-				});
+				Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
 				commands.get(cmd.invoke).executed(false, cmd.event);
 				return;
 			}
@@ -173,13 +173,9 @@ public class Main {
 				commands.get(cmd.invoke).executed(safe, cmd.event);
 			}
 		} else {
-			try {
-				RequestBuffer.request(() -> {
-					cmd.event.getMessage().addReaction("❓");
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			RequestBuffer.request(() -> {
+				cmd.event.getMessage().addReaction("❓");
+			});
 		}
 	}
 }
