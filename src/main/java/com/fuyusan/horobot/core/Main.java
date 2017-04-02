@@ -22,7 +22,10 @@ import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandEval;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
 import com.fuyusan.horobot.command.commands.fun.*;
-import com.fuyusan.horobot.command.commands.image.*;
+import com.fuyusan.horobot.command.commands.image.CommandCat;
+import com.fuyusan.horobot.command.commands.image.CommandEcchi;
+import com.fuyusan.horobot.command.commands.image.CommandExplicit;
+import com.fuyusan.horobot.command.commands.image.CommandKona;
 import com.fuyusan.horobot.command.commands.misc.*;
 import com.fuyusan.horobot.command.commands.music.*;
 import com.fuyusan.horobot.command.commands.utility.*;
@@ -33,9 +36,7 @@ import com.fuyusan.horobot.command.proccessing.CommandParser;
 import com.fuyusan.horobot.database.DataBase;
 import com.fuyusan.horobot.util.FontTemplate;
 import com.fuyusan.horobot.util.Message;
-import com.fuyusan.horobot.util.music.CommandLoop;
 import com.fuyusan.horobot.util.music.GuildMusicManager;
-import com.fuyusan.horobot.wolf.WolfProfileBuilder;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -43,6 +44,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.RequestBuffer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 	
