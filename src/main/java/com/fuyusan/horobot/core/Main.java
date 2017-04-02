@@ -38,7 +38,6 @@ import com.fuyusan.horobot.command.proccessing.CommandParser;
 import com.fuyusan.horobot.database.DataBase;
 import com.fuyusan.horobot.util.FontTemplate;
 import com.fuyusan.horobot.util.Message;
-import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.util.music.GuildMusicManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -52,11 +51,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-	
+
 	public static boolean debug = true;
 
+	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	public static ClientManager INSTANCE;
-	
+
 	public static HashMap<String, Command> commands = new HashMap<String, Command>();
 	public static final CommandParser parser = new CommandParser();
 
@@ -66,7 +66,6 @@ public class Main {
 	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
 
 	public static void main(String[] args) {
-		Logger logger = LoggerFactory.getLogger(Main.class);
 
 		FontTemplate template = new FontTemplate();
 		template.loadFont();
