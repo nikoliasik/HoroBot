@@ -27,7 +27,7 @@ public class CommandWolf implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			if(!Cooldowns.onCooldown("wolf-stats", 1/*300000*/, event.getAuthor())) {
+			if(!Cooldowns.onCooldown("wolf-stats", 300000, event.getAuthor())) {
 				Cooldowns.putOnCooldown("wolf-stats", event.getAuthor());
 				DataBase.insertWolf(event.getAuthor());
 				Message.sendFile(

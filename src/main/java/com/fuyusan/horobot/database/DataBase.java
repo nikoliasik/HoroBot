@@ -346,7 +346,7 @@ public class DataBase {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return "none";
+		return "None";
 	}
 
 	public static WolfTemplate wolfQuery(IUser user) {

@@ -77,6 +77,43 @@ public class ProfileBuilder {
 		graphics.setColor(new Color(128, 128, 128, 255));
 		graphics.drawRect(avatarX, avatarY, avatar.getWidth(), avatar.getHeight());
 
+		// Draw name
+		final int nameY = (height / 2 + 40);
+		graphics.setColor(Color.DARK_GRAY);
+		graphics.setFont(new Font("Roboto", Font.BOLD, 26));
+		graphics.drawString(
+				user.getName(),
+				(width / 2) - ((int) graphics.getFontMetrics().getStringBounds(user.getName(), graphics).getWidth() / 2),
+				nameY);
+
+		// Draw stats
+		// Draw level
+		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 20));
+		graphics.drawString("Level " + template.getLevel(), 40, (nameY + 30));
+
+		// Draw experience progress bar
+		// Draw the actual progress
+		final int size = (width / 2 - 20);
+		final double percent = ((double) template.getXp() / (double) template.getMaxXp()) * (double) size;
+		final int progress = (int) percent;
+		graphics.setColor(Color.ORANGE);
+		graphics.fillRect(
+				(width / 2 - 30),
+				(nameY + 20),
+				progress,
+				(10));
+
+		// Draw the rectangle
+		graphics.setColor(Color.DARK_GRAY);
+		graphics.drawRect(
+				(width / 2 - 30),
+				(nameY + 20),
+				size,
+				(10));
+
+		// Draw the experience
+		graphics.drawString();
+
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		try {
