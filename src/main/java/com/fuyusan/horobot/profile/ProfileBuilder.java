@@ -38,19 +38,17 @@ public class ProfileBuilder {
 		final Font font = new Font("Roboto", Font.TRUETYPE_FONT, 16);
 		graphics.setFont(font);
 
-		BufferedImage avatar = null;
-		final int imageWidth = 128;
-		final int imageHeight = 128;
+		Image avatar = null;
 		try {
-			avatar = Utility.imageFor(user.getAvatarURL().replace(".webp", ".png"));
-			System.out.println(user.getAvatarURL().replace(".webp", ".png"));
+			BufferedImage temp = Utility.imageFor(user.getAvatarURL().replace(".webp", ".png"));
+			avatar = temp.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 
 		// Calculate some stuff
 		final int avatarX = 20;
-		final int avatarY = ((height / 3) - (avatar.getHeight() / 2) - 20);
+		final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2) - 20);
 
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
@@ -61,7 +59,7 @@ public class ProfileBuilder {
 
 		// Draw profile picture background
 		graphics.setColor(new Color(255, 255, 255, 175));
-		graphics.fillRect(avatarX, avatarY, width - 40, avatar.getHeight() - 14);
+		graphics.fillRect(avatarX, avatarY, width - 40, avatar.getHeight(null) - 14);
 
 		// Draw the status border
 		graphics.setStroke(new BasicStroke(3));
@@ -74,12 +72,12 @@ public class ProfileBuilder {
 		graphics.drawRect(avatarX, 15, width - 40, height - 35);
 
 		// Draw profile picture
-		graphics.drawImage(avatar, avatarX, avatarY, imageWidth, imageHeight, null);
+		graphics.drawImage(avatar, avatarX, avatarY, avatar.getWidth(null), avatar.getHeight(null), null);
 
 		// Draw profile picture border
 		graphics.setStroke(new BasicStroke(3));
 		graphics.setColor(new Color(128, 128, 128, 255));
-		graphics.drawRect(avatarX, avatarY, avatar.getWidth(), avatar.getHeight());
+		graphics.drawRect(avatarX, avatarY, avatar.getWidth(null), avatar.getHeight(null));
 
 		// Draw name
 		final int nameY = (height / 2 + 20);
@@ -115,7 +113,7 @@ public class ProfileBuilder {
 				size,
 				(10));
 
-		// Draw the fox coins
+		// Draw the coins
 		graphics.drawString(
 				"Coins $" + template.getFoxCoins(),
 				(int) ((width / 2) - (graphics.getFontMetrics().getStringBounds("Coins $" + template.getFoxCoins(), graphics).getWidth() / 2)),
