@@ -26,7 +26,7 @@ public class CommandParser {
 	public CommandContainer parse(String rw, String prefix, MessageReceivedEvent event) {
 		ArrayList<String> split = new ArrayList<String>();
 		String raw = rw;
-		String beheaded = beheaded = raw.replaceFirst(prefix, "");
+		String beheaded = raw.replaceFirst(prefix, "");
 		String[] splitBeheaded = beheaded.split(" ");
 		
 		for(String s : splitBeheaded)

@@ -48,7 +48,7 @@ public class ProfileBuilder {
 
 		// Calculate some stuff
 		final int avatarX = 20;
-		final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2) - 20);
+		final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2));
 
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
@@ -59,7 +59,7 @@ public class ProfileBuilder {
 
 		// Draw profile picture background
 		graphics.setColor(new Color(255, 255, 255, 175));
-		graphics.fillRect(avatarX, avatarY, width - 40, avatar.getHeight(null) - 14);
+		graphics.fillRect(20, 15, width - 40, (height / 2 - 35));
 
 		// Draw the status border
 		graphics.setStroke(new BasicStroke(3));
