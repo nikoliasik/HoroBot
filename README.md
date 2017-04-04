@@ -1,4 +1,4 @@
-# HoroBot nicknamed HorrorBot because the source code is bad
+# HoroBot
 Is a multifunctional open-source Discord bot written in Java using Discord4J.
 
 # Features
