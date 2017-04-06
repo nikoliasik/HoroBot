@@ -10,13 +10,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-gb9ce1de-203" level="project" />
-    <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-g059b5eb-226" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.7" level="project" />
-    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.7" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-jsr223:2.4.7" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy:2.4.7" level="project" />
-    <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-g21be107-228" level="project" />
+    <orderEntry type="library" name="Maven: com.github.austinv11:Discord4j:dev-2.7.0-gbb12e28-230" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.24" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.3" level="project" />

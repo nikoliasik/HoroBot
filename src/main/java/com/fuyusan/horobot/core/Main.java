@@ -57,7 +57,7 @@ public class Main {
 	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	public static ClientManager INSTANCE;
 
-	public static HashMap<String, Command> commands = new HashMap<String, Command>();
+	public static HashMap<String, Command> commands = new HashMap<>();
 	public static final CommandParser parser = new CommandParser();
 
 	public static AudioPlayerManager playerManager;

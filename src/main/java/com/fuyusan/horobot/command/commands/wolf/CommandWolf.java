@@ -13,7 +13,9 @@ import com.fuyusan.horobot.wolf.WolfTemplate;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -41,11 +43,11 @@ public class CommandWolf implements Command {
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats", 300000, event.getAuthor())));
 			}
-		} else if (args.length > 1) {
+		} else if (args.length >= 1) {
 			if (args[0].equals("feed")) {
-				if(args.length == 2) {
-					if(WolfCosmetics.foods.containsKey(args[1])) {
-						if(!Cooldowns.onCooldown("wolf-feed", 1/*7200000*/, event.getAuthor())) {
+				if (args.length == 2) {
+					if (WolfCosmetics.foods.containsKey(args[1])) {
+						if (!Cooldowns.onCooldown("wolf-feed", 1/*7200000*/, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed", event.getAuthor());
 							new HoroTask(event.getAuthor().getID() + "-note") {
 								@Override
@@ -71,18 +73,21 @@ public class CommandWolf implements Command {
 								DataBase.updateWolf(event.getAuthor(), "hunger", 0);
 								DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
 								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);
-								message.append(String.format("**LEVEL UP!** Your wolf leveled up and is now level **%s**!\n", template.getLevel() + 1));
+								message.append(String.format("**LEVEL UP!** Your wolf is now level **%s**!\n", template.getLevel() + 1));
 							}
 
 							Random rand = new Random();
 							int drop = rand.nextInt(100);
-							if(drop <= 10) {
+							if (drop <= 10) {
 								String result = WolfCosmetics.drop(event.getAuthor());
-								if(result != null) {
+								if (result != null) {
 									DataBase.insertItem(event.getAuthor(), result);
 									message.append("**ITEM DROP!** You got **" + result + "**!");
 								}
 							}
+
+							DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() + 100));
+							message.append("**+100** Coins for feeding your wolf!");
 
 							Message.sendFile(
 									event.getChannel(),
@@ -101,7 +106,7 @@ public class CommandWolf implements Command {
 				}
 			} else if (args[0].equals("rename")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if(temp.length() <= 30) {
+				if (temp.length() <= 30) {
 					DataBase.updateWolf(event.getAuthor(), "name", temp);
 					Message.sendMessageInChannel(event.getChannel(), "name-success", temp);
 				} else {
@@ -109,12 +114,43 @@ public class CommandWolf implements Command {
 				}
 			} else if (args[0].equals("equip")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				String item;
-				if((item = DataBase.queryItem(event.getAuthor(), temp)) != null) {
+				String item = DataBase.queryItem(event.getAuthor(), temp);
+				if (item != null) {
 					DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), temp);
 					Message.sendMessageInChannel(event.getChannel(), "background-success", temp);
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "no-item");
+				}
+			} else if (args[0].equals("strip")) {
+				DataBase.updateWolf(event.getAuthor(), "background", "None");
+				DataBase.updateWolf(event.getAuthor(), "hat", "None");
+				DataBase.updateWolf(event.getAuthor(), "body", "None");
+				DataBase.updateWolf(event.getAuthor(), "paws", "None");
+				DataBase.updateWolf(event.getAuthor(), "tail", "None");
+				DataBase.updateWolf(event.getAuthor(), "shirt", "None");
+				DataBase.updateWolf(event.getAuthor(), "nose", "None");
+				DataBase.updateWolf(event.getAuthor(), "eye", "None");
+				DataBase.updateWolf(event.getAuthor(), "neck", "None");
+				Message.sendMessageInChannel(event.getChannel(), "stripped-items");
+			} else if (args[0].equals("inventory")) {
+				ArrayList<String> items = (ArrayList<String>) DataBase.queryItems(event.getAuthor());
+				Message.sendRawMessageInChannel(
+						event.getChannel(),
+						"Here's your inventory!\n" +
+								"```\n" +
+								Utility.listAsString(items) + "\n" +
+								"```");
+			} else if (args[0].equals("capsule")) {
+				String drop = WolfCosmetics.drop(event.getAuthor());
+				if(drop != null) {
+					DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
+					DataBase.insertItem(event.getAuthor(), drop);
+					Message.sendMessageInChannel(
+							event.getChannel(),
+							"capsule-opened",
+							drop);
+				} else {
+					Message.sendMessageInChannel(event.getChannel(), "got-everything");
 				}
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "no-sub-command");

@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class ProfileBuilder {
 
@@ -26,6 +27,34 @@ public class ProfileBuilder {
 		return builder.build();
 	}
 
+	public static byte[] generateLevelUp(IUser user, int level, BufferedImage bg) {
+		BufferedImage bufferedImage = new BufferedImage(90, 110, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics = bufferedImage.createGraphics();
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		final Font font = new Font("Roboto", Font.BOLD, 32);
+		graphics.setFont(font);
+
+		Image avatar = null;
+		try {
+			BufferedImage temp = Utility.imageFor(user.getAvatarURL().replace(".webp", ".png"));
+			avatar = temp.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		graphics.drawImage(bg, 0, 0, 90, 110, null);
+
+		graphics.dispose();
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(bufferedImage, "png", bytes);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return bytes.toByteArray();
+	}
+
 	public static byte[] generateProfileImage(IUser user) {
 		final ProfileTemplate template = DataBase.queryUser(user);
 
@@ -39,7 +68,7 @@ public class ProfileBuilder {
 		Image avatar = null;
 		try {
 			BufferedImage temp = Utility.imageFor(user.getAvatarURL().replace(".webp", ".png"));
-			avatar = temp.getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
+			avatar = temp.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

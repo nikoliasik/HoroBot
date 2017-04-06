@@ -1,9 +1,11 @@
 - Wolf
     - Add more cosmetic types
-    - Inventory command
+
+- Implement Jisho.org kanji search
 
 - Music
     - Implement a loop queue command
+    - Implement a vote-skip command
     - Fix the other music shit
 
 - Gag, mute etc commands

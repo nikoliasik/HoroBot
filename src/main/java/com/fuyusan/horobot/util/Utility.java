@@ -36,6 +36,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -201,5 +202,14 @@ public class Utility {
 		connection.addRequestProperty("User-Agent", "Mozilla/5.0 Apache the Attack Helicopter");
 		connection.connect();
 		return ImageIO.read(connection.getInputStream());
+	}
+
+	public static String listAsString (ArrayList<String> list) {
+		StringBuilder builder = new StringBuilder();
+		for(String string : list) {
+			builder.append(string);
+			builder.append(", ");
+		}
+		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "";
 	}
 }
