@@ -88,7 +88,11 @@ public class DataBase {
 					"hat TEXT NOT NULL DEFAULT 'None'," +
 					"body TEXT NOT NULL DEFAULT 'None'," +
 					"paws TEXT NOT NULL DEFAULT 'None'," +
-					"tail TEXT NOT NULL DEFAULT 'None');";
+					"tail TEXT NOT NULL DEFAULT 'None'," +
+					"shirt TEXT NOT NULL DEFAULT 'None'," +
+					"nose TEXT NOT NULL DEFAULT 'None'," +
+					"eye TEXT NOT NULL DEFAULT 'None'," +
+					"neck TEXT NOT NULL DEFAULT 'None');";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -366,7 +370,11 @@ public class DataBase {
 						set.getString("hat"),
 						set.getString("body"),
 						set.getString("paws"),
-						set.getString("tail")
+						set.getString("tail"),
+						set.getString("shirt"),
+						set.getString("nose"),
+						set.getString("eye"),
+						set.getString("neck")
 				);
 			}
 			set.close();

@@ -1,3 +1,11 @@
+- Wolf
+    - Add more cosmetic types
+    - Inventory command
+
+- Music
+    - Implement a loop queue command
+    - Fix the other music shit
+
 - Gag, mute etc commands
 
 - Measurement converter command
@@ -6,8 +14,7 @@
 - Calculator command
     - Should be relatively simple, figure it out along the way ^^
 
-- Code eval command
-    - Write code in chat, compile at runtime and execute it
+- Weather command
 
 - Implement an about this bot command
     - Just a few generic things about myself, the bot and stuff

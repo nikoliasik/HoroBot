@@ -18,8 +18,6 @@ public class ProfileBuilder {
 	public static final int height = 300;
 
 	public static EmbedObject generateEmbed(IGuild guild, IUser user) {
-		final ProfileTemplate template = DataBase.queryUser(user);
-
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withAuthorIcon(user.getAvatarURL());
 		builder.withAuthorName(user.getDisplayName(guild) + "'s Profile");
@@ -48,18 +46,14 @@ public class ProfileBuilder {
 
 		// Calculate some stuff
 		final int avatarX = 20;
-		final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2));
+		final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2) + 40);
 
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
 
 		// Draw the stats background
 		graphics.setColor(new Color(255, 255, 255, 175));
-		graphics.fillRect(20, (height / 2 - 20), width - 40, (height / 2));
-
-		// Draw profile picture background
-		graphics.setColor(new Color(255, 255, 255, 175));
-		graphics.fillRect(20, 15, width - 40, (height / 2 - 35));
+		graphics.fillRect(20, avatarY, width - 40, height - 35);
 
 		// Draw the status border
 		graphics.setStroke(new BasicStroke(3));
@@ -69,7 +63,7 @@ public class ProfileBuilder {
 		//graphics.drawLine(20, (height / 2 - 20), 20, (height - 20));
 		//graphics.drawLine(20, (height - 20), width - 20, (height - 20));
 		//graphics.drawLine((width - 20), (height - 20), (width - 20), (height / 2 - 20));
-		graphics.drawRect(avatarX, 15, width - 40, height - 35);
+		graphics.drawRect(avatarX, avatarY, width - 40, height - 35);
 
 		// Draw profile picture
 		graphics.drawImage(avatar, avatarX, avatarY, avatar.getWidth(null), avatar.getHeight(null), null);
@@ -80,7 +74,7 @@ public class ProfileBuilder {
 		graphics.drawRect(avatarX, avatarY, avatar.getWidth(null), avatar.getHeight(null));
 
 		// Draw name
-		final int nameY = (height / 2 + 20);
+		final int nameY = (height / 2 + 60);
 		graphics.setColor(Color.DARK_GRAY);
 		graphics.setFont(new Font("Roboto", Font.BOLD, 26));
 		graphics.drawString(
@@ -100,7 +94,7 @@ public class ProfileBuilder {
 		final int progress = (int) percent;
 		graphics.setColor(Color.ORANGE);
 		graphics.fillRect(
-				(width / 2 - 30),
+		(width / 2 - 30),
 				(nameY + 10),
 				progress,
 				(10));
@@ -112,12 +106,6 @@ public class ProfileBuilder {
 				(nameY + 10),
 				size,
 				(10));
-
-		// Draw the coins
-		graphics.drawString(
-				"Coins $" + template.getFoxCoins(),
-				(int) ((width / 2) - (graphics.getFontMetrics().getStringBounds("Coins $" + template.getFoxCoins(), graphics).getWidth() / 2)),
-				(nameY + 45));
 
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

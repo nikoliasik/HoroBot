@@ -91,6 +91,64 @@ public class WolfProfileBuilder {
 				wolf.getBase().getWidth() * 2,
 				wolf.getBase().getHeight() * 2,
 				null);
+
+		// Draw the wolf cosmetics
+		graphics.drawImage(wolf.getBody(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getEye(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getNose(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getShirt(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getNeck(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getTail(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getPaws(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getHat(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
 		graphics.dispose();
 
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

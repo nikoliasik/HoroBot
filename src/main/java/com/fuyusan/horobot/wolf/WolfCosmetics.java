@@ -72,6 +72,7 @@ public class WolfCosmetics {
 	public static LinkedHashMap<String, String> hats = new LinkedHashMap<>();
 	static {
 		hats.put("None", "/wolf/hats/none.png");
+		hats.put("Christmas Hat", "/wolf/hats/christmas-hat.png");
 	}
 
 	public static LinkedHashMap<String, String> bodies = new LinkedHashMap<>();
@@ -87,58 +88,122 @@ public class WolfCosmetics {
 	public static LinkedHashMap<String, String> tails = new LinkedHashMap<>();
 	static {
 		tails.put("None", "/wolf/tails/none.png");
+		tails.put("Christmas Lights", "/wolf/tails/christmas-lights.png");
 	}
 
-	public static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size());
+	public static LinkedHashMap<String, String> shirts = new LinkedHashMap<>();
+	static {
+		shirts.put("None", "/wolf/shirts/none.png");
+		shirts.put("Anime Shirt", "/wolf/shirts/anime.png");
+	}
 
-	public static String drop(IUser user, int type) {
+	public static LinkedHashMap<String, String> noses = new LinkedHashMap<>();
+	static {
+		noses.put("None", "/wolf/noses/none.png");
+		noses.put("Clowns Nose", "/wolf/noses/clown-nose.png");
+	}
+
+	public static LinkedHashMap<String, String> eyes = new LinkedHashMap<>();
+	static {
+		eyes.put("None", "/wolf/eyes/none.png");
+		eyes.put("Eye Patch", "/wolf/eyes/eye-patch.png");
+		eyes.put("Thug Glasses", "/wolf/eyes/thug-life.png");
+	}
+
+	public static LinkedHashMap<String, String> neck = new LinkedHashMap<>();
+	static {
+		neck.put("None", "/wolf/neck/none.png");
+		neck.put("Scarf", "/wolf/neck/scarf-1.png");
+		neck.put("Scarf 2", "/wolf/neck/scarf-2.png");
+	}
+
+	public static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
+
+	public static String drop(IUser user) {
 		Random rand = new Random();
+		int type = rand.nextInt(8);
 		int drop;
 		switch(type) {
 			case 0: {
 				drop = rand.nextInt(backgrounds.size());
 				String value = (new ArrayList<>(backgrounds.values())).get(drop);
 				String item = getKeyName(backgrounds, value);
-				if(item.equals("None")) return drop(user, rand.nextInt(4));
+				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return null;
-				return drop(user, type);
+				return drop(user);
 			}
 			case 1: {
 				drop = rand.nextInt(hats.size());
 				String value = (new ArrayList<>(hats.values())).get(drop);
 				String item = getKeyName(hats, value);
-				if(item.equals("None")) return drop(user, rand.nextInt(4));
+				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return null;
-				return drop(user, type);
+				return drop(user);
 			}
 			case 2: {
 				drop = rand.nextInt(bodies.size());
 				String value = (new ArrayList<>(bodies.values())).get(drop);
 				String item = getKeyName(bodies, value);
-				if(item.equals("None")) return drop(user, rand.nextInt(4));
+				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return null;
-				return drop(user, type);
+				return drop(user);
 			}
 			case 3: {
 				drop = rand.nextInt(paws.size());
 				String value = (new ArrayList<>(paws.values())).get(drop);
 				String item = getKeyName(paws, value);
-				if(item.equals("None")) return drop(user, rand.nextInt(4));
+				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return null;
-				return drop(user, type);
+				return drop(user);
 			}
 			case 4: {
 				drop = rand.nextInt(tails.size());
 				String value = (new ArrayList<>(tails.values())).get(drop);
 				String item = getKeyName(tails, value);
-				if(item.equals("None")) return drop(user, rand.nextInt(4));
+				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return null;
-				return drop(user, type);
+				return drop(user);
+			}
+			case 5: {
+				drop = rand.nextInt(shirts.size());
+				String value = (new ArrayList<>(shirts.values())).get(drop);
+				String item = getKeyName(shirts, value);
+				if(item.equals("None")) return drop(user);
+				if(!hasItem(user, item)) return item;
+				if(!hasAllItems(user)) return null;
+				return drop(user);
+			}
+			case 6: {
+				drop = rand.nextInt(noses.size());
+				String value = (new ArrayList<>(noses.values())).get(drop);
+				String item = getKeyName(noses, value);
+				if(item.equals("None")) return drop(user);
+				if(!hasItem(user, item)) return item;
+				if(!hasAllItems(user)) return null;
+				return drop(user);
+			}
+			case 7: {
+				drop = rand.nextInt(neck.size());
+				String value = (new ArrayList<>(neck.values())).get(drop);
+				String item = getKeyName(neck, value);
+				if(item.equals("None")) return drop(user);
+				if(!hasItem(user, item)) return item;
+				if(!hasAllItems(user)) return null;
+				return drop(user);
+			}
+			case 8: {
+				drop = rand.nextInt(eyes.size());
+				String value = (new ArrayList<>(eyes.values())).get(drop);
+				String item = getKeyName(eyes, value);
+				if(item.equals("None")) return drop(user);
+				if(!hasItem(user, item)) return item;
+				if(!hasAllItems(user)) return null;
+				return drop(user);
 			}
 		}
 		return null;
@@ -167,6 +232,10 @@ public class WolfCosmetics {
 				paws.containsKey(item) ? "paws" :
 				bodies.containsKey(item) ? "body" :
 				tails.containsKey(item) ? "tail" :
+				shirts.containsKey(item) ? "shirt" :
+				noses.containsKey(item) ? "nose" :
+				neck.containsKey(item) ? "neck" :
+				eyes.containsKey(item) ? "eye" :
 				null;
 	}
 }
