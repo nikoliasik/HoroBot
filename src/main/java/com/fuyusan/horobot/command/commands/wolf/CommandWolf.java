@@ -29,7 +29,7 @@ public class CommandWolf implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			if(!Cooldowns.onCooldown("wolf-stats", 1/*300000*/, event.getAuthor())) {
+			if(!Cooldowns.onCooldown("wolf-stats", 10000, event.getAuthor())) {
 				Cooldowns.putOnCooldown("wolf-stats", event.getAuthor());
 				DataBase.insertWolf(event.getAuthor());
 				Message.sendFile(
@@ -46,8 +46,8 @@ public class CommandWolf implements Command {
 		} else if (args.length >= 1) {
 			if (args[0].equals("feed")) {
 				if (args.length == 2) {
-					if (WolfCosmetics.foods.containsKey(args[1])) {
-						if (!Cooldowns.onCooldown("wolf-feed", 1/*7200000*/, event.getAuthor())) {
+					if (WolfCosmetics.foods.containsKey(args[1].toLowerCase())) {
+						if (!Cooldowns.onCooldown("wolf-feed", 7200000, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed", event.getAuthor());
 							new HoroTask(event.getAuthor().getID() + "-note") {
 								@Override
@@ -103,6 +103,8 @@ public class CommandWolf implements Command {
 					} else {
 						Message.sendMessageInChannel(event.getChannel(), "no-food");
 					}
+				} else {
+					Message.sendMessageInChannel(event.getChannel(), "feed-help");
 				}
 			} else if (args[0].equals("rename")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
@@ -141,16 +143,20 @@ public class CommandWolf implements Command {
 								Utility.listAsString(items) + "\n" +
 								"```");
 			} else if (args[0].equals("capsule")) {
-				String drop = WolfCosmetics.drop(event.getAuthor());
-				if(drop != null) {
-					DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
-					DataBase.insertItem(event.getAuthor(), drop);
-					Message.sendMessageInChannel(
-							event.getChannel(),
-							"capsule-opened",
-							drop);
+				if(DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
+					String drop = WolfCosmetics.drop(event.getAuthor());
+					if (drop != null) {
+						DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
+						DataBase.insertItem(event.getAuthor(), drop);
+						Message.sendMessageInChannel(
+								event.getChannel(),
+								"capsule-opened",
+								drop);
+					} else {
+						Message.sendMessageInChannel(event.getChannel(), "got-everything");
+					}
 				} else {
-					Message.sendMessageInChannel(event.getChannel(), "got-everything");
+					Message.sendMessageInChannel(event.getChannel(), "insufficient-funds");
 				}
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "no-sub-command");

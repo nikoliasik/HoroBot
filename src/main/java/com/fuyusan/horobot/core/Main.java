@@ -21,6 +21,7 @@ package com.fuyusan.horobot.core;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandEval;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
+import com.fuyusan.horobot.command.commands.dev.CommandTest;
 import com.fuyusan.horobot.command.commands.fun.*;
 import com.fuyusan.horobot.command.commands.image.CommandCat;
 import com.fuyusan.horobot.command.commands.image.CommandEcchi;
@@ -133,6 +134,7 @@ public class Main {
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
+		//commands.put("test", new CommandTest());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();

@@ -35,6 +35,8 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageSendEvent;
 import sx.blah.discord.handle.impl.events.shard.ReconnectSuccessEvent;
 
+import java.io.ByteArrayInputStream;
+
 public class AnnotationListener {
 	
 	@EventSubscriber
@@ -48,24 +50,24 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
-		if (event.getClient().isReady()) {
-			if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
-				DataBase.insertGuild(event.getGuild().getID());
+		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
+			DataBase.insertGuild(event.getGuild().getID());
+			if (event.getClient().isReady()) {
 				Message.sendRawMessageInChannel(event.getGuild().getChannels().get(0),
 						"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
-				Main.LOGGER.info(String.format("New guild created:\n" +
-								"Name: %s\n" +
-								"ID: %s\n" +
-								"Owner: %s\n" +
-								"Owner ID: %s\n" +
-								"Users: %s\n",
-						event.getGuild().getName(),
-						event.getGuild().getID(),
-						event.getGuild().getOwner().getName(),
-						event.getGuild().getOwner().getID(),
-						event.getGuild().getUsers().size()));
 			}
-		}
+			Main.LOGGER.info(String.format("New guild created:\n" +
+							"Name: %s\n" +
+							"ID: %s\n" +
+							"Owner: %s\n" +
+							"Owner ID: %s\n" +
+							"Users: %s\n",
+					event.getGuild().getName(),
+					event.getGuild().getID(),
+					event.getGuild().getOwner().getName(),
+					event.getGuild().getOwner().getID(),
+					event.getGuild().getUsers().size()));
+			}
 	}
 	
 	@EventSubscriber
@@ -88,16 +90,20 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor() != event.getClient().getOurUser()) {
+			DataBase.insertUser(event.getAuthor());
 			if (!Cooldowns.onCooldown("message-xp", 120000, event.getAuthor())) {
 				Cooldowns.putOnCooldown("message-xp", event.getAuthor());
 				DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
 				ProfileTemplate template = DataBase.queryUser(event.getAuthor());
 				if (template.getXp() >= template.getMaxXp()) {
 					DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
+					DataBase.updateUser(event.getAuthor(), "xp", 0);
+					DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
 					Message.sendFile(
 							event.getChannel(),
 							"**LEVEL UP!**",
-							ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1));
+							"level-up.png",
+							new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
 				}
 			}
 			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");

@@ -161,6 +161,12 @@ public class CommandHelp implements Command {
 								"\n" +
 								".horotranslate\n" +
 								"	* Usage: .horotranslate [from] [to] [text] - Translate something from one language to another\n" +
+								"\n" +
+								".horowolf\n" +
+								"	* Usage: .horowolf <feed/rename/background/strip/inventory/capsule> - Display your wolf or execute one of the sub-commands\n" +
+								"\n" +
+								".horoprofile\n" +
+								"	* Usage: .horoprofile <background/info/capsule> - Display your profile or execute one of the sub-commands\n" +
 								"```");
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {

@@ -9,7 +9,7 @@ public class WolfCosmetics {
 
 	public static HashMap<String, Integer> foods = new HashMap<>();
 	static {
-		foods.put("Cracker", 4);
+		foods.put("cracker", 4);
 	}
 
 	public static LinkedHashMap<String, String> backgrounds = new LinkedHashMap<>();
@@ -72,7 +72,6 @@ public class WolfCosmetics {
 	public static LinkedHashMap<String, String> hats = new LinkedHashMap<>();
 	static {
 		hats.put("None", "/wolf/hats/none.png");
-		hats.put("Christmas Hat", "/wolf/hats/christmas-hat.png");
 	}
 
 	public static LinkedHashMap<String, String> bodies = new LinkedHashMap<>();

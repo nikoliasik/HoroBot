@@ -194,6 +194,24 @@ public class DataBase {
 		return template;
 	}
 
+	public static int queryRank(IUser user) {
+		try {
+			Statement statement = con.createStatement();
+			String sql = String.format(
+					"SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;",
+					user.getID());
+			ResultSet set = statement.executeQuery(sql);
+			while(set.next()) {
+				if(set.getString("id").equals(user.getID())) {
+					return set.getInt("rank");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 	public static void insertItem(IUser user, String item) {
 		try {
 			String sql = "INSERT INTO users.item (id, item) VALUES (?, ?) ON CONFLICT DO NOTHING;";
