@@ -21,10 +21,14 @@ package com.fuyusan.horobot.command.commands.dev;
 import com.fuyusan.horobot.core.Main;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.command.proccessing.Command;
+import com.fuyusan.horobot.util.music.GuildMusicManager;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IVoiceState;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class CommandReboot implements Command {
 
@@ -35,9 +39,15 @@ public class CommandReboot implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor().getID().equals("288996157202497536")) {
 			try {
-				Message.reply("shut-down", event.getMessage());
+				//Message.reply("shut-down", event.getMessage());
 
-				String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+				Iterator iterator = Main.INSTANCE.client.getOurUser().getVoiceStates().entrySet().iterator();
+				while(iterator.hasNext()) {
+					Map.Entry<String, IVoiceState> pair = (Map.Entry) iterator.next();
+					pair.getValue().getChannel().leave();
+				}
+
+				/*String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 				File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
 				if(!currentJar.getName().endsWith(".jar"))
@@ -51,7 +61,7 @@ public class CommandReboot implements Command {
 
 				ProcessBuilder builder = new ProcessBuilder(command);
 				builder.start();
-				System.exit(0);
+				System.exit(0);*/
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

@@ -33,17 +33,13 @@ public class CommandKawaii implements Command {
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		try {
-			if (args.length == 1) {
-				String guildID = event.getMessage().getGuild().getID();
-				Random rand = new Random();
-				int factor = rand.nextInt(100);
-				Message.replyRaw("**" + args[0] + "** " + Localisation.getMessage(guildID, "kawaii-is") + " " + factor + Localisation.getMessage(guildID, "kawaii-percent"), event.getMessage());
-			} else {
-				Message.reply(help(), event.getMessage());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (args.length == 1) {
+			String guildID = event.getMessage().getGuild().getID();
+			Random rand = new Random();
+			int factor = rand.nextInt(100);
+			Message.sendRawMessageInChannel(event.getChannel(), "**" + args[0] + "** " + Localisation.getMessage(guildID, "kawaii-is") + " " + factor + Localisation.getMessage(guildID, "kawaii-percent"));
+		} else {
+			Message.reply(help(), event.getMessage());
 		}
 	}
 

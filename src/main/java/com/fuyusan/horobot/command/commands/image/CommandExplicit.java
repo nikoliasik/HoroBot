@@ -23,6 +23,10 @@ import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.command.proccessing.Command;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.awt.*;
 
 public class CommandExplicit implements Command {
 
@@ -37,7 +41,17 @@ public class CommandExplicit implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
-			event.getChannel().sendMessage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.NSFW));
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.NSFW));
+				builder.withColor(Color.CYAN);
+				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
+				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+
+				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
+			} else {
+				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
+			}
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

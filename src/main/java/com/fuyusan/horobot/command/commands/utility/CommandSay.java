@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.fuyusan.horobot.command.commands.fun;
+package com.fuyusan.horobot.command.commands.utility;
 
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
@@ -36,28 +36,11 @@ public class CommandSay implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length > 0) {
-			if(args.length > 1) {
-				String message = ":speech_balloon: ";
-				
-				for (int i = 0; i < args.length; i++) {
-					message += args[i] + " ";
-				}
-				
-				Message.replyInChannel(message, event.getMessage());
-				try {
-					event.getMessage().delete();
-				} catch(Exception e) {
-					Message.reply("role-error", event.getMessage());
-					e.printStackTrace();
-				}
-			} else {
-				Message.replyInChannel(":speech_balloon: " + args[0], event.getMessage());
-				try {
-					event.getMessage().delete();
-				} catch(Exception e) {
-					Message.reply("role-error", event.getMessage());
-					e.printStackTrace();
-				}
+			Message.sendRawMessageInChannel(event.getChannel(), raw);
+			try {
+				event.getMessage().delete();
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

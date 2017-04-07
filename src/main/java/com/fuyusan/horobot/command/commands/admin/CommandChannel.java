@@ -37,7 +37,7 @@ public class CommandChannel implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
-			if (args[1].equals("ecchi") || args[1].equals("nsfw")) {
+			if (args[1].equals("ecchi") || args[1].equals("nsfw") || args[1].equals("none")) {
 				IChannel channel = event.getGuild().getChannelByID(args[0]);
 				if (channel != null) {
 					Utility.storeChannelMod(channel.getID(), args[1]);

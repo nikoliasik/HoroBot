@@ -5,6 +5,7 @@ import com.fuyusan.horobot.util.Localisation;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
@@ -19,48 +20,52 @@ public class CommandHug implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(event.getMessage().getMentions().size() == 1) {
-			Random rand = new Random();
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				Random rand = new Random();
 
-			try {
-				EmbedBuilder builder = new EmbedBuilder();
+				try {
+					EmbedBuilder builder = new EmbedBuilder();
 
-				String message = "";
+					String message = "";
 
-				int result = rand.nextInt(6);
-				switch (result) {
-					case 0:
-						message = "http://imgur.com/scNkWcj.gif";
-						break;
-					case 1:
-						message = "http://imgur.com/KAxcvC4.gif";
-						break;
-					case 2:
-						message = "http://imgur.com/OG6Xkgx.gif";
-						break;
-					case 3:
-						message = "http://imgur.com/alBP2Hq.gif";
-						break;
-					case 4:
-						message = "http://imgur.com/dMvK13X.gif";
-						break;
-					case 5:
-						message = "http://imgur.com/X87fp5U.gif";
-						break;
-					case 6:
-						message = "http://imgur.com/I3RsJk1.gif";
-						break;
+					int result = rand.nextInt(6);
+					switch (result) {
+						case 0:
+							message = "http://imgur.com/scNkWcj.gif";
+							break;
+						case 1:
+							message = "http://imgur.com/KAxcvC4.gif";
+							break;
+						case 2:
+							message = "http://imgur.com/OG6Xkgx.gif";
+							break;
+						case 3:
+							message = "http://imgur.com/alBP2Hq.gif";
+							break;
+						case 4:
+							message = "http://imgur.com/dMvK13X.gif";
+							break;
+						case 5:
+							message = "http://imgur.com/X87fp5U.gif";
+							break;
+						case 6:
+							message = "http://imgur.com/I3RsJk1.gif";
+							break;
+					}
+
+					builder.withImage(message);
+					builder.withColor(Color.CYAN);
+
+					Message.sendEmbed(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getID(),
+							"hug-from"),
+							event.getMessage().getMentions().get(0).getDisplayName(event.getGuild()),
+							event.getAuthor().getDisplayName(event.getGuild())
+					), builder.build(), false);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-
-				builder.withImage(message);
-				builder.withColor(Color.CYAN);
-
-				event.getChannel().sendMessage(String.format(Localisation.getMessage(event.getGuild().getID(),
-						"hug-from"),
-						event.getMessage().getMentions().get(0).getDisplayName(event.getGuild()),
-						event.getAuthor().getDisplayName(event.getGuild())
-				), builder.build());
-			} catch(Exception e) {
-				e.printStackTrace();
+			} else {
+				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

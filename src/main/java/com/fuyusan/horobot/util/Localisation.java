@@ -31,10 +31,6 @@ public class Localisation {
 		return DataBase.guildQuery(guildID, "language");
 	}
 
-	public static void removeGuild(String guildID) {
-		DataBase.deleteGuild(guildID);
-	}
-
 	public static boolean changeLanguage (String guildID, String language) {
 		if (language.equals("en")) {
 			updateGuildLanguage(guildID, "en");
@@ -48,7 +44,7 @@ public class Localisation {
 	}
 
 	public static void updateGuildLanguage (String guildID, String language) {
-		DataBase.insertGuild(guildID, language, ".horo", "Welcome~!");
+		DataBase.insertGuild(guildID);
 		DataBase.updateGuild(guildID, "language", language);
 		System.out.println(DataBase.guildQuery(guildID, "language"));
 	}
@@ -64,12 +60,12 @@ public class Localisation {
 				return nlLang.getString(str);
 			}
 		}
-		return "Localisation error";
+		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}
 	
 	public static String getPMMessage(String str) {
 		if(enLang.containsKey(str))
 			return enLang.getString(str);
-		return "Localisation error";
+		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}
 }

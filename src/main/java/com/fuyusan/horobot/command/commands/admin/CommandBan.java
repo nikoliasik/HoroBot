@@ -20,29 +20,33 @@ public class CommandBan implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
-			IUser user = null;
-			if(event.getMessage().getMentions().size() == 1) {
-				user = event.getMessage().getMentions().get(0);
-			}
-			if(user == null)
-				user = event.getGuild().getUserByID(args[0]);
-			if(user == null) {
-				if (event.getGuild().getUsersByName(args[0]).size() == 1) {
-					user = event.getGuild().getUsersByName(args[0]).get(0);
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.BAN)) {
+				IUser user = null;
+				if (event.getMessage().getMentions().size() == 1) {
+					user = event.getMessage().getMentions().get(0);
 				}
-			}
-			if(user != null) {
-				if (args.length == 1) {
-					String name = user.getName();
-					event.getChannel().sendMessage("**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-banned"));
-					event.getGuild().banUser(user);
+				if (user == null)
+					user = event.getGuild().getUserByID(args[0]);
+				if (user == null) {
+					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
+						user = event.getGuild().getUsersByName(args[0]).get(0);
+					}
+				}
+				if (user != null) {
+					if (args.length == 1) {
+						String name = user.getName();
+						Message.sendMessageInChannel(event.getChannel(), "**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-banned"));
+						event.getGuild().banUser(user);
+					} else {
+						String name = user.getName();
+						Message.sendMessageInChannel(event.getChannel(), "**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-banned-reason") + " " + raw.replaceFirst(args[0], ""));
+						event.getGuild().banUser(user);
+					}
 				} else {
-					String name = user.getName();
-					event.getChannel().sendMessage("**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-banned-reason") + " " + raw.replaceFirst(args[0], ""));
-					event.getGuild().banUser(user);
+					Message.reply("user-not-found", event.getMessage());
 				}
 			} else {
-				Message.reply("user-not-found", event.getMessage());
+				Message.sendMessageInChannel(event.getChannel(), "missing-ban-perm");
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

@@ -59,4 +59,9 @@ target/classes/images/hug/5.gif
 target/classes/images/hug/6.gif
 src/main/java/com/fuyusan/horobot/core/Config.java
 *.xml
+!src/main/resources/logback.xml
 !pom.xml
+src/main/java/META-INF/MANIFEST.MF
+!/src/main/java/com/fuyusan/horobot/command/commands/wolf/CommandWolf.java
+target/*
+*.log

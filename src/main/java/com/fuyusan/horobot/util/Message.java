@@ -18,58 +18,91 @@
 
 package com.fuyusan.horobot.util;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RequestBuffer;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.MessageFormat;
 
 public class Message {
-	
-	public static void reply (String str, IMessage message) {
-		try {
+
+	public static void sendFile(IChannel channel, String message, File file) {
+		RequestBuffer.request(() -> {
+			try {
+				channel.sendFile(message, file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	public static void sendFile(IChannel channel, String message, String name, InputStream file) {
+		RequestBuffer.request(() -> {
+			channel.sendFile(message, false, file, name);
+		});
+	}
+
+	public static void sendFile(IChannel channel, EmbedObject embed, String message, String name, InputStream file) {
+		RequestBuffer.request(() -> {
+			channel.sendMessage(message);
+			channel.sendFile(embed, file, name);
+		});
+	}
+
+	public static void sendEmbed(IChannel channel, String message, EmbedObject embed, boolean inline) {
+		RequestBuffer.request(() -> {
+			channel.sendMessage(message, embed, inline);
+		});
+	}
+
+	public static void reply(String str, IMessage message) {
+		RequestBuffer.request(() -> {
 			message.reply(Localisation.getMessage(message.getGuild().getID(), str));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
-	
-	public static void replyRaw (String str, IMessage message) {
-		try {
+
+	public static void replyRaw(String str, IMessage message) {
+		RequestBuffer.request(() -> {
 			message.reply(str);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
-	
-	public static void replyInChannel (String str, IMessage message) {
-		try {
-			message.getChannel().sendMessage(str);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+	public static void sendMessageInChannel(IChannel channel, String message, Object... args) {
+		RequestBuffer.request(() -> {
+			channel.sendMessage(String.format(Localisation.getMessage(channel.getGuild().getID(), message), args));
+		});
+	}
+
+	public static void sendRawMessageInChannel(IChannel channel, String message) {
+		RequestBuffer.request(() -> {
+			channel.sendMessage(message);
+		});
 	}
 
 	public static void sendPM(String message, IUser user) {
-		try {
+		RequestBuffer.request(() -> {
 			user.getOrCreatePMChannel().sendMessage(Localisation.getPMMessage(message));
-		} catch(Exception e) {
+		});
+	}
 
-		}
-	}
-	
-	public static void sendRawPM (String message, IUser user) {
-		try {
+	public static void sendRawPM(String message, IUser user) {
+		RequestBuffer.request(() -> {
 			user.getOrCreatePMChannel().sendMessage(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
-	
-	public static void sendPMPic (String message, MessageReceivedEvent event) {
-		try {
-			String tags[] = { "holo" };
+
+	public static void sendPMPic(String message, MessageReceivedEvent event) {
+		String tags[] = {"holo"};
+		RequestBuffer.request(() -> {
 			event.getMessage().getAuthor().getOrCreatePMChannel().sendMessage(HTMLHandler.requestKona(tags, HTMLHandler.KONA_RATING.SAFE));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
 }
