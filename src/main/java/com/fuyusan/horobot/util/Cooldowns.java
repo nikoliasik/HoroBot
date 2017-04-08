@@ -1,10 +1,7 @@
 package com.fuyusan.horobot.util;
 
-import com.fuyusan.horobot.database.DataBase;
 import sx.blah.discord.handle.obj.IUser;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public class Cooldowns {
@@ -22,22 +19,13 @@ public class Cooldowns {
 	 */
 	public static boolean onCooldown(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-		try {
-			if (System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L) < length) return true;
-			return false;
-		} catch(Exception e) {
-			return false;
-		}
+	return false;
+		//return System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L) < length;
 	}
 
 	public static long getRemaining(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-		try {
-			return (length - (System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L)));
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
+		return (length - (System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L)));
 	}
 
 	/**

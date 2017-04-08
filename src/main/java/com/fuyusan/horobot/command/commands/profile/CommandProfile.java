@@ -43,13 +43,13 @@ public class CommandProfile implements Command {
 			if(args[0].equals("background")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
 				if ("background".equals(WolfCosmetics.getType(temp))) {
-					String item = DataBase.queryItem(event.getAuthor(), temp);
-					if(item != null) {
-						DataBase.updateUser(event.getAuthor(), "background", temp);
-						Message.sendMessageInChannel(event.getChannel(), "background-updated", temp);
-					} else {
-						Message.sendMessageInChannel(event.getChannel(), "no-item");
-					}
+//					String item = DataBase.queryItem(event.getAuthor(), temp);
+//					if(item != null) {
+					DataBase.updateUser(event.getAuthor(), "background", temp);
+					Message.sendMessageInChannel(event.getChannel(), "background-updated", temp);
+//					} else {
+//						Message.sendMessageInChannel(event.getChannel(), "no-item");
+//					}
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "invalid-item");
 				}

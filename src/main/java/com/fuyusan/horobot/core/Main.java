@@ -21,7 +21,6 @@ package com.fuyusan.horobot.core;
 import com.fuyusan.horobot.command.commands.admin.*;
 import com.fuyusan.horobot.command.commands.dev.CommandEval;
 import com.fuyusan.horobot.command.commands.dev.CommandReboot;
-import com.fuyusan.horobot.command.commands.dev.CommandTest;
 import com.fuyusan.horobot.command.commands.fun.*;
 import com.fuyusan.horobot.command.commands.image.CommandCat;
 import com.fuyusan.horobot.command.commands.image.CommandEcchi;
@@ -48,12 +47,11 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-
-	public static boolean debug = false;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	public static ClientManager INSTANCE;
@@ -67,7 +65,7 @@ public class Main {
 	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
 
 	public static void main(String[] args) {
-
+		LOGGER.info(ManagementFactory.getRuntimeMXBean().getName());
 		FontTemplate template = new FontTemplate();
 		template.loadFont();
 

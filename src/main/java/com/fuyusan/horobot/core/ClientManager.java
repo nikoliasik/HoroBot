@@ -31,7 +31,7 @@ public class ClientManager {
 	
 	public static ClientManager createClient() {
 		String token;
-		if (Main.debug) {
+		if (Config.debug) {
 			token = Config.debugToken;
 		} else {
 			token = Config.botToken;
