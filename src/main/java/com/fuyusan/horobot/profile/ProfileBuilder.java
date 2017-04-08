@@ -38,7 +38,7 @@ public class ProfileBuilder {
 
 		Image avatar = null;
 		try {
-			BufferedImage temp = Utility.imageFor(user.getAvatarURL().replace(".webp", ".png"));
+			BufferedImage temp = Utility.imageFor(Utility.getAvatar(user).replace(".webp", ".png"));
 			avatar = temp.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class ProfileBuilder {
 
 		Image avatar = null;
 		try {
-			BufferedImage temp = Utility.imageFor(user.getAvatarURL().replace(".webp", ".png"));
+			BufferedImage temp = Utility.imageFor(Utility.getAvatar(user).replace(".webp", ".png"));
 			avatar = temp.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		} catch(Exception e) {
 			e.printStackTrace();

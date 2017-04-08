@@ -285,6 +285,7 @@ public class HTMLHandler {
 				NamedNodeMap map = node.getAttributes();
 				Node url = map.getNamedItem("file_url");
 				String name = "http:" + url.getNodeValue();
+				System.out.println(name);
 				return name;
 			} else {
 				return Localisation.getPMMessage("html-server-error");

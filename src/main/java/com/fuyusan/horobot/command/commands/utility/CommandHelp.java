@@ -36,7 +36,7 @@ public class CommandHelp implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		try {
 			if (args.length == 0) {
-				event.getAuthor().getOrCreatePMChannel().sendMessage(
+				Message.sendRawPM(
 								"```\n" +
 								"Here's a list of my commands:\n" +
 								"\n" +
@@ -99,8 +99,9 @@ public class CommandHelp implements Command {
 								"\n" +
 								".horohelp\n" +
 								"    * Usage: .horohelp or .horohelp [command] - Lists all commands or describes the command\n" +
-								"```");
-				event.getAuthor().getOrCreatePMChannel().sendMessage(
+								"```",
+						event.getAuthor());
+				Message.sendRawPM(
 								"```\n" +
 								".horo8ball\n" +
 								"    * Usage: .horo8ball [question] - Ask away~!\n" +
@@ -167,7 +168,8 @@ public class CommandHelp implements Command {
 								"\n" +
 								".horoprofile\n" +
 								"	* Usage: .horoprofile <background/info/capsule> - Display your profile or execute one of the sub-commands\n" +
-								"```");
+								"```",
+						event.getAuthor());
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {
 				if(!event.getMessage().getChannel().isPrivate()) {

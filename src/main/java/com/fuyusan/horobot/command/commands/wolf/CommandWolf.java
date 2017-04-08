@@ -82,12 +82,12 @@ public class CommandWolf implements Command {
 								String result = WolfCosmetics.drop(event.getAuthor());
 								if (result != null) {
 									DataBase.insertItem(event.getAuthor(), result);
-									message.append("**ITEM DROP!** You got **" + result + "**!");
+									message.append("**ITEM DROP!** You got **" + result + "**!\n");
 								}
 							}
 
 							DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() + 100));
-							message.append("**+100** Coins for feeding your wolf!");
+							message.append("**+100** Coins for feeding your wolf!\n");
 
 							Message.sendFile(
 									event.getChannel(),

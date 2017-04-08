@@ -24,6 +24,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.ByteArrayInputStream;
@@ -59,7 +60,15 @@ public class Message {
 
 	public static void sendEmbed(IChannel channel, String message, EmbedObject embed, boolean inline) {
 		RequestBuffer.request(() -> {
-			channel.sendMessage(message, embed, inline);
+			try {
+				channel.sendMessage(message, embed, inline);
+			} catch (Exception e) {
+				if(e instanceof RateLimitException) {
+					throw e;
+				} else {
+					channel.sendMessage("No results");
+				}
+			}
 		});
 	}
 
@@ -96,13 +105,6 @@ public class Message {
 	public static void sendRawPM(String message, IUser user) {
 		RequestBuffer.request(() -> {
 			user.getOrCreatePMChannel().sendMessage(message);
-		});
-	}
-
-	public static void sendPMPic(String message, MessageReceivedEvent event) {
-		String tags[] = {"holo"};
-		RequestBuffer.request(() -> {
-			event.getMessage().getAuthor().getOrCreatePMChannel().sendMessage(HTMLHandler.requestKona(tags, HTMLHandler.KONA_RATING.SAFE));
 		});
 	}
 }

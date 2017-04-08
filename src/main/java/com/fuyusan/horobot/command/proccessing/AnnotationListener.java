@@ -51,7 +51,6 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
 		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
-			DataBase.insertGuild(event.getGuild().getID());
 			if (event.getClient().isReady()) {
 				Message.sendRawMessageInChannel(event.getGuild().getChannels().get(0),
 						"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
@@ -67,12 +66,12 @@ public class AnnotationListener {
 					event.getGuild().getOwner().getName(),
 					event.getGuild().getOwner().getID(),
 					event.getGuild().getUsers().size()));
-			}
+		}
+		DataBase.insertGuild(event.getGuild().getID());
 	}
 	
 	@EventSubscriber
 	public void onGuildLeaveEvent(GuildLeaveEvent event) {
-		MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
 		DataBase.deleteGuild(event.getGuild().getID());
 		Main.LOGGER.info(String.format("Guild deleted:\n" +
 				"Name: %s\n" +
@@ -96,21 +95,26 @@ public class AnnotationListener {
 				DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
 				ProfileTemplate template = DataBase.queryUser(event.getAuthor());
 				if (template.getXp() >= template.getMaxXp()) {
+					DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
 					DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
 					DataBase.updateUser(event.getAuthor(), "xp", 0);
 					DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
 					Message.sendFile(
 							event.getChannel(),
-							"**LEVEL UP!**",
+							"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
+									"**+100 Coins** for leveling up!",
 							"level-up.png",
 							new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
 				}
 			}
 			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
-			if(event.getMessage().getContent().startsWith(".horo")) {
+			if (event.getMessage().getContent().startsWith(".horo")) {
 				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-			} else if(event.getMessage().getContent().startsWith(prefix)) {
-				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+			}
+			if(prefix != null) {
+				if (event.getMessage().getContent().startsWith(prefix)) {
+					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+				}
 			}
 		}
 		Utility.messagesReceived++;

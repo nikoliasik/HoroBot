@@ -53,7 +53,7 @@ import java.util.Map;
 
 public class Main {
 
-	public static boolean debug = true;
+	public static boolean debug = false;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 	public static ClientManager INSTANCE;
