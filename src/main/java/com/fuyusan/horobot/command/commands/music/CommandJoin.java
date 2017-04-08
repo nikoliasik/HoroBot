@@ -30,8 +30,12 @@ public class CommandJoin implements Command {
 				}
 
 				if (channel != null) {
-					channel.join();
-					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "joined-voice"));
+					if(channel.getModifiedPermissions(event.getClient().getOurUser()).contains(Permissions.VOICE_CONNECT)) {
+						channel.join();
+						Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "joined-voice"));
+					} else {
+						Message.sendRawMessageInChannel(event.getChannel(), "I can't join that voice channel because I'm missing the Voice Connect permission for that channel");
+					}
 				} else {
 					Message.reply("no-voice-channel", event.getMessage());
 				}

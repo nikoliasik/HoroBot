@@ -20,7 +20,7 @@ public class CommandLeave implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if(event.getGuild().getConnectedVoiceChannel() != null) {
-				if(MusicUtils.getGuildAudioPlayer(event.getGuild()) != null) MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
+				MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
 				event.getGuild().getConnectedVoiceChannel().leave();
 				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "left-voice"));
 			} else {

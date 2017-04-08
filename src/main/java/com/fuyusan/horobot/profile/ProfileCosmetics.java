@@ -22,7 +22,7 @@ public class ProfileCosmetics {
 		backgrounds.put("Crop Stomp", "/wolf/bg/crop-stomp.png");
 		backgrounds.put("DJ School", "/wolf/bg/dj-school.png");
 		backgrounds.put("Dog Ninja", "/wolf/bg/dog-ninja.png");
-		backgrounds.put("Drummer Dual", "/wolf/bg/drummer-dual.png");
+		backgrounds.put("Drummer Dual", "/wolf/bg/drummer-duel.png");
 		backgrounds.put("Fan Club 2", "/wolf/bg/fan-club-2.png");
 		backgrounds.put("Fillbots Bee", "/wolf/bg/fillbots-bee.png");
 		backgrounds.put("Final Destination", "/wolf/bg/final-destination.png");
