@@ -119,6 +119,7 @@ public class WolfCosmetics {
 	public static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
 
 	public static String drop(IUser user) {
+		// TODO: Fix this method
 		Random rand = new Random();
 		int type = rand.nextInt(8);
 		int drop;

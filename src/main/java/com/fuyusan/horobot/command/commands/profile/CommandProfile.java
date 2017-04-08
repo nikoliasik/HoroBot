@@ -24,8 +24,8 @@ public class CommandProfile implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			if(!Cooldowns.onCooldown("profile-stats", 10000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("profile-stats", event.getAuthor());
+			if(!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
+				Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getID(), event.getAuthor());
 				DataBase.insertUser(event.getAuthor());
 				Message.sendFile(
 						event.getChannel(),
@@ -37,19 +37,19 @@ public class CommandProfile implements Command {
 						new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 								event.getAuthor())));
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats", 150000, event.getAuthor())));
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
 			}
 		} else if(args.length >= 1) {
 			if(args[0].equals("background")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
 				if ("background".equals(WolfCosmetics.getType(temp))) {
-//					String item = DataBase.queryItem(event.getAuthor(), temp);
-//					if(item != null) {
+					String item = DataBase.queryItem(event.getAuthor(), temp);
+					if(item != null) {
 					DataBase.updateUser(event.getAuthor(), "background", temp);
 					Message.sendMessageInChannel(event.getChannel(), "background-updated", temp);
-//					} else {
-//						Message.sendMessageInChannel(event.getChannel(), "no-item");
-//					}
+					} else {
+						Message.sendMessageInChannel(event.getChannel(), "no-item");
+					}
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "invalid-item");
 				}

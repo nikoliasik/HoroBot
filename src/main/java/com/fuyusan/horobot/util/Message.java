@@ -24,6 +24,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.RateLimitException;
 import sx.blah.discord.util.RequestBuffer;
 
@@ -36,13 +37,15 @@ import java.text.MessageFormat;
 public class Message {
 
 	public static void sendFile(IChannel channel, String message, File file) {
-		RequestBuffer.request(() -> {
-			try {
-				channel.sendFile(message, file);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-		});
+		if(channel.getModifiedPermissions(channel.getClient().getOurUser().getRolesForGuild(channel.getGuild()).get(0)).contains(Permissions.SEND_MESSAGES)) {
+			RequestBuffer.request(() -> {
+				try {
+					channel.sendFile(message, file);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			});
+		}
 	}
 
 	public static void sendFile(IChannel channel, String message, String name, InputStream file) {

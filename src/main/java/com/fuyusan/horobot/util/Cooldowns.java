@@ -19,8 +19,8 @@ public class Cooldowns {
 	 */
 	public static boolean onCooldown(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-	return false;
-		//return System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L) < length;
+		//return false;
+		return System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L) < length;
 	}
 
 	public static long getRemaining(String bucket, long length, IUser user) {

@@ -90,8 +90,16 @@ public class AnnotationListener {
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor() != event.getClient().getOurUser()) {
 			DataBase.insertUser(event.getAuthor());
-			if (!Cooldowns.onCooldown("message-xp", 120000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("message-xp", event.getAuthor());
+			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
+			if(prefix == null) prefix = "4363463423thisisrand43om456745shitandn76obodywil45346levergetthis352950234532053467345";
+			if (event.getMessage().getContent().startsWith(".horo")) {
+				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
+			} else if (event.getMessage().getContent().startsWith(prefix)) {
+				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+			}
+
+			if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getID(), 120000, event.getAuthor())) {
+				Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getID(), event.getAuthor());
 				DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
 				ProfileTemplate template = DataBase.queryUser(event.getAuthor());
 				if (template.getXp() >= template.getMaxXp()) {
@@ -105,15 +113,6 @@ public class AnnotationListener {
 									"**+100 Coins** for leveling up!",
 							"level-up.png",
 							new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
-				}
-			}
-			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
-			if (event.getMessage().getContent().startsWith(".horo")) {
-				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-			}
-			if(prefix != null) {
-				if (event.getMessage().getContent().startsWith(prefix)) {
-					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
 				}
 			}
 		}

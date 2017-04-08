@@ -29,8 +29,8 @@ public class CommandWolf implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			if(!Cooldowns.onCooldown("wolf-stats", 10000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("wolf-stats", event.getAuthor());
+			if(!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
+				Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getID(), event.getAuthor());
 				DataBase.insertWolf(event.getAuthor());
 				Message.sendFile(
 						event.getChannel(),
@@ -41,14 +41,14 @@ public class CommandWolf implements Command {
 								WolfProfileBuilder.generateImage(
 										event.getAuthor())));
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats", 300000, event.getAuthor())));
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
 			}
 		} else if (args.length >= 1) {
 			if (args[0].equals("feed")) {
 				if (args.length == 2) {
 					if (WolfCosmetics.foods.containsKey(args[1].toLowerCase())) {
-						if (!Cooldowns.onCooldown("wolf-feed", 7200000, event.getAuthor())) {
-							Cooldowns.putOnCooldown("wolf-feed", event.getAuthor());
+						if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())) {
+							Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getID(), event.getAuthor());
 							new HoroTask(event.getAuthor().getID() + "-note") {
 								@Override
 								public void run() {
@@ -98,7 +98,7 @@ public class CommandWolf implements Command {
 											WolfProfileBuilder.generateImage(
 													event.getAuthor())));
 						} else {
-							Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed", 7200000, event.getAuthor())));
+							Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())));
 						}
 					} else {
 						Message.sendMessageInChannel(event.getChannel(), "no-food");

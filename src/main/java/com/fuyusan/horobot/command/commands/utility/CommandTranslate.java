@@ -4,6 +4,7 @@ import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.util.HTMLHandler;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.Permissions;
 
@@ -17,7 +18,12 @@ public class CommandTranslate implements Command {
 		if(args.length > 2) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				String text = raw.replaceFirst(args[0] + " " + args[1], "");
-				Message.sendEmbed(event.getChannel(), "", HTMLHandler.requestTranslation(args[0], args[1], text, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL()), false);
+				EmbedObject embed = HTMLHandler.requestTranslation(args[0], args[1], text, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL());
+				if(embed != null) {
+					Message.sendEmbed(event.getChannel(), "", embed, false);
+				} else {
+					Message.sendMessageInChannel(event.getChannel(), "html-no-results");
+				}
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}

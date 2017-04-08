@@ -79,7 +79,7 @@ public class Utility {
 
 	public static String getStats(int shard, int shardCount, int serverCount) {
 		updateStats();
-		if (!Main.debug) postStats(shard, shardCount, serverCount);
+		if (!Config.debug) postStats(shard, shardCount, serverCount);
 
 		return "```\n" +
 				"Discord4J version: " + Discord4JVersion + "\n" +
