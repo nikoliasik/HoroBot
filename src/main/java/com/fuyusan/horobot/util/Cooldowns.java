@@ -15,7 +15,7 @@ public class Cooldowns {
 	 * @param length Length of the cooldown
 	 * @param user The user to cool down
 	 *
-	 * @returns true if the cooldown isn't over
+	 * @return true if the cooldown isn't over
 	 */
 	public static boolean onCooldown(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
