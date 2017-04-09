@@ -91,8 +91,6 @@ public class HTMLHandler {
 					.asJson();
 			if(response.getStatus() == 200) {
 				return "https://www.youtube.com/watch?v=" + response.getBody().getObject().getJSONArray("items").getJSONObject(0).getJSONObject("id").getString("videoId");
-			} else {
-				return null;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

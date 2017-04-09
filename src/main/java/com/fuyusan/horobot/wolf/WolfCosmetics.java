@@ -116,10 +116,9 @@ public class WolfCosmetics {
 		neck.put("Scarf 2", "/wolf/neck/scarf-2.png");
 	}
 
-	public static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
+	private static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
 
 	public static String drop(IUser user) {
-		// TODO: Fix this method
 		Random rand = new Random();
 		int type = rand.nextInt(8);
 		int drop;
@@ -130,8 +129,7 @@ public class WolfCosmetics {
 				String item = getKeyName(backgrounds, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 1: {
 				drop = rand.nextInt(hats.size());
@@ -139,8 +137,7 @@ public class WolfCosmetics {
 				String item = getKeyName(hats, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 2: {
 				drop = rand.nextInt(bodies.size());
@@ -148,8 +145,7 @@ public class WolfCosmetics {
 				String item = getKeyName(bodies, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 3: {
 				drop = rand.nextInt(paws.size());
@@ -157,8 +153,7 @@ public class WolfCosmetics {
 				String item = getKeyName(paws, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 4: {
 				drop = rand.nextInt(tails.size());
@@ -166,8 +161,7 @@ public class WolfCosmetics {
 				String item = getKeyName(tails, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 5: {
 				drop = rand.nextInt(shirts.size());
@@ -175,8 +169,7 @@ public class WolfCosmetics {
 				String item = getKeyName(shirts, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 6: {
 				drop = rand.nextInt(noses.size());
@@ -184,8 +177,7 @@ public class WolfCosmetics {
 				String item = getKeyName(noses, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 7: {
 				drop = rand.nextInt(neck.size());
@@ -193,8 +185,7 @@ public class WolfCosmetics {
 				String item = getKeyName(neck, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 			case 8: {
 				drop = rand.nextInt(eyes.size());
@@ -202,28 +193,30 @@ public class WolfCosmetics {
 				String item = getKeyName(eyes, value);
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return null;
-				return drop(user);
+				if(!hasAllItems(user)) return drop(user);
 			}
 		}
 		return null;
 	}
 
-	public static String getKeyName(LinkedHashMap<String, String> hashMap, String value) {
-		Iterator<Map.Entry<String, String>> iterator = hashMap.entrySet().iterator();
-		while(iterator.hasNext()) {
-			Map.Entry<String, String> entry = iterator.next();
+	private static String getKeyName(LinkedHashMap<String, String> hashMap, String value) {
+		for(Map.Entry<String, String> entry : hashMap.entrySet()) {
 			if(entry.getValue().equals(value)) return entry.getKey();
 		}
-		return "Unknown";
+		return "None";
 	}
 
-	public static boolean hasItem(IUser user, String item) {
+	private static boolean hasItem(IUser user, String item) {
 		return DataBase.queryItem(user, item) != null;
 	}
 
-	public static boolean hasAllItems(IUser user) {
-		return (DataBase.queryItems(user).size() >= totalItems);
+	private static boolean hasAllItems(IUser user) {
+		List<String> items = DataBase.queryItems(user);
+		if (items != null) {
+			int count = items.size();
+			if(count >= totalItems) return true;
+		}
+		return false;
 	}
 
 	public static String getType(String item) {

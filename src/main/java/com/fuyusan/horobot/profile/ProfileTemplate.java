@@ -1,5 +1,7 @@
 package com.fuyusan.horobot.profile;
 
+import com.fuyusan.horobot.wolf.WolfCosmetics;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
@@ -21,7 +23,7 @@ public class ProfileTemplate {
 		this.maxXp = maxXp;
 		this.foxCoins = foxCoins;
 		try {
-			this.background = ImageIO.read(getClass().getResourceAsStream(ProfileCosmetics.backgrounds.get(background)));
+			this.background = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.backgrounds.get(background)));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

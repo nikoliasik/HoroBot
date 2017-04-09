@@ -155,13 +155,6 @@ public class Main {
 	}
 
 	public static void handleCommand(CommandContainer cmd) {
-		if (cmd.event.getMessage().getChannel().isPrivate()) {
-			if(!cmd.invoke.equals("invite") && !cmd.invoke.equals("help")) {
-				Message.sendPM("private-channel", cmd.event.getMessage().getAuthor());
-				commands.get(cmd.invoke).executed(false, cmd.event);
-				return;
-			}
-		}
 		if (commands.containsKey(cmd.invoke)) {
 			boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
 			if(cmd.event.getAuthor().getID().equals("288996157202497536")) safe = true;

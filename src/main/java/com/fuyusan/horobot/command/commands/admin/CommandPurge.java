@@ -17,7 +17,8 @@ public class CommandPurge implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
-			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_MESSAGES)) {
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_MESSAGES) &&
+					event.getChannel().getModifiedPermissions(event.getClient().getOurUser()).contains(Permissions.MANAGE_MESSAGES)) {
 				try {
 					int messages = Integer.parseInt(args[0]);
 					event.getChannel().getMessageHistory(messages).bulkDelete();

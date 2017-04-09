@@ -46,7 +46,7 @@ public class CommandWolf implements Command {
 		} else if (args.length >= 1) {
 			if (args[0].equals("feed")) {
 				if (args.length == 2) {
-					if (WolfCosmetics.foods.containsKey(args[1].toLowerCase())) {
+					if (WolfCosmetics.foods.containsKey(args[1])) {
 						if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getID(), event.getAuthor());
 							new HoroTask(event.getAuthor().getID() + "-note") {

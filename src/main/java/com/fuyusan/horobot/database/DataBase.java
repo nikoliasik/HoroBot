@@ -346,12 +346,11 @@ public class DataBase {
 			} else {
 				set.close();
 				statement.close();
-				return null;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return "en";
+		return null;
 	}
 
 	public static String channelQuery(String channelID) {

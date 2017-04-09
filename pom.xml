@@ -49,7 +49,7 @@
         <dependency>
             <groupId>com.github.austinv11</groupId>
             <artifactId>Discord4j</artifactId>
-            <version>0c117aa</version>
+            <version>2beeb98</version>
         </dependency>
 
         <dependency>

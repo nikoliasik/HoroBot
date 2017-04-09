@@ -25,6 +25,7 @@ import com.fuyusan.horobot.profile.ProfileTemplate;
 import com.fuyusan.horobot.util.Cooldowns;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
+import com.fuyusan.horobot.util.music.GuildMusicManager;
 import com.fuyusan.horobot.util.music.MusicUtils;
 import com.sun.media.jfxmedia.logging.Logger;
 import sx.blah.discord.api.events.EventSubscriber;
@@ -33,6 +34,7 @@ import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageSendEvent;
+import sx.blah.discord.handle.impl.events.guild.voice.user.UserVoiceChannelLeaveEvent;
 import sx.blah.discord.handle.impl.events.shard.ReconnectSuccessEvent;
 
 import java.io.ByteArrayInputStream;
@@ -51,23 +53,25 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
 		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
-			if (event.getClient().isReady()) {
+			if(event.getClient().isReady()) {
+				DataBase.insertGuild(event.getGuild().getID());
 				Message.sendRawMessageInChannel(event.getGuild().getChannels().get(0),
 						"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
+				Main.LOGGER.info(String.format("\n-----------------\n" +
+								"New guild created:\n" +
+								"Name: %s\n" +
+								"ID: %s\n" +
+								"Owner: %s\n" +
+								"Owner ID: %s\n" +
+								"Users: %s\n" +
+								"-----------------",
+						event.getGuild().getName(),
+						event.getGuild().getID(),
+						event.getGuild().getOwner().getName(),
+						event.getGuild().getOwner().getID(),
+						event.getGuild().getUsers().size()));
 			}
-			Main.LOGGER.info(String.format("New guild created:\n" +
-							"Name: %s\n" +
-							"ID: %s\n" +
-							"Owner: %s\n" +
-							"Owner ID: %s\n" +
-							"Users: %s\n",
-					event.getGuild().getName(),
-					event.getGuild().getID(),
-					event.getGuild().getOwner().getName(),
-					event.getGuild().getOwner().getID(),
-					event.getGuild().getUsers().size()));
 		}
-		DataBase.insertGuild(event.getGuild().getID());
 	}
 	
 	@EventSubscriber
@@ -89,15 +93,18 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor() != event.getClient().getOurUser()) {
-			DataBase.insertUser(event.getAuthor());
 			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
-			if(prefix == null) prefix = "4363463423thisisrand43om456745shitandn76obodywil45346levergetthis352950234532053467345";
+			if(prefix == null) {
+				prefix = ".horo";
+				DataBase.insertGuild(event.getGuild().getID());
+			}
 			if (event.getMessage().getContent().startsWith(".horo")) {
 				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
 			} else if (event.getMessage().getContent().startsWith(prefix)) {
 				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
 			}
 
+			DataBase.insertUser(event.getAuthor());
 			if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getID(), 120000, event.getAuthor())) {
 				Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getID(), event.getAuthor());
 				DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
@@ -115,8 +122,8 @@ public class AnnotationListener {
 							new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
 				}
 			}
+			Utility.messagesReceived++;
 		}
-		Utility.messagesReceived++;
 	}
 	
 	@EventSubscriber
@@ -127,5 +134,13 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onReconnectedEvent(ReconnectSuccessEvent event) {
 		Utility.reconnectedTimes++;
+	}
+
+	@EventSubscriber
+	public void onVoiceLeaveEvent(UserVoiceChannelLeaveEvent event) {
+		if(event.getUser() == event.getClient().getOurUser()) {
+			GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
+			manager.player.stopTrack();
+		}
 	}
 }

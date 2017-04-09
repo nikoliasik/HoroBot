@@ -177,10 +177,9 @@ public class Utility {
 		NumberFormat format = NumberFormat.getInstance();
 		StringBuilder builder = new StringBuilder();
 
-		long max = runtime.maxMemory();
-		long allocated = runtime.totalMemory();
-		builder.append(format.format((int) allocated / 1048576)).append("Mb / ");
-		builder.append(format.format((int) max / 1048576)).append("Mb");
+		int mb = 1024 * 1024;
+		builder.append(format.format((int) (runtime.totalMemory() - runtime.freeMemory()) / mb)).append("Mb / ");
+		builder.append(format.format((int) (runtime.totalMemory()) / mb)).append("Mb");
 		return builder.toString();
 	}
 

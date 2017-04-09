@@ -170,16 +170,16 @@ public class CommandHelp implements Command {
 //								"	* Usage: .horoprofile <background/info/capsule> - Display your profile or execute one of the sub-commands\n" +
 //								"```",
 //						event.getAuthor());
-				StringBuilder dicksword = new StringBuilder("```bf\n");
+				StringBuilder builder = new StringBuilder("```bf\n");
 				for(Map.Entry<String, Command> c : Main.commands.entrySet()) {
 					String formatted = String.format(".horo%s:\n    * %s\n\n", c.getKey(),
 							Localisation.getMessage(event.getGuild().getID(), c.getValue().help()));
-					if(dicksword.length() + formatted.length() > 1995) {
-						Message.sendRawPM(dicksword + "\n```", event.getAuthor());
-						dicksword = new StringBuilder("```bf\n" + formatted);
-					} else dicksword.append(formatted);
+					if(builder.length() + formatted.length() > 1995) {
+						Message.sendRawPM(builder + "\n```", event.getAuthor());
+						builder = new StringBuilder("```bf\n" + formatted);
+					} else builder.append(formatted);
 				}
-				Message.sendRawPM(dicksword + "\n```", event.getAuthor());
+				Message.sendRawPM(builder + "\n```", event.getAuthor());
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {
 				if(!event.getMessage().getChannel().isPrivate()) {

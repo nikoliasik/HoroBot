@@ -3,7 +3,6 @@ package com.fuyusan.horobot.command.commands.profile;
 import com.fuyusan.horobot.command.proccessing.Command;
 import com.fuyusan.horobot.database.DataBase;
 import com.fuyusan.horobot.profile.ProfileBuilder;
-import com.fuyusan.horobot.profile.ProfileCosmetics;
 import com.fuyusan.horobot.util.Cooldowns;
 import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
@@ -63,7 +62,7 @@ public class CommandProfile implements Command {
 				}
 			} else if (args[0].equals("capsule")) {
 				if(DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
-					String drop = ProfileCosmetics.drop(event.getAuthor());
+					String drop = WolfCosmetics.drop(event.getAuthor());
 					if (drop != null) {
 						DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
 						DataBase.insertItem(event.getAuthor(), drop);

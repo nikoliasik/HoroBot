@@ -1,6 +1,7 @@
 package com.fuyusan.horobot.command.commands.dev;
 
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IGuild;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

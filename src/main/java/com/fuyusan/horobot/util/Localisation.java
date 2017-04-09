@@ -46,7 +46,6 @@ public class Localisation {
 	public static void updateGuildLanguage (String guildID, String language) {
 		DataBase.insertGuild(guildID);
 		DataBase.updateGuild(guildID, "language", language);
-		System.out.println(DataBase.guildQuery(guildID, "language"));
 	}
 	
 	public static String getMessage(String guildID, String str) {
