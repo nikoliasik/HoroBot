@@ -27,7 +27,6 @@ import com.fuyusan.horobot.util.Message;
 import com.fuyusan.horobot.util.Utility;
 import com.fuyusan.horobot.util.music.GuildMusicManager;
 import com.fuyusan.horobot.util.music.MusicUtils;
-import com.sun.media.jfxmedia.logging.Logger;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
@@ -49,27 +48,14 @@ public class AnnotationListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
 		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
+			DataBase.insertGuild(event.getGuild().getID());
 			if(event.getClient().isReady()) {
-				DataBase.insertGuild(event.getGuild().getID());
 				Message.sendRawMessageInChannel(event.getGuild().getChannels().get(0),
 						"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
-				Main.LOGGER.info(String.format("\n-----------------\n" +
-								"New guild created:\n" +
-								"Name: %s\n" +
-								"ID: %s\n" +
-								"Owner: %s\n" +
-								"Owner ID: %s\n" +
-								"Users: %s\n" +
-								"-----------------",
-						event.getGuild().getName(),
-						event.getGuild().getID(),
-						event.getGuild().getOwner().getName(),
-						event.getGuild().getOwner().getID(),
-						event.getGuild().getUsers().size()));
 			}
 		}
 	}
@@ -77,17 +63,6 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onGuildLeaveEvent(GuildLeaveEvent event) {
 		DataBase.deleteGuild(event.getGuild().getID());
-		Main.LOGGER.info(String.format("Guild deleted:\n" +
-				"Name: %s\n" +
-				"ID: %s\n" +
-				"Owner: %s\n" +
-				"Owner ID: %s\n" +
-				"Users: %s\n",
-				event.getGuild().getName(),
-				event.getGuild().getID(),
-				event.getGuild().getOwner().getName(),
-				event.getGuild().getOwner().getID(),
-				event.getGuild().getUsers().size()));
 	}
 	
 	@EventSubscriber

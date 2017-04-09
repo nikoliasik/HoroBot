@@ -343,9 +343,6 @@ public class DataBase {
 			ResultSet set = statement.executeQuery(sql);
 			if(set.next()) {
 				return set.getString(index);
-			} else {
-				set.close();
-				statement.close();
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -358,11 +355,8 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = String.format("SELECT * FROM channels.channel WHERE id='%s';", channelID);
 			ResultSet set = statement.executeQuery(sql);
-			while(set.next()) {
-				String mod = set.getString("mod");
-				set.close();
-				statement.close();
-				return mod;
+			if(set.next()) {
+				return set.getString("mod");
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
