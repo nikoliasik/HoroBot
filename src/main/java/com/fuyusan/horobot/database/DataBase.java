@@ -1,6 +1,7 @@
 package com.fuyusan.horobot.database;
 
 import com.fuyusan.horobot.core.Config;
+import com.fuyusan.horobot.core.Main;
 import com.fuyusan.horobot.profile.ProfileTemplate;
 import com.fuyusan.horobot.wolf.WolfTemplate;
 import sx.blah.discord.handle.obj.IUser;
@@ -197,9 +198,7 @@ public class DataBase {
 	public static int queryRank(IUser user) {
 		try {
 			Statement statement = con.createStatement();
-			String sql = String.format(
-					"SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;",
-					user.getID());
+			String sql = "SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;";
 			ResultSet set = statement.executeQuery(sql);
 			while(set.next()) {
 				if(set.getString("id").equals(user.getID())) {
@@ -210,6 +209,34 @@ public class DataBase {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	public static String queryRanks(int amount) {
+		try {
+			Statement statement1 = con.createStatement();
+			String sql1 = "";
+			ResultSet set1 = statement1.executeQuery(sql1);
+			int count = set1.getInt("count");
+
+			Statement statement = con.createStatement();
+			String sql = String.format("SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;", amount);
+			ResultSet set = statement.executeQuery(sql);
+
+			if(count <= amount) amount = count;
+
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < amount; i++) {
+				String id = set.getString("id");
+				String name = Main.INSTANCE.client.getUserByID(id).getName();
+				int rank = set.getInt("rank");
+				String complete = "#" + rank + " " + name + "\n";
+				builder.append(complete);
+			}
+			return builder.toString();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return "An unexpected exception occurred while querying ranks";
 	}
 
 	public static void insertItem(IUser user, String item) {

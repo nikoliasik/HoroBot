@@ -51,13 +51,13 @@ public class AnnotationListener {
 
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
-		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) {
-			DataBase.insertGuild(event.getGuild().getID());
+		if(DataBase.guildQuery(event.getGuild().getID(), "id") == null) { // People were getting spammed so just to prevent spam
 			if(event.getClient().isReady()) {
 				Message.sendRawMessageInChannel(event.getGuild().getChannels().get(0),
 						"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
 			}
 		}
+		DataBase.insertGuild(event.getGuild().getID()); // DO NOT REMOVE THIS, I WANT TO BE 100% SURE IT WORKS
 	}
 	
 	@EventSubscriber
@@ -67,10 +67,10 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
-		if(event.getMessage().getAuthor() != event.getClient().getOurUser()) {
+		if(event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
 			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
 			if(prefix == null) {
-				prefix = ".horo";
+				prefix = "123545439328gdfhud932hsdiifewc932iudjk84tdfjvgui";
 				DataBase.insertGuild(event.getGuild().getID());
 			}
 			if (event.getMessage().getContent().startsWith(".horo")) {
