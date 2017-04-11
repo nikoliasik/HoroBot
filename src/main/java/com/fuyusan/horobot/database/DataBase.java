@@ -213,19 +213,13 @@ public class DataBase {
 
 	public static String queryRanks(int amount) {
 		try {
-			Statement statement1 = con.createStatement();
-			String sql1 = "";
-			ResultSet set1 = statement1.executeQuery(sql1);
-			int count = set1.getInt("count");
-
 			Statement statement = con.createStatement();
-			String sql = String.format("SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;", amount);
+			String sql = "SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;";
 			ResultSet set = statement.executeQuery(sql);
-
-			if(count <= amount) amount = count;
 
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < amount; i++) {
+				set.next();
 				String id = set.getString("id");
 				String name = Main.INSTANCE.client.getUserByID(id).getName();
 				int rank = set.getInt("rank");
@@ -323,14 +317,13 @@ public class DataBase {
 		}
 	}
 
-	public static void updateGuild(String guildID, String index, String value) {
+	public static void updateGuild(String guildID, String index, Object value) {
 		try {
-			Statement statement = con.createStatement();
-			String sql = String.format("UPDATE guilds.guild SET %s='%s' WHERE id='%s';",
-					index,
-					value,
-					guildID);
-			statement.executeUpdate(sql);
+			PreparedStatement statement = con.prepareStatement("UPDATE guilds.guild SET " + index + "=? WHERE id=?;");
+			if (value instanceof String) statement.setString(1, (String) value);
+			if (value instanceof Integer) statement.setInt(1, (int) value);
+			statement.setString(2, guildID);
+			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
 			e.printStackTrace();

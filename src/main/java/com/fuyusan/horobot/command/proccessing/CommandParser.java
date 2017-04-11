@@ -21,19 +21,20 @@ package com.fuyusan.horobot.command.proccessing;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 public class CommandParser {
 	public CommandContainer parse(String rw, String prefix, MessageReceivedEvent event) {
 		ArrayList<String> split = new ArrayList<String>();
 		String raw = rw;
-		String beheaded = raw.replaceFirst(prefix, "");
+		String beheaded = rw.substring(prefix.length(), rw.length());
 		String[] splitBeheaded = beheaded.split(" ");
 		
 		for(String s : splitBeheaded)
 			split.add(s);
 		
 		String invoke = split.get(0);
-		beheaded = raw.replaceFirst(prefix + invoke, "");
+		beheaded = raw.substring(prefix.length() + invoke.length(), raw.length());
 		String[] args = new String[split.size() - 1];
 		split.subList(1, split.size()).toArray(args);
 		

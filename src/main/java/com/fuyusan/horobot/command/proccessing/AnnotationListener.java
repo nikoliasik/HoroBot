@@ -36,6 +36,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageSendEvent
 import sx.blah.discord.handle.impl.events.guild.voice.user.UserVoiceChannelLeaveEvent;
 import sx.blah.discord.handle.impl.events.shard.ReconnectSuccessEvent;
 
+import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 
 public class AnnotationListener {
