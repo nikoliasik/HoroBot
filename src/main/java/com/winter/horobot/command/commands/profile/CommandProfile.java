@@ -56,7 +56,7 @@ public class CommandProfile implements Command {
 				}
 			} else if (args[0].equals("info")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if (temp.length() <= 88) {
+				if (temp.length() <= 54) {
 					DataBase.updateUser(event.getAuthor(), "description", temp);
 					Message.sendMessageInChannel(event.getChannel(), "desc-changed");
 				} else {

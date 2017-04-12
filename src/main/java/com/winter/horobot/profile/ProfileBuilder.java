@@ -2,6 +2,7 @@ package com.winter.horobot.profile;
 
 import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.Utility;
+import com.winter.horobot.wolf.WolfTemplate;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IGuild;
@@ -30,26 +31,43 @@ public class ProfileBuilder {
 	}
 
 	public static byte[] generateLevelUp(IUser user, int level) {
-		BufferedImage bufferedImage = new BufferedImage(90, 110, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bufferedImage = new BufferedImage(100, 125, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bufferedImage.createGraphics();
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		final Font font = new Font("Roboto", Font.BOLD, 16);
-		final Font font2 = new Font("Roboto", Font.BOLD, 18);
 
 		Image avatar = null;
 		try {
 			BufferedImage temp = Utility.imageFor(Utility.getAvatar(user).replace(".webp", ".png"));
-			avatar = temp.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+			avatar = temp.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		ProfileTemplate template = DataBase.queryUser(user);
 
-		graphics.drawImage(template.getBackground(), 0, 0, 90, 110, null);
+		// Draw the background
+		graphics.drawImage(template.getBackground(), 0, 0, 100, 125, null);
 
-		graphics.setColor(new Color(255, 255, 255, 175));
+		// Draw the template
+		graphics.drawImage(template.getLvlTemplate(), 0, 0, 100, 125, null);
+
+		// Draw the user avatar
+		graphics.setClip(new Ellipse2D.Double(25, 20, 50, 50));
+		graphics.drawImage(avatar, 30, 15, 50, 50, null);
+		graphics.setClip(null);
+
+		// Draw the level
+		final String levelUp = "LVL " + template.getLevel();
+		final int levelX = (100 / 2) - (int) (graphics.getFontMetrics().getStringBounds(levelUp, graphics).getWidth() / 2) - 5;
+		final int levelY = 125 - 15;
+		graphics.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
+		graphics.setColor(new Color(186,187,189));
+		graphics.drawString(levelUp,
+				levelX,
+				levelY);
+
+		/* LEGACY */
+		/*graphics.setColor(new Color(255, 255, 255, 175));
 		graphics.fillRect(0, 70, 90, 110);
 
 		graphics.drawImage(avatar, 15, 5, 60, 60, null);
@@ -64,7 +82,7 @@ public class ProfileBuilder {
 		graphics.drawString(
 				"LVL " + template.getLevel(),
 				(90 / 2) - ((int) graphics.getFontMetrics().getStringBounds("LVL " + template.getLevel(), graphics).getWidth() / 2),
-				105);
+				105);*/
 
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -89,14 +107,14 @@ public class ProfileBuilder {
 		Image avatar = null;
 		try {
 			BufferedImage temp = Utility.imageFor(Utility.getAvatar(user).replace(".webp", ".png"));
-			avatar = temp.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+			avatar = temp.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		// Calculate some stuff
-		final int avatarX = 20;
-		final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2) - 30);
+		/* LEGACY */
+		//final int avatarX = 20;
+		//final int avatarY = ((height / 3) - (avatar.getHeight(null) / 2) - 30);
 
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
@@ -106,7 +124,7 @@ public class ProfileBuilder {
 
 		// Draw the user avatar
 		graphics.setClip(new Ellipse2D.Double(30, 30, avatar.getWidth(null) - 5, avatar.getHeight(null) - 5));
-		graphics.drawImage(avatar, 30, 30, avatar.getWidth(null), avatar.getHeight(null), null);
+		graphics.drawImage(avatar, 30, 30, 75, 75, null);
 		graphics.setClip(null);
 
 		// Draw the username
@@ -157,18 +175,37 @@ public class ProfileBuilder {
 		graphics.drawString("" + experience, textX, textY + 97);
 
 		// Draw the info
-		final int infoX = (width / 2) - 15;
+		final int infoX = (width / 2) - 13;
 		final int infoY = (height / 2) + 10;
 		graphics.setFont(new Font("Roboto Light", Font.PLAIN, 14));
-		String info = WordUtils.wrap(template.getDescription(), 32);
+		// Split every 18 characters
+		final int count = 24;
+		String[] info = template.getDescription().split("(?<=\\G.{" + count + "})");
 		int y = infoY - graphics.getFontMetrics().getHeight();
-		for (String line : info.split("\n")) {
+		for (String line : info) {
 			graphics.drawString(
 					line,
 					infoX,
 					y += graphics.getFontMetrics().getHeight());
 		}
 
+		// Draw the wolf image
+		final int wolfX = (width / 2) + 50;
+		final int wolfY = (height / 2) + 60;
+		graphics.drawImage(template.getWolf(), wolfX, wolfY, template.getWolf().getWidth(), template.getWolf().getHeight(), null);
+
+		// Draw the wolf hunger
+		DataBase.insertWolf(user);
+		final WolfTemplate wolf = DataBase.wolfQuery(user);
+		final int hungerX = wolfX - 60;
+		final int hungerY = wolfY + 30;
+		graphics.setFont(new Font("Roboto Light", Font.PLAIN, 13));
+		graphics.drawString(wolf.getHunger() + "/" + wolf.getMaxHunger() + " Hunger", hungerX, hungerY);
+
+		// Draw the wolf level
+		final int wolfLevelY = wolfY + 70;
+		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));
+		graphics.drawString("Level " + wolf.getLevel(), hungerX, wolfLevelY);
 
 		/* Legacy Profile */
 		/*// Draw the stats background

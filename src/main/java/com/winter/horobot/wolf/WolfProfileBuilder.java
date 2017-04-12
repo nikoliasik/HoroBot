@@ -14,11 +14,8 @@ import java.io.IOException;
 
 public class WolfProfileBuilder {
 
-	private static final int width = 256;
-	private static final int height = 128;
-
-	private static final int wolfWidth = 94;
-	private static final int wolfHeight = 100;
+	private static final int width = 300;
+	private static final int height = 150;
 
 	public static EmbedObject generateEmbed(IGuild guild, IUser user) {
 		final WolfTemplate template = DataBase.wolfQuery(user);
@@ -42,7 +39,15 @@ public class WolfProfileBuilder {
 		final Font font = new Font("Roboto", Font.PLAIN, 16);
 		graphics.setFont(font);
 
-		// TODO: Implement the new profile design & wolf design
+		// Draw background
+		graphics.drawImage(wolf.getBackground(), 0, 0, width, height, null);
+
+		// Draw the template
+		graphics.drawImage(wolf.getTemplate(), 0, 0, width, height, null);
+
+		// Draw the wolf
+		graphics.drawImage(generateWolf(user), 0, 0, 68, 68, null);
+
 
 		/* LEGACY PROFILE */
 		/*// Calculate some stuff
@@ -162,5 +167,80 @@ public class WolfProfileBuilder {
 			e.printStackTrace();
 		}
 		return bytes.toByteArray();
+	}
+
+	public static BufferedImage generateWolf(IUser user) {
+		BufferedImage bufferedImage = new BufferedImage(300, 150, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D graphics = bufferedImage.createGraphics();
+
+		final WolfTemplate wolf = DataBase.wolfQuery(user);
+
+		// Draw the wolf base
+		graphics.drawImage(wolf.getBase(),
+				(width - wolf.getBase().getWidth() * 2),
+				(height / 2 - wolf.getBase().getHeight()),
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		// Draw the wolf cosmetics
+		graphics.drawImage(wolf.getBody(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getEye(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getNose(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getShirt(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getNeck(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getTail(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getPaws(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.drawImage(wolf.getHat(),
+				0,
+				0,
+				wolf.getBase().getWidth() * 2,
+				wolf.getBase().getHeight() * 2,
+				null);
+
+		graphics.dispose();
+		return bufferedImage;
 	}
 }

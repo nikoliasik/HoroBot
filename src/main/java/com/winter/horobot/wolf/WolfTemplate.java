@@ -20,6 +20,7 @@ public class WolfTemplate {
 	private BufferedImage nose;
 	private BufferedImage eye;
 	private BufferedImage neck;
+	private BufferedImage template;
 
 	public WolfTemplate(String name, int level, int hunger, int maxHunger, int fedTimes, String background, String hat, String body, String paws, String tail, String shirt, String nose, String eye, String neck) {
 		this.name = name;
@@ -38,6 +39,7 @@ public class WolfTemplate {
 			this.nose = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.noses.get(nose)));
 			this.eye = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.eyes.get(eye)));
 			this.neck = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.neck.get(neck)));
+			this.template = ImageIO.read(getClass().getResourceAsStream("/wolf/template.png"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -94,4 +96,6 @@ public class WolfTemplate {
 	public BufferedImage getNeck() {
 		return neck;
 	}
+
+	public BufferedImage getTemplate() { return template; }
 }

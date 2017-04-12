@@ -48,12 +48,12 @@ public class CommandWolf implements Command {
 					if (WolfCosmetics.foods.containsKey(args[1])) {
 						if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())) {
 							Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getID(), event.getAuthor());
-							new HoroTask(event.getAuthor().getID() + "-note") {
+							/*new HoroTask(event.getAuthor().getID() + "-note") {
 								@Override
 								public void run() {
 									Message.sendPM("wolf-ready", event.getAuthor());
 								}
-							}.delay(7200000);
+							}.delay(7200000);*/
 							WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 							if (template == null) {
 								DataBase.insertWolf(event.getAuthor());
