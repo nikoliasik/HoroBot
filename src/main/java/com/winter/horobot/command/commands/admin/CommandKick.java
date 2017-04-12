@@ -53,11 +53,11 @@ public class CommandKick implements Command {
 				if (user != null) {
 					if (args.length == 1) {
 						String name = user.getName();
-						Message.sendMessageInChannel(event.getChannel(),"**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-kicked"));
+						Message.sendMessageInChannel(event.getChannel(), "user-kicked-reason", name, "No reason specified");
 						event.getGuild().kickUser(user);
 					} else {
 						String name = user.getName();
-						Message.sendMessageInChannel(event.getChannel(),"**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-kicked-reason") + " " + raw.replaceFirst(args[0], ""));
+						Message.sendMessageInChannel(event.getChannel(), "user-kicked-reason", name, raw.replaceFirst(args[0], ""));
 						event.getGuild().kickUser(user);
 					}
 				} else {

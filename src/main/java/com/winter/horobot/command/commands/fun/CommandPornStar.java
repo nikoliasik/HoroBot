@@ -45,7 +45,7 @@ public class CommandPornStar implements Command {
 			String suffix = suf[rand.nextInt(suf.length)];
 			String name = prefix + " " + suffix;
 			
-			Message.replyRaw(Localisation.getMessage(guildID, "pornstar-name") + " " + name, event.getMessage());
+			Message.sendMessageInChannel(event.getChannel(),"pornstar-name", event.getAuthor().getDisplayName(event.getGuild()), name);
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

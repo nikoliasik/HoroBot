@@ -39,9 +39,8 @@ public class CommandShoot implements Command {
 				int result = rand.nextInt(2);
 
 				if(result == 0) {
-					String guildID = event.getMessage().getGuild().getID();
 					int dmg = rand.nextInt(100);
-					Message.replyRaw(Localisation.getMessage(guildID, "shoot-hit1") + " **" + args[0] + "** " + Localisation.getMessage(guildID, "shoot-hit2") + " " + dmg + " " + Localisation.getMessage(guildID, "shoot-hit3"), event.getMessage());
+					Message.sendMessageInChannel(event.getChannel(), "shoot-hit", event.getAuthor().getDisplayName(event.getGuild()), args[0], dmg);
 				} else if(result == 1) {
 					Message.reply("shoot-miss", event.getMessage());
 				}

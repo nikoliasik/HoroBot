@@ -22,7 +22,7 @@ public class CommandPurge implements Command {
 				try {
 					int messages = Integer.parseInt(args[0]);
 					event.getChannel().getMessageHistory(messages).bulkDelete();
-					Message.sendRawMessageInChannel(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getID(), "purged-messages"), messages));
+					Message.sendMessageInChannel(event.getChannel(),"purged-messages", messages);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

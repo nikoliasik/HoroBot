@@ -19,7 +19,7 @@ public class CommandRate implements Command {
 			Random rand = new Random();
 			int rate = rand.nextInt(100);
 
-			Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "rate") + " **" + raw + "** " + Localisation.getMessage(event.getGuild().getID(), "rate-2") + " " + rate + "/100" + Localisation.getMessage(event.getGuild().getID(), "rate-3"));
+			Message.sendMessageInChannel(event.getChannel(), "rate", raw, rate + "/100");
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

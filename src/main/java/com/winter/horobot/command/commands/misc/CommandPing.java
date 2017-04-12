@@ -31,7 +31,7 @@ public class CommandPing implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			Message.sendRawMessageInChannel(event.getChannel(), "Pong! Ping is: " + event.getClient().getOurUser().getShard().getResponseTime() + "ms");
+			Message.sendMessageInChannel(event.getChannel(), "pong", event.getClient().getOurUser().getShard().getResponseTime() + " milliseconds");
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

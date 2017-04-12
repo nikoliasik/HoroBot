@@ -35,11 +35,11 @@ public class CommandBan implements Command {
 				if (user != null) {
 					if (args.length == 1) {
 						String name = user.getName();
-						Message.sendMessageInChannel(event.getChannel(), "**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-banned"));
+						Message.sendMessageInChannel(event.getChannel(), "user-banned", name, "No reason specified");
 						event.getGuild().banUser(user);
 					} else {
 						String name = user.getName();
-						Message.sendMessageInChannel(event.getChannel(), "**" + name + "** " + Localisation.getMessage(event.getGuild().getID(), "user-banned-reason") + " " + raw.replaceFirst(args[0], ""));
+						Message.sendMessageInChannel(event.getChannel(), "user-banned", name, raw.replaceFirst(args[0], ""));
 						event.getGuild().banUser(user);
 					}
 				} else {

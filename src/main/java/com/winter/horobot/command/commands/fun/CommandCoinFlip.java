@@ -37,9 +37,9 @@ public class CommandCoinFlip implements Command {
 			Random rand = new Random();
 			int result = rand.nextInt(2);
 			if(result == 1) {
-				Message.sendRawMessageInChannel(event.getChannel(), "***" + event.getMessage().getAuthor().getName() + "*** " + Localisation.getMessage(event.getMessage().getGuild().getID(), "coinflip-head"));
+				Message.sendMessageInChannel(event.getChannel(), "coinflip-head", event.getAuthor().getNicknameForGuild(event.getGuild()));
 			} else {
-				Message.sendRawMessageInChannel(event.getChannel(), "***" + event.getMessage().getAuthor().getName() + "*** " + Localisation.getMessage(event.getMessage().getGuild().getID(), "coinflip-tails"));
+				Message.sendMessageInChannel(event.getChannel(), "coinflip-tails", event.getAuthor().getNicknameForGuild(event.getGuild()));
 			}
 		} else {
 			Message.reply(help(), event.getMessage());
