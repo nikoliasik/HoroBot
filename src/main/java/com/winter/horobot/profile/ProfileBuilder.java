@@ -10,6 +10,8 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
@@ -99,7 +101,77 @@ public class ProfileBuilder {
 		// Draw background
 		graphics.drawImage(template.getBackground(), 0, 0, width, height, null);
 
-		// Draw the stats background
+		// Draw the profile template
+		graphics.drawImage(template.getTemplate(), 0, 0, width, height, null);
+
+		// Draw the user avatar
+		graphics.setClip(new Ellipse2D.Double(30, 30, avatar.getWidth(null) - 5, avatar.getHeight(null) - 5));
+		graphics.drawImage(avatar, 30, 30, avatar.getWidth(null), avatar.getHeight(null), null);
+		graphics.setClip(null);
+
+		// Draw the username
+		graphics.setFont(new Font("Roboto Black", Font.BOLD, 20));
+		graphics.setColor(new Color(186,187,189));
+		graphics.drawString(
+				template.getName(),
+				(width / 2 + width / 7) - ((int) graphics.getFontMetrics().getStringBounds(template.getName(), graphics).getWidth() / 2),
+				50);
+
+		// Fill progress bar
+		int barX = 122;
+		int barY = 62;
+		int barHeight = 18;
+		final int size = (width / 2 - 4);
+		final double percent = ((double) template.getXp() / (double) template.getMaxXp()) * (double) size;
+		final int barWidth = (int) percent;
+		graphics.setColor(new Color(96,115,145));
+		graphics.setClip(new RoundRectangle2D.Float(barX, barY, barWidth, barHeight, 10, 10));
+		graphics.fillRect(barX, barY, barWidth, barHeight);
+		graphics.setClip(null);
+
+		// Draw the experience
+		final int experienceX = (barX + (size / 2)) - (int) graphics.getFontMetrics().getStringBounds(template.getXp() + " / " + template.getMaxXp(), graphics).getWidth() / 3;
+		final int experienceY = barY + barHeight - 4;
+		graphics.setFont(new Font("Roboto Bold", Font.BOLD, 14));
+		graphics.setColor(new Color(216,216,216));
+		graphics.drawString(template.getXp() + " / " + template.getMaxXp(), experienceX, experienceY);
+
+		// Draw the level
+		final int levelX = (barX + (size / 2)) - (int) graphics.getFontMetrics().getStringBounds("Level " + template.getLevel(), graphics).getWidth() / 2;
+		final int levelY = barY + barHeight + 20;
+		graphics.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
+		graphics.setColor(new Color(186,187,189));
+		graphics.drawString("Level " + template.getLevel(), levelX, levelY);
+
+		// Draw the coins
+		final int textX = 63;
+		final int textY = (height / 2) + 15;
+		graphics.setFont(new Font("Roboto Light", Font.PLAIN, 20));
+		graphics.drawString("$" + template.getFoxCoins(), textX, textY + 2);
+
+		// Draw the rank
+		graphics.drawString("#" + DataBase.queryRank(user), textX, textY + 48);
+
+		// Draw the experience
+		final int experience = (template.getLevel() * 300) + (template.getLevel() * 60);
+		graphics.drawString("" + experience, textX, textY + 97);
+
+		// Draw the info
+		final int infoX = (width / 2) - 15;
+		final int infoY = (height / 2) + 10;
+		graphics.setFont(new Font("Roboto Light", Font.PLAIN, 14));
+		String info = WordUtils.wrap(template.getDescription(), 32);
+		int y = infoY - graphics.getFontMetrics().getHeight();
+		for (String line : info.split("\n")) {
+			graphics.drawString(
+					line,
+					infoX,
+					y += graphics.getFontMetrics().getHeight());
+		}
+
+
+		/* Legacy Profile */
+		/*// Draw the stats background
 		graphics.setColor(new Color(255, 255, 255, 175));
 		graphics.fillRect(20, avatarY, width - 40, 240);
 
@@ -200,7 +272,7 @@ public class ProfileBuilder {
 		graphics.drawString(
 				"Total XP: " + totalXP,
 				avatarX + avatar.getWidth(null) + 10,
-				avatarY + 69);
+				avatarY + 69);*/
 
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();

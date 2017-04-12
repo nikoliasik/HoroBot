@@ -14,6 +14,7 @@ public class ProfileTemplate {
 	private final int maxXp;
 	private final int foxCoins;
 	private BufferedImage background;
+	private BufferedImage template;
 
 	public ProfileTemplate(String name, String description, int level, int xp, int maxXp, int foxCoins, String background) {
 		this.name = name;
@@ -24,6 +25,7 @@ public class ProfileTemplate {
 		this.foxCoins = foxCoins;
 		try {
 			this.background = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.backgrounds.get(background)));
+			this.template = ImageIO.read(getClass().getResourceAsStream("/profile/template.png"));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -56,4 +58,6 @@ public class ProfileTemplate {
 	public BufferedImage getBackground() {
 		return background;
 	}
+
+	public BufferedImage getTemplate() { return template; }
 }
