@@ -26,21 +26,29 @@ public class Localisation {
 
 	public static ResourceBundle enLang = ResourceBundle.getBundle("locale.en");
 	public static ResourceBundle nlLang = ResourceBundle.getBundle("locale.nl");
+	public static ResourceBundle esLang = ResourceBundle.getBundle("locale.es");
+	public static ResourceBundle ptLang = ResourceBundle.getBundle("locale.pt");
 
 	public static String checkLanguage(String guildID) {
 		return DataBase.guildQuery(guildID, "language");
 	}
 
 	public static boolean changeLanguage (String guildID, String language) {
-		if (language.equals("en")) {
-			updateGuildLanguage(guildID, "en");
-			return true;
-		} else if (language.equals("nl")) {
-			updateGuildLanguage(guildID, "nl");
-			return true;
-		} else {
-			return false;
+		switch (language) {
+			case "en":
+				updateGuildLanguage(guildID, "en");
+				return true;
+			case "nl":
+				updateGuildLanguage(guildID, "nl");
+				return true;
+			case "es":
+				updateGuildLanguage(guildID, "es");
+				return true;
+			case "pt":
+				updateGuildLanguage(guildID, "pt");
+				return true;
 		}
+		return false;
 	}
 
 	public static void updateGuildLanguage (String guildID, String language) {
@@ -57,6 +65,14 @@ public class Localisation {
 		} else if(lang.equals("nl")) {
 			if (nlLang.containsKey(str)) {
 				return nlLang.getString(str);
+			}
+		} else if(lang.equals("es")) {
+			if (esLang.containsKey(str)) {
+				return esLang.getString(str);
+			}
+		} else if(lang.equals("pt")) {
+			if (ptLang.containsKey(str)) {
+				return ptLang.getString(str);
 			}
 		}
 		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";

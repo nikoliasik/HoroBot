@@ -132,7 +132,7 @@ public class Main {
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
-		commands.put("test", new CommandTest());
+		//commands.put("test", new CommandTest());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
