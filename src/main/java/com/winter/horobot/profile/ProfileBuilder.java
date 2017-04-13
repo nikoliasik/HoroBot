@@ -52,16 +52,16 @@ public class ProfileBuilder {
 		graphics.drawImage(template.getLvlTemplate(), 0, 0, 100, 125, null);
 
 		// Draw the user avatar
-		graphics.setClip(new Ellipse2D.Double(25, 20, 50, 50));
-		graphics.drawImage(avatar, 30, 15, 50, 50, null);
+		graphics.setClip(new Ellipse2D.Double(26, 17, 50, 50));
+		graphics.drawImage(avatar, 26, 17, 50, 50, null);
 		graphics.setClip(null);
 
 		// Draw the level
-		final String levelUp = "LVL " + template.getLevel();
-		final int levelX = (100 / 2) - (int) (graphics.getFontMetrics().getStringBounds(levelUp, graphics).getWidth() / 2) - 5;
-		final int levelY = 125 - 15;
 		graphics.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
 		graphics.setColor(new Color(186,187,189));
+		final String levelUp = "LVL " + template.getLevel();
+		final int levelX = (100 / 2) - ((int) graphics.getFontMetrics().getStringBounds(levelUp, graphics).getWidth() / 2);
+		final int levelY = 125 - 15;
 		graphics.drawString(levelUp,
 				levelX,
 				levelY);
@@ -123,8 +123,8 @@ public class ProfileBuilder {
 		graphics.drawImage(template.getTemplate(), 0, 0, width, height, null);
 
 		// Draw the user avatar
-		graphics.setClip(new Ellipse2D.Double(30, 30, avatar.getWidth(null) - 5, avatar.getHeight(null) - 5));
-		graphics.drawImage(avatar, 30, 30, 75, 75, null);
+		graphics.setClip(new Ellipse2D.Double(33, 30, 75, 75));
+		graphics.drawImage(avatar, 33, 30, 75, 75, null);
 		graphics.setClip(null);
 
 		// Draw the username

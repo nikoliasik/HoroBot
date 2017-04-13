@@ -214,9 +214,9 @@ public class WolfCosmetics {
 		List<String> items = DataBase.queryItems(user);
 		if (items != null) {
 			int count = items.size();
-			if(count >= totalItems) return true;
+			if(count >= totalItems - 1) return true;
 		}
-		return false;
+		return true;
 	}
 
 	public static String getType(String item) {

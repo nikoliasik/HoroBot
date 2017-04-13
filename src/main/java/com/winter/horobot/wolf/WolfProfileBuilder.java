@@ -8,6 +8,7 @@ import sx.blah.discord.util.EmbedBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ public class WolfProfileBuilder {
 
 	private static final int width = 300;
 	private static final int height = 150;
+
+	private static final double multiplier = 2.5;
 
 	public static EmbedObject generateEmbed(IGuild guild, IUser user) {
 		final WolfTemplate template = DataBase.wolfQuery(user);
@@ -35,9 +38,7 @@ public class WolfProfileBuilder {
 		final WolfTemplate wolf = DataBase.wolfQuery(user);
 		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bufferedImage.createGraphics();
-
-		final Font font = new Font("Roboto", Font.PLAIN, 16);
-		graphics.setFont(font);
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// Draw background
 		graphics.drawImage(wolf.getBackground(), 0, 0, width, height, null);
@@ -46,8 +47,42 @@ public class WolfProfileBuilder {
 		graphics.drawImage(wolf.getTemplate(), 0, 0, width, height, null);
 
 		// Draw the wolf
-		graphics.drawImage(generateWolf(user), 0, 0, 68, 68, null);
+		final double calc = wolf.getBase().getWidth() * multiplier;
+		final int sizeWolf = (int) calc;
+		graphics.drawImage(generateWolf(user), 175, 20, sizeWolf, sizeWolf, null);
 
+		// Draw the name
+		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));
+		graphics.setColor(new Color(186,187,189));
+		final int nameX = (width / 4 + width / 13) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getWidth() / 2);
+		final int nameY = 60;
+		graphics.drawString(wolf.getName(), nameX, nameY);
+
+		// Draw the level
+		graphics.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
+		final int levelX = (width / 4 + width / 13) - (int) (graphics.getFontMetrics().getStringBounds("Level " + wolf.getLevel(), graphics).getWidth() / 2);
+		final int levelY = 105;
+		graphics.drawString("Level " + wolf.getLevel(), levelX, levelY);
+
+		// Fill progress bar
+		final int barX = 17;
+		final int barY = 67;
+		final int barHeight = 20;
+		final int size = (width / 2 - 2);
+		final double percent = ((double) wolf.getHunger() / (double) wolf.getMaxHunger()) * (double) size;
+		//final double percent = 1 * (double) size;
+		final int barWidth = (int) percent;
+		graphics.setColor(new Color(150,117,96));
+		graphics.setClip(new RoundRectangle2D.Float(barX, barY, barWidth, barHeight, 10, 10));
+		graphics.fillRect(barX, barY, barWidth, barHeight);
+		graphics.setClip(null);
+
+		// Draw the actual progress string
+		graphics.setFont(new Font("Roboto Bold", Font.BOLD, 14));
+		graphics.setColor(new Color(216,216,216));
+		final int textX = (width / 2 - 15) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getHunger() + " / " + wolf.getMaxHunger(), graphics).getWidth() / 2);
+		final int textY = 67;
+		graphics.drawString(wolf.getHunger() + " / " + wolf.getMaxHunger(), textX, textY);
 
 		/* LEGACY PROFILE */
 		/*// Calculate some stuff
@@ -170,74 +205,76 @@ public class WolfProfileBuilder {
 	}
 
 	public static BufferedImage generateWolf(IUser user) {
-		BufferedImage bufferedImage = new BufferedImage(300, 150, BufferedImage.TYPE_INT_ARGB);
+		final WolfTemplate wolf = DataBase.wolfQuery(user);
+		BufferedImage bufferedImage = new BufferedImage(wolf.getBase().getWidth() * 4, wolf.getBase().getHeight() * 4, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bufferedImage.createGraphics();
 
-		final WolfTemplate wolf = DataBase.wolfQuery(user);
+		final double calc = wolf.getBase().getWidth() * multiplier;
+		final int size = (int) calc;
 
 		// Draw the wolf base
 		graphics.drawImage(wolf.getBase(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				0,
+				0,
+				size,
+				size,
 				null);
 
 		// Draw the wolf cosmetics
 		graphics.drawImage(wolf.getBody(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getEye(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getNose(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getShirt(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getNeck(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getTail(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getPaws(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.drawImage(wolf.getHat(),
 				0,
 				0,
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
+				size,
+				size,
 				null);
 
 		graphics.dispose();
