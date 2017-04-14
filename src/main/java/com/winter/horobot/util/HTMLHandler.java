@@ -158,12 +158,17 @@ public class HTMLHandler {
 			request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
 
 			String msgSearch = "";
-			for (int i = 0; i < tags.length; i++) {
-				msgSearch += tags[i] + " ";
+			String searchOrig = "";
+			for(int i = 0; i < tags.length; i++) {
+				if(tags.length == 1) {
+					searchOrig += tags[i];
+				} else {
+					searchOrig += msgSearch + tags[i] + " ";
+				}
 			}
 
 			URIBuilder builder = new URIBuilder(request.getURI());
-			builder.addParameter("q", msgSearch);
+			builder.addParameter("q", searchOrig);
 			request.setURI(builder.build());
 
 			HttpClient client = HttpClientBuilder.create().build();
@@ -216,6 +221,7 @@ public class HTMLHandler {
 					unescaped = unescaped.replaceAll("\\<.*?>","");
 					unescaped = unescaped.replaceAll("\\[.*?]","");
 
+					unescaped = unescaped.substring(0, Math.min(unescaped.length(), 1024));
 					embedBuilder.appendField(StringEscapeUtils.unescapeXml(element.getElementsByTagName("title").item(0).getTextContent()), unescaped, false);
 				}
 				return embedBuilder.build();
