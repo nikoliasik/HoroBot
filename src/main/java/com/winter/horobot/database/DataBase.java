@@ -1,9 +1,10 @@
 package com.winter.horobot.database;
 
-import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.profile.ProfileTemplate;
 import com.winter.horobot.wolf.WolfTemplate;
+import org.postgresql.jdbc3.Jdbc3ConnectionPool;
+import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.sql.*;
@@ -12,7 +13,8 @@ import java.util.List;
 
 public class DataBase {
 
-	private static Connection con;
+	private static Jdbc3PoolingDataSource source;
+	private static Jdbc3ConnectionPool pool;
 
 	public static void createGuildSchema() {
 		try {
@@ -451,17 +453,16 @@ public class DataBase {
 
 	public static void connect() {
 		try {
-			Class.forName("org.postgresql.Driver");
-			con = DriverManager.getConnection("jdbc:postgresql://localhost/postgres", "postgres", Config.dataBasePassword);
+			//Class.forName("org.postgresql.Driver");
+			//con = DriverManager.getConnection("jdbc:postgresql://localhost/postgres", "postgres", Config.dataBasePassword);
+			source = new Jdbc3PoolingDataSource();
+			source.setDataSourceName("DataSource");
+			source.setServerName("localhost");
+			source.setDatabaseName("psql");
+			source.setUser("postgres");
+			source.setPassword("RazorStar3");
+			source.setMaxConnections(10);
 		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void close() {
-		try {
-			con.close();
-		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
