@@ -107,7 +107,7 @@ public class CommandWolf implements Command {
 				}
 			} else if (args[0].equals("rename")) {
 				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if (temp.length() <= 30) {
+				if (temp.length() <= 18) {
 					DataBase.updateWolf(event.getAuthor(), "name", temp);
 					Message.sendMessageInChannel(event.getChannel(), "name-success", temp);
 				} else {

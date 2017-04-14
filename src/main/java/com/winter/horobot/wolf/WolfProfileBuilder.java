@@ -54,13 +54,13 @@ public class WolfProfileBuilder {
 		// Draw the name
 		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));
 		graphics.setColor(new Color(186,187,189));
-		final int nameX = (width / 4 + width / 13) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getWidth() / 2);
+		final int nameX = (width / 4 + 15) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getWidth() / 2);
 		final int nameY = 60;
 		graphics.drawString(wolf.getName(), nameX, nameY);
 
 		// Draw the level
-		graphics.setFont(new Font("Roboto Medium", Font.PLAIN, 18));
-		final int levelX = (width / 4 + width / 13) - (int) (graphics.getFontMetrics().getStringBounds("Level " + wolf.getLevel(), graphics).getWidth() / 2);
+		graphics.setFont(new Font("Roboto Medium", Font.PLAIN, 16));
+		final int levelX = (width / 4 + width / 12) - (int) (graphics.getFontMetrics().getStringBounds("Level " + wolf.getLevel(), graphics).getWidth() / 2);
 		final int levelY = 105;
 		graphics.drawString("Level " + wolf.getLevel(), levelX, levelY);
 
@@ -80,8 +80,8 @@ public class WolfProfileBuilder {
 		// Draw the actual progress string
 		graphics.setFont(new Font("Roboto Bold", Font.BOLD, 14));
 		graphics.setColor(new Color(216,216,216));
-		final int textX = (width / 2 - 15) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getHunger() + " / " + wolf.getMaxHunger(), graphics).getWidth() / 2);
-		final int textY = 67;
+		final int textX = barX + (size / 2) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getHunger() + " / " + wolf.getMaxHunger(), graphics).getWidth() / 2);
+		final int textY = 82;
 		graphics.drawString(wolf.getHunger() + " / " + wolf.getMaxHunger(), textX, textY);
 
 		/* LEGACY PROFILE */
