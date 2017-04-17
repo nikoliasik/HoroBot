@@ -130,6 +130,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 1: {
 				drop = rand.nextInt(hats.size());
@@ -138,6 +139,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 2: {
 				drop = rand.nextInt(bodies.size());
@@ -146,6 +148,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 3: {
 				drop = rand.nextInt(paws.size());
@@ -154,6 +157,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 4: {
 				drop = rand.nextInt(tails.size());
@@ -162,6 +166,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 5: {
 				drop = rand.nextInt(shirts.size());
@@ -170,6 +175,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 6: {
 				drop = rand.nextInt(noses.size());
@@ -178,6 +184,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 7: {
 				drop = rand.nextInt(neck.size());
@@ -186,6 +193,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 			case 8: {
 				drop = rand.nextInt(eyes.size());
@@ -194,6 +202,7 @@ public class WolfCosmetics {
 				if(item.equals("None")) return drop(user);
 				if(!hasItem(user, item)) return item;
 				if(!hasAllItems(user)) return drop(user);
+				if(hasItem(user, item)) return drop(user);
 			}
 		}
 		return null;

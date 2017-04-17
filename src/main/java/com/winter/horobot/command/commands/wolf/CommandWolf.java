@@ -68,7 +68,7 @@ public class CommandWolf implements Command {
 
 							StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", args[1]));
 							if (hunger >= maxHunger) {
-								int nextHunger = (8);
+								int nextHunger = 1 + template.getLevel();
 								DataBase.updateWolf(event.getAuthor(), "hunger", 0);
 								DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
 								DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);

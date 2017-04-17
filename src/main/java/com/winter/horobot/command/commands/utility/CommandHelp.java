@@ -180,6 +180,11 @@ public class CommandHelp implements Command {
 					} else builder.append(formatted);
 				}
 				Message.sendRawPM(builder + "\n```", event.getAuthor());
+				Message.sendRawPM("Hey there!\n\n" +
+						"I know everyone hates these kinds of messages and so do I so I'll keep it short,\n" +
+						"HoroBot is a project which I've been working on for the past month for fun but I am in desperate need of funds to keep her running.\n" +
+						"So should you even have 1 dollar to spare, please head over to https://www.patreon.com/HoroBot and help me out!\n\n" +
+						"Thanks a lot for reading and helping me out!", event.getAuthor());
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {
 				if(!event.getMessage().getChannel().isPrivate()) {

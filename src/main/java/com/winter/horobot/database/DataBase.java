@@ -126,7 +126,7 @@ public class DataBase {
 					"name TEXT NOT NULL DEFAULT 'Wolf'," +
 					"level INTEGER NOT NULL DEFAULT 1," +
 					"hunger INTEGER NOT NULL DEFAULT 0," +
-					"maxHunger INTEGER NOT NULL DEFAULT 8," +
+					"maxHunger INTEGER NOT NULL DEFAULT 2," +
 					"fedTimes INTEGER NOT NULL DEFAULT 0," +
 					"background TEXT NOT NULL DEFAULT 'None'," +
 					"hat TEXT NOT NULL DEFAULT 'None'," +
