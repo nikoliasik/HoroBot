@@ -31,64 +31,95 @@ public class CommandProfile implements Command {
 				Message.sendFile(
 						event.getChannel(),
 						ProfileBuilder.generateEmbed(
-								event.getGuild(),
 								event.getAuthor()),
 						"Here's your profile",
-						event.getAuthor().getID() + "profile.png",
+						"profile.png",
 						new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 								event.getAuthor())));
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
 			}
 		} else if(args.length >= 1) {
-			if (args[0].equals("background")) {
-				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if ("background".equals(WolfCosmetics.getType(temp))) {
-					String item = DataBase.queryItem(event.getAuthor(), temp);
-					if (item != null) {
-						DataBase.updateUser(event.getAuthor(), "background", temp);
-						Message.sendMessageInChannel(event.getChannel(), "background-updated", temp);
-					} else {
-						Message.sendMessageInChannel(event.getChannel(), "no-item");
-					}
-				} else {
-					Message.sendMessageInChannel(event.getChannel(), "invalid-item");
-				}
-			} else if (args[0].equals("info")) {
-				String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-				if (temp.length() <= 54) {
-					DataBase.updateUser(event.getAuthor(), "description", temp);
-					Message.sendMessageInChannel(event.getChannel(), "desc-changed");
-				} else {
-					Message.sendMessageInChannel(event.getChannel(), "desc-too-long");
-				}
-			} else if (args[0].equals("capsule")) {
-				if (DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
-					String drop = WolfCosmetics.drop(event.getAuthor());
-					if (drop != null) {
-						DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
-						DataBase.insertItem(event.getAuthor(), drop);
-						Message.sendMessageInChannel(
+			if (event.getMessage().getMentions().size() == 1) {
+				if(!event.getMessage().getMentions().get(0).isBot()) {
+					if (!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
+						Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getID(), event.getAuthor());
+						DataBase.insertUser(event.getMessage().getMentions().get(0));
+						Message.sendFile(
 								event.getChannel(),
-								"capsule-opened",
-								drop);
+								ProfileBuilder.generateEmbed(
+										event.getMessage().getMentions().get(0)),
+								"Here's **" + event.getMessage().getMentions().get(0) + "**'s profile!",
+								"profile.png",
+								new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
+										event.getMessage().getMentions().get(0))));
 					} else {
-						Message.sendMessageInChannel(event.getChannel(), "got-everything");
+						Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
 					}
 				} else {
-					Message.sendMessageInChannel(event.getChannel(), "insufficient-funds");
+					Message.sendMessageInChannel(event.getChannel(), "bot-user");
 				}
-			} else if (args[0].equals("ranking")) {
-				String result = DataBase.queryRanks(10);
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
-				builder.withAuthorName(event.getAuthor().getDisplayName(event.getGuild()));
-				builder.withColor(Color.CYAN);
-				builder.appendField("Global Ranking", result, false);
-
-				Message.sendEmbed(event.getChannel(), "Here's the current ranking chart", builder.build(), false);
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "no-sub-command");
+				switch (args[0]) {
+					case "background": {
+						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
+						if ("background".equals(WolfCosmetics.getType(temp))) {
+							String item = DataBase.queryItem(event.getAuthor(), temp);
+							if (item != null) {
+								DataBase.updateUser(event.getAuthor(), "background", temp);
+								Message.sendMessageInChannel(event.getChannel(), "background-updated", temp);
+							} else {
+								Message.sendMessageInChannel(event.getChannel(), "no-item");
+							}
+						} else {
+							Message.sendMessageInChannel(event.getChannel(), "invalid-item");
+						}
+						break;
+					}
+					case "info": {
+						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
+						if (temp.length() <= 54) {
+							DataBase.updateUser(event.getAuthor(), "description", temp);
+							Message.sendMessageInChannel(event.getChannel(), "desc-changed");
+						} else {
+							Message.sendMessageInChannel(event.getChannel(), "desc-too-long");
+						}
+						break;
+					}
+					case "capsule":
+						if (DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
+							String drop = WolfCosmetics.drop(event.getAuthor());
+							if (drop != null) {
+								DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
+								DataBase.insertItem(event.getAuthor(), drop);
+								Message.sendMessageInChannel(
+										event.getChannel(),
+										"capsule-opened",
+										drop);
+							} else {
+								Message.sendMessageInChannel(event.getChannel(), "got-everything");
+							}
+						} else {
+							Message.sendMessageInChannel(event.getChannel(), "insufficient-funds");
+						}
+						break;
+					case "ranking":
+						String result = DataBase.queryRanks(10);
+						EmbedBuilder builder = new EmbedBuilder();
+						builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+						builder.withAuthorName(event.getAuthor().getDisplayName(event.getGuild()));
+						builder.withColor(Color.CYAN);
+						builder.appendField("Global Ranking", result, false);
+
+						Message.sendEmbed(event.getChannel(), "Here's the current ranking chart", builder.build(), false);
+						break;
+					case "help":
+						Message.sendMessageInChannel(event.getChannel(), help());
+						break;
+					default:
+						Message.sendMessageInChannel(event.getChannel(), "no-sub-command");
+						break;
+				}
 			}
 		}
 	}

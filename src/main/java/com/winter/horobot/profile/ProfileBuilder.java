@@ -21,12 +21,12 @@ public class ProfileBuilder {
 	public static final int width = 300;
 	public static final int height = 300;
 
-	public static EmbedObject generateEmbed(IGuild guild, IUser user) {
+	public static EmbedObject generateEmbed(IUser user) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withAuthorIcon(user.getAvatarURL());
-		builder.withAuthorName(user.getDisplayName(guild) + "'s Profile");
+		builder.withAuthorName(user.getName() + "'s Profile");
 		builder.withColor(Color.CYAN);
-		builder.withImage("attachment://" + user.getID() + "profile.png");
+		builder.withImage("attachment://" + "profile.png");
 		return builder.build();
 	}
 

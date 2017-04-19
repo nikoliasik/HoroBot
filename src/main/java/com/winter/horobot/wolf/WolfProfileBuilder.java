@@ -20,17 +20,17 @@ public class WolfProfileBuilder {
 
 	private static final double multiplier = 2.5;
 
-	public static EmbedObject generateEmbed(IGuild guild, IUser user) {
+	public static EmbedObject generateEmbed(IUser user) {
 		final WolfTemplate template = DataBase.wolfQuery(user);
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withAuthorIcon(user.getAvatarURL());
-		builder.withAuthorName(user.getDisplayName(guild) + "'s Wolf");
+		builder.withAuthorName(user.getName() + "'s Wolf");
 		builder.withColor(Color.CYAN);
 		builder.appendField("Level", "" + template.getLevel(), true);
 		builder.appendField("Progress", template.getHunger() + " / " + template.getMaxHunger() + " food to level " + (template.getLevel() + 1), true);
 		builder.appendField("Feed Stats", "This wolf has been fed a total of " + template.getFedTimes() + " times", false);
-		builder.withImage("attachment://" + user.getID() + "wolf.png");
+		builder.withImage("attachment://wolf.png");
 		return builder.build();
 	}
 
