@@ -113,7 +113,7 @@ public class CommandWolf implements Command {
 											event.getChannel(),
 											WolfProfileBuilder.generateEmbed(event.getAuthor()),
 											message.toString(),
-											event.getAuthor().getID() + "wolf.png",
+											"wolf.png",
 											new ByteArrayInputStream(
 													WolfProfileBuilder.generateImage(
 															event.getAuthor())));
