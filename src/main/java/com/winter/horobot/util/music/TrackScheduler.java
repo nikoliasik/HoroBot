@@ -19,7 +19,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	public TrackScheduler(AudioPlayer player) {
 		this.player = player;
-		this.queue = new LinkedList<AudioTrack>();
+		this.queue = new LinkedList<>();
 		this.repeat = false;
 	}
 
@@ -29,12 +29,18 @@ public class TrackScheduler extends AudioEventAdapter {
 		}
 	}
 
+	public Queue<AudioTrack> getQueue() { return this.queue; }
+
 	public void nextTrack() {
 		player.startTrack(queue.poll(), false);
 	}
 
 	public void repeatTrack() {
 		player.startTrack(lastTrack.makeClone(), false);
+	}
+
+	public void clearQueue() {
+		this.queue.clear();
 	}
 
 	public void setRepeat(boolean repeat) {

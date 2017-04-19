@@ -38,13 +38,9 @@ public class MusicUtils {
 				}
 
 				public void playlistLoaded(AudioPlaylist audioPlaylist) {
-					AudioTrack firstTrack = audioPlaylist.getSelectedTrack();
-
-					if (firstTrack == null) {
-						firstTrack = audioPlaylist.getTracks().get(0);
+					for(AudioTrack track : audioPlaylist.getTracks()) {
+						play(event.getGuild(), musicManager, track);
 					}
-
-					play(channel.getGuild(), musicManager, firstTrack);
 					sendMessage(event, Localisation.getMessage(channel.getGuild().getID(), "playlist-loaded"));
 				}
 

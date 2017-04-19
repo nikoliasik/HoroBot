@@ -1,4 +1,4 @@
-package com.winter.horobot.util.music;
+package com.winter.horobot.command.commands.fun;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.util.Message;

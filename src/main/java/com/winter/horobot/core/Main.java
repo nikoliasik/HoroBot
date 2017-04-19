@@ -125,10 +125,8 @@ public class Main {
 		commands.put("repeat", new CommandRepeat());
 		commands.put("song", new CommandSong());
 		commands.put("eval", new CommandEval());
-		//commands.put("voteskip", new CommandVoteSkip());
-		//commands.put("shuffle", new CommandShuffle());
-		//commands.put("loop", new CommandLoop());
-		//commands.put("queue", new CommandQueue());
+		commands.put("clear", new CommandClear());
+		commands.put("queue", new CommandQueue());
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
