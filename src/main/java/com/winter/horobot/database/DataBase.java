@@ -3,7 +3,7 @@ package com.winter.horobot.database;
 import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.profile.ProfileTemplate;
-import com.winter.horobot.wolf.WolfTemplate;
+import com.winter.horobot.animals.wolf.WolfTemplate;
 import org.postgresql.ds.PGPoolingDataSource;
 import sx.blah.discord.handle.obj.IUser;
 

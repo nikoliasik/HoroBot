@@ -2,10 +2,8 @@ package com.winter.horobot.profile;
 
 import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.Utility;
-import com.winter.horobot.wolf.WolfTemplate;
-import org.apache.commons.lang3.text.WordUtils;
+import com.winter.horobot.animals.wolf.WolfTemplate;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 

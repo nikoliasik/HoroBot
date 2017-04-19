@@ -6,7 +6,7 @@ import com.winter.horobot.profile.ProfileBuilder;
 import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
-import com.winter.horobot.wolf.WolfCosmetics;
+import com.winter.horobot.animals.wolf.WolfCosmetics;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -49,7 +49,7 @@ public class CommandProfile implements Command {
 								event.getChannel(),
 								ProfileBuilder.generateEmbed(
 										event.getMessage().getMentions().get(0)),
-								"Here's **" + event.getMessage().getMentions().get(0) + "**'s profile!",
+								"Here's **" + event.getMessage().getMentions().get(0).getName() + "**'s profile!",
 								"profile.png",
 								new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 										event.getMessage().getMentions().get(0))));

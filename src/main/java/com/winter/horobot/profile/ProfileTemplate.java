@@ -1,6 +1,6 @@
 package com.winter.horobot.profile;
 
-import com.winter.horobot.wolf.WolfCosmetics;
+import com.winter.horobot.animals.wolf.WolfCosmetics;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

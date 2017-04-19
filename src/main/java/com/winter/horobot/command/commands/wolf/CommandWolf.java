@@ -2,14 +2,14 @@ package com.winter.horobot.command.commands.wolf;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.database.DataBase;
-import com.winter.horobot.scheduler.HoroTask;
 import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
-import com.winter.horobot.wolf.WolfCosmetics;
-import com.winter.horobot.wolf.WolfProfileBuilder;
-import com.winter.horobot.wolf.WolfTemplate;
+import com.winter.horobot.animals.wolf.WolfCosmetics;
+import com.winter.horobot.animals.wolf.WolfProfileBuilder;
+import com.winter.horobot.animals.wolf.WolfTemplate;
+import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
 import java.io.ByteArrayInputStream;
@@ -51,7 +51,7 @@ public class CommandWolf implements Command {
 						Message.sendFile(
 								event.getChannel(),
 								WolfProfileBuilder.generateEmbed(event.getMessage().getMentions().get(0)),
-								"Here's your wolf",
+								"Here's " + event.getMessage().getMentions().get(0).getName() + "'s wolf",
 								"wolf.png",
 								new ByteArrayInputStream(
 										WolfProfileBuilder.generateImage(
@@ -66,7 +66,7 @@ public class CommandWolf implements Command {
 				switch (args[0]) {
 					case "feed":
 						if (args.length == 2) {
-							if (WolfCosmetics.foods.containsKey(args[1])) {
+							if (WolfCosmetics.foods.containsKey(args[1].toLowerCase())) {
 								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())) {
 									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getID(), event.getAuthor());
 							/*new HoroTask(event.getAuthor().getID() + "-note") {
@@ -82,12 +82,12 @@ public class CommandWolf implements Command {
 									}
 									int hunger = template.getHunger();
 									int maxHunger = template.getMaxHunger();
-									int foodValue = WolfCosmetics.foods.get(args[1]);
+									int foodValue = WolfCosmetics.foods.get(args[1].toLowerCase());
 									hunger += foodValue;
 									DataBase.updateWolf(event.getAuthor(), "hunger", hunger);
 									DataBase.updateWolf(event.getAuthor(), "fedTimes", template.getFedTimes() + 1);
 
-									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", args[1]));
+									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", WordUtils.capitalizeFully(args[1])));
 									if (hunger >= maxHunger) {
 										int nextHunger = 1 + template.getLevel();
 										DataBase.updateWolf(event.getAuthor(), "hunger", 0);
@@ -139,10 +139,10 @@ public class CommandWolf implements Command {
 					}
 					case "equip": {
 						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-						String item = DataBase.queryItem(event.getAuthor(), temp);
+						String item = DataBase.queryItem(event.getAuthor(), WordUtils.capitalizeFully(temp));
 						if (item != null) {
-							DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), temp);
-							Message.sendMessageInChannel(event.getChannel(), "background-success", temp);
+							DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), WordUtils.capitalizeFully(temp));
+							Message.sendMessageInChannel(event.getChannel(), "background-success", WordUtils.capitalizeFully(temp));
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "no-item");
 						}

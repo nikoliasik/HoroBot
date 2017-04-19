@@ -1,8 +1,7 @@
-package com.winter.horobot.wolf;
+package com.winter.horobot.animals.wolf;
 
 import com.winter.horobot.database.DataBase;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -83,115 +82,6 @@ public class WolfProfileBuilder {
 		final int textX = barX + (size / 2) - (int) (graphics.getFontMetrics().getStringBounds(wolf.getHunger() + " / " + wolf.getMaxHunger(), graphics).getWidth() / 2);
 		final int textY = 82;
 		graphics.drawString(wolf.getHunger() + " / " + wolf.getMaxHunger(), textX, textY);
-
-		/* LEGACY PROFILE */
-		/*// Calculate some stuff
-		final int stringX = (width / 2) - (graphics.getFontMetrics().stringWidth(wolf.getName()) / 2);
-		final int stringY = (height - 16 + 10);
-		final int nameWidth = (int) graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getWidth();
-		final int nameHeight = (int) graphics.getFontMetrics().getStringBounds(wolf.getName(), graphics).getHeight() + 5;
-		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 16));
-		final int foodWidth = (int) graphics.getFontMetrics().getStringBounds("HUNGER " + wolf.getHunger() + "/" + wolf.getMaxHunger(), graphics).getWidth() + 10;
-		final int foodHeight = (int) graphics.getFontMetrics().getStringBounds("HUNGER " + wolf.getHunger() + "/" + wolf.getMaxHunger(), graphics).getHeight();
-
-		// Draw the background
-		graphics.drawImage(wolf.getBackground(), 0, 0, width, height, null);
-
-		// Draw the box around the wolf's name
-		graphics.setColor(new Color(128, 128, 128, 150));
-		graphics.fillRect(
-				stringX - 5,
-				stringY - 16,
-				nameWidth + 10,
-				nameHeight + 20);
-
-		// Draw the wolf's name
-		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 16));
-		graphics.setColor(Color.WHITE);
-		graphics.drawString(
-				wolf.getName(),
-				stringX,
-				stringY);
-
-		// Draw the box around the wolf's stats
-		graphics.setColor(new Color(128, 128, 128, 150));
-		graphics.fillRect(
-				0,
-				0,
-				(Math.max(foodWidth, foodHeight)),
-				(32 + 2 + 16 + 2 + 4));
-
-		// Draw the wolf's stats
-		graphics.setColor(Color.WHITE);
-		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 32));
-		graphics.drawString("LVL " + wolf.getLevel(), 4, 32);
-		graphics.setFont(new Font("Roboto", Font.TRUETYPE_FONT, 16));
-		graphics.drawString("HUNGER " + wolf.getHunger() + "/" + wolf.getMaxHunger(), 4, 32 + 2 + 16 + 2);
-
-		// Draw the wolf base
-		graphics.drawImage(wolf.getBase(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		// Draw the wolf cosmetics
-		graphics.drawImage(wolf.getBody(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getEye(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getNose(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getShirt(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getNeck(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getTail(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getPaws(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);
-
-		graphics.drawImage(wolf.getHat(),
-				(width - wolf.getBase().getWidth() * 2),
-				(height / 2 - wolf.getBase().getHeight()),
-				wolf.getBase().getWidth() * 2,
-				wolf.getBase().getHeight() * 2,
-				null);*/
 
 		graphics.dispose();
 

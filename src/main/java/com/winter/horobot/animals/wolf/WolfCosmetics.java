@@ -1,4 +1,4 @@
-package com.winter.horobot.wolf;
+package com.winter.horobot.animals.wolf;
 
 import com.winter.horobot.database.DataBase;
 import sx.blah.discord.handle.obj.IUser;
@@ -9,7 +9,12 @@ public class WolfCosmetics {
 
 	public static HashMap<String, Integer> foods = new HashMap<>();
 	static {
-		foods.put("cracker", 4);
+		foods.put("cracker", 2);
+		foods.put("meat", 2);
+		foods.put("turnip", 2);
+		foods.put("bread", 2);
+		foods.put("fries", 2);
+		foods.put("beer", 2);
 	}
 
 	public static LinkedHashMap<String, String> backgrounds = new LinkedHashMap<>();

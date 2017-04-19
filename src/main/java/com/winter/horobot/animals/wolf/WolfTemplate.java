@@ -1,4 +1,4 @@
-package com.winter.horobot.wolf;
+package com.winter.horobot.animals.wolf;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
