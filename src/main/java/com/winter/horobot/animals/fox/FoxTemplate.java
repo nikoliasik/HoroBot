@@ -1,5 +1,7 @@
 package com.winter.horobot.animals.fox;
 
+import com.winter.horobot.animals.wolf.WolfCosmetics;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +28,7 @@ public class FoxTemplate {
 		this.state = state;
 		try {
 			this.fox = new ImageIcon(getClass().getResource("/fox/" + state.getName().toLowerCase() + ".gif")).getImage();
-			this.background = ImageIO.read(getClass().getResourceAsStream("/wolf/bg/" + background + ".png"));
+			this.background = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.backgrounds.get(background)));
 			this.template = ImageIO.read(getClass().getResourceAsStream("/wolf/template.png"));
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -57,7 +59,7 @@ public class FoxTemplate {
 		return state;
 	}
 
-	public BufferedImage getFox() { return fox; }
+	public Image getFox() { return fox; }
 
 	public BufferedImage getBackground() { return background; }
 

@@ -6,6 +6,9 @@ import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
+
+import java.awt.*;
 
 public class CommandUrban implements Command {
 
@@ -14,9 +17,15 @@ public class CommandUrban implements Command {
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(args.length == 1) {
+		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				Message.sendEmbed(event.getChannel(), "", HTMLHandler.requestUrban(args[0], event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL()), false);
+				EmbedBuilder embedBuilder = new EmbedBuilder();
+				embedBuilder.withColor(Color.CYAN);
+				embedBuilder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()));
+				embedBuilder.withAuthorIcon(event.getAuthor().getAvatarURL());
+				embedBuilder.appendField(raw, HTMLHandler.requestUrban(raw, event.getGuild().getID()), false);
+
+				Message.sendEmbed(event.getChannel(), "", embedBuilder.build(), false);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}

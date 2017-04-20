@@ -1,5 +1,7 @@
 package com.winter.horobot.database;
 
+import com.winter.horobot.animals.fox.FoxState;
+import com.winter.horobot.animals.fox.FoxTemplate;
 import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.profile.ProfileTemplate;
@@ -83,7 +85,13 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS foxes.fox (" +
 					"id TEXT PRIMARY KEY NOT NULL," +
-					");";
+					"name TEXT DEFAULT 'Fox'," +
+					"level INTEGER DEFAULT 1," +
+					"xp INTEGER DEFAULT 0," +
+					"maxXP INTEGER DEFAULT 300," +
+					"fedTimes INTEGER DEFAULT 0," +
+					"state TEXT DEFAULT 'HAPPY'," +
+					"background TEXT DEFAULT 'None');";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch (SQLException e) {
@@ -456,6 +464,80 @@ public class DataBase {
 		return null;
 	}
 
+	public static void insertFox(IUser user) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "INSERT INTO foxes.fox (id) VALUES (?) ON CONFLICT DO NOTHING;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, user.getID());
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static void updateFox(IUser user, String index, Object value) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			PreparedStatement statement = con.prepareStatement("UPDATE foxes.fox SET " + index + " = ? WHERE id = ?");
+			if(value instanceof String) statement.setString(1, (String) value);
+			if(value instanceof Integer) statement.setInt(1, (int) value);
+			statement.setString(2, user.getID());
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static FoxTemplate foxQuery(IUser user) {
+		Connection con = null;
+		FoxTemplate template = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = String.format("SELECT * FROM foxes.fox WHERE id='%s'", user.getID());
+			ResultSet set = statement.executeQuery(sql);
+
+			set.next();
+			template = new FoxTemplate(
+					set.getString("name"),
+					set.getInt("level"),
+					set.getInt("xp"),
+					set.getInt("maxXP"),
+					set.getInt("fedTimes"),
+					FoxState.FOX_STATE.valueOf(set.getString("state")),
+					set.getString("background")
+			);
+			set.close();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return template;
+	}
+
 	public static void insertWolf(IUser user) {
 		Connection con = null;
 		try {
@@ -633,24 +715,24 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = String.format("SELECT * FROM wolves.wolf WHERE id='%s'", user.getID());
 			ResultSet set = statement.executeQuery(sql);
-			while(set.next()) {
-				template = new WolfTemplate(
-						set.getString("name"),
-						set.getInt("level"),
-						set.getInt("hunger"),
-						set.getInt("maxHunger"),
-						set.getInt("fedTimes"),
-						set.getString("background"),
-						set.getString("hat"),
-						set.getString("body"),
-						set.getString("paws"),
-						set.getString("tail"),
-						set.getString("shirt"),
-						set.getString("nose"),
-						set.getString("eye"),
-						set.getString("neck")
-				);
-			}
+
+			set.next();
+			template = new WolfTemplate(
+					set.getString("name"),
+					set.getInt("level"),
+					set.getInt("hunger"),
+					set.getInt("maxHunger"),
+					set.getInt("fedTimes"),
+					set.getString("background"),
+					set.getString("hat"),
+					set.getString("body"),
+					set.getString("paws"),
+					set.getString("tail"),
+					set.getString("shirt"),
+					set.getString("nose"),
+					set.getString("eye"),
+					set.getString("neck")
+			);
 			set.close();
 			statement.close();
 		} catch(Exception e) {

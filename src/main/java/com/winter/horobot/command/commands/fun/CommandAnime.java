@@ -18,7 +18,13 @@ public class CommandAnime implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				EmbedObject anime = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 0);
+				EmbedObject anime = null;
+				try {
+					anime = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 0);
+				} catch (Exception e) {
+					Message.sendMessageInChannel(event.getChannel(), "html-error");
+					return;
+				}
 				if (anime != null) {
 					Message.sendEmbed(event.getChannel(), "", anime, false);
 				} else {

@@ -23,7 +23,13 @@ public class CommandPlay implements Command {
 					URL url = new URL(raw);
 					MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), args[0]);
 				} catch(Exception e) {
-					String link = HTMLHandler.searchYouTube(raw);
+					String link;
+					try {
+						link = HTMLHandler.searchYouTube(raw);
+					} catch (Exception ee) {
+						Message.sendMessageInChannel(event.getChannel(), "html-error");
+						return;
+					}
 					if(link != null) {
 						MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
 					} else {

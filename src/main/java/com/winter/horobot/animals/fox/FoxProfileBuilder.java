@@ -7,6 +7,7 @@ import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -45,10 +46,8 @@ public class FoxProfileBuilder {
 		// Draw the template
 		graphics.drawImage(template.getTemplate(), 0, 0, width, height, null);
 
-		// Draw the wolf
-		final double calc = template.getFox().getWidth() * multiplier;
-		final int sizeWolf = (int) calc;
-		graphics.drawImage(generateAnimal(user), 175, 20, sizeWolf, sizeWolf, null);
+		// Draw the fox
+		graphics.drawImage(template.getFox(), 175, 20, 150, 150, null);
 
 		// Draw the name
 		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));
@@ -68,7 +67,7 @@ public class FoxProfileBuilder {
 		final int barY = 67;
 		final int barHeight = 20;
 		final int size = (width / 2 - 2);
-		final double percent = ((double) template.getHunger() / (double) template.getMaxHunger()) * (double) size;
+		final double percent = ((double) template.getXp() / (double) template.getMaxXP()) * (double) size;
 		//final double percent = 1 * (double) size;
 		final int barWidth = (int) percent;
 		graphics.setColor(new Color(150,117,96));
@@ -79,10 +78,9 @@ public class FoxProfileBuilder {
 		// Draw the actual progress string
 		graphics.setFont(new Font("Roboto Bold", Font.BOLD, 14));
 		graphics.setColor(new Color(216,216,216));
-		final int textX = barX + (size / 2) - (int) (graphics.getFontMetrics().getStringBounds(template.getHunger() + " / " + template.getMaxHunger(), graphics).getWidth() / 2);
+		final int textX = barX + (size / 2) - (int) (graphics.getFontMetrics().getStringBounds(template.getXp() + " / " + template.getMaxXP(), graphics).getWidth() / 2);
 		final int textY = 82;
-		graphics.drawString(template.getHunger() + " / " + template.getMaxHunger(), textX, textY);
-
+		graphics.drawString(template.getXp() + " / " + template.getMaxXP(), textX, textY);
 
 		graphics.dispose();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -92,22 +90,5 @@ public class FoxProfileBuilder {
 			e.printStackTrace();
 		}
 		return bytes.toByteArray();
-	}
-
-	public static BufferedImage generateAnimal(IUser user) {
-		FoxTemplate fox = DataBase.foxQuery(user);
-		BufferedImage bufferedImage = new BufferedImage(150, 150, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics = bufferedImage.createGraphics();
-		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		graphics.drawImage(fox.getFox(), 0, 0, fox.getFox().getWidth(), fox.getFox().getHeight(), null);
-
-		graphics.dispose();
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(bufferedImage, "gif", bytes);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

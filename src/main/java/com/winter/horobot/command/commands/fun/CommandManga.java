@@ -17,7 +17,13 @@ public class CommandManga implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				EmbedObject manga = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 1);
+				EmbedObject manga;
+				try {
+					manga = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 1);
+				} catch (Exception e) {
+					Message.sendMessageInChannel(event.getChannel(), "html-error");
+					return;
+				}
 				if (manga != null) {
 					Message.sendEmbed(event.getChannel(),"", manga, false);
 				} else {

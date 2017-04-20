@@ -18,7 +18,13 @@ public class CommandTranslate implements Command {
 		if(args.length > 2) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				String text = raw.replaceFirst(args[0] + " " + args[1], "");
-				EmbedObject embed = HTMLHandler.requestTranslation(args[0], args[1], text, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL());
+				EmbedObject embed = null;
+				try {
+					embed = HTMLHandler.requestTranslation(args[0], args[1], text, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL());
+				} catch (Exception e) {
+					Message.sendMessageInChannel(event.getChannel(), "html-error");
+					return;
+				}
 				if(embed != null) {
 					Message.sendEmbed(event.getChannel(), "", embed, false);
 				} else {

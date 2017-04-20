@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.util.EmbedBuilder;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -114,20 +115,17 @@ public class HTMLHandler {
 		return null;
 	}
 
-	public static EmbedObject requestUrban(String term, String author, String authorIcon) throws UnirestException {
-		HttpResponse<JsonNode> response = Unirest.get("https://mashape-community-urban-dictionary.p.mashape.com/define?term=" + term)
-				.header("X-Mashape-Key", Config.mashapeKey)
-				.header("Accept", "text/plain")
-				.asJson();
+	public static String requestUrban(String term, String guildID) {
+		try {
+			HttpResponse<JsonNode> response = Unirest.get("https://mashape-community-urban-dictionary.p.mashape.com/define?term=" + term)
+					.header("X-Mashape-Key", Config.mashapeKey)
+					.header("Accept", "text/plain")
+					.asJson();
 
-		String definition = response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("definition");
-
-		EmbedBuilder embedBuilder = new EmbedBuilder();
-		embedBuilder.withColor(Color.CYAN);
-		embedBuilder.withAuthorName("Requested by @" + author);
-		embedBuilder.withAuthorIcon(authorIcon);
-		embedBuilder.appendField(term, definition, false);
-		return embedBuilder.build();
+			return response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("definition");
+		} catch (Exception e) {
+			return Localisation.getMessage(guildID, "html-error");
+		}
 	}
 
 	public static EmbedObject requestAnime(String[] tags, String author, String authorIcon, int searchType) throws URISyntaxException, IOException, ParserConfigurationException, SAXException {
