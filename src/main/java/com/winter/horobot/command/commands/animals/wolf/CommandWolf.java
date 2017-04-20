@@ -1,4 +1,4 @@
-package com.winter.horobot.command.commands.wolf;
+package com.winter.horobot.command.commands.animals.wolf;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.database.DataBase;
@@ -37,7 +37,7 @@ public class CommandWolf implements Command {
 						"Here's your wolf",
 						"wolf.png",
 						new ByteArrayInputStream(
-								WolfProfileBuilder.generateImage(
+								WolfProfileBuilder.generateProfile(
 										event.getAuthor())));
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
@@ -54,7 +54,7 @@ public class CommandWolf implements Command {
 								"Here's " + event.getMessage().getMentions().get(0).getName() + "'s wolf",
 								"wolf.png",
 								new ByteArrayInputStream(
-										WolfProfileBuilder.generateImage(
+										WolfProfileBuilder.generateProfile(
 												event.getMessage().getMentions().get(0))));
 					} else {
 						Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
@@ -115,7 +115,7 @@ public class CommandWolf implements Command {
 											message.toString(),
 											"wolf.png",
 											new ByteArrayInputStream(
-													WolfProfileBuilder.generateImage(
+													WolfProfileBuilder.generateProfile(
 															event.getAuthor())));
 								} else {
 									Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())));

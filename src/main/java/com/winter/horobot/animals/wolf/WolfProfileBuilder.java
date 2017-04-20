@@ -33,7 +33,7 @@ public class WolfProfileBuilder {
 		return builder.build();
 	}
 
-	public static byte[] generateImage(IUser user) {
+	public static byte[] generateProfile(IUser user) {
 		final WolfTemplate wolf = DataBase.wolfQuery(user);
 		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bufferedImage.createGraphics();
@@ -48,7 +48,7 @@ public class WolfProfileBuilder {
 		// Draw the wolf
 		final double calc = wolf.getBase().getWidth() * multiplier;
 		final int sizeWolf = (int) calc;
-		graphics.drawImage(generateWolf(user), 175, 20, sizeWolf, sizeWolf, null);
+		graphics.drawImage(generateAnimal(user), 175, 20, sizeWolf, sizeWolf, null);
 
 		// Draw the name
 		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));
@@ -94,7 +94,7 @@ public class WolfProfileBuilder {
 		return bytes.toByteArray();
 	}
 
-	public static BufferedImage generateWolf(IUser user) {
+	public static BufferedImage generateAnimal(IUser user) {
 		final WolfTemplate wolf = DataBase.wolfQuery(user);
 		BufferedImage bufferedImage = new BufferedImage(wolf.getBase().getWidth() * 4, wolf.getBase().getHeight() * 4, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bufferedImage.createGraphics();

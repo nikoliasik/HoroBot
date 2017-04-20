@@ -21,7 +21,6 @@ package com.winter.horobot.core;
 import com.winter.horobot.command.commands.admin.*;
 import com.winter.horobot.command.commands.dev.CommandEval;
 import com.winter.horobot.command.commands.dev.CommandReboot;
-import com.winter.horobot.command.commands.dev.CommandTest;
 import com.winter.horobot.command.commands.image.CommandCat;
 import com.winter.horobot.command.commands.image.CommandEcchi;
 import com.winter.horobot.command.commands.image.CommandExplicit;
@@ -29,7 +28,7 @@ import com.winter.horobot.command.commands.image.CommandKona;
 import com.winter.horobot.command.commands.misc.*;
 import com.winter.horobot.command.commands.profile.CommandProfile;
 import com.winter.horobot.command.commands.utility.*;
-import com.winter.horobot.command.commands.wolf.CommandWolf;
+import com.winter.horobot.command.commands.animals.wolf.CommandWolf;
 import com.winter.horobot.command.proccessing.AnnotationListener;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandContainer;
@@ -79,6 +78,8 @@ public class Main {
 		DataBase.createUserSchema();
 		DataBase.createItemTable();
 		DataBase.createUserTable();
+		DataBase.createFoxSchema();
+		DataBase.createFoxTable();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
