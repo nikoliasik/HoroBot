@@ -19,6 +19,7 @@
 package com.winter.horobot.command.commands.image;
 
 import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -43,7 +44,11 @@ public class CommandExplicit implements Command {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.NSFW));
+				try {
+					builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.NSFW));
+				} catch (Exception e) {
+					builder.appendField("Error", Localisation.getMessage(event.getGuild().getID(), "html-error"), false);
+				}
 				builder.withColor(Color.CYAN);
 				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
 				builder.withAuthorIcon(event.getAuthor().getAvatarURL());

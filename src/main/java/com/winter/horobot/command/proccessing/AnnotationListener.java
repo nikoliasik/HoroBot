@@ -68,14 +68,11 @@ public class AnnotationListener {
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
+			DataBase.insertGuild(event.getGuild().getID());
 			String prefix = DataBase.guildQuery(event.getGuild().getID(), "prefix");
-			if(prefix == null) {
-				prefix = "123545439328gdfhud932hsdiifewc932iudjk84tdfjvgui";
-				DataBase.insertGuild(event.getGuild().getID());
-			}
 			if (event.getMessage().getContent().startsWith(".horo")) {
 				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-			} else if (event.getMessage().getContent().startsWith(prefix)) {
+			} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
 				Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
 			}
 

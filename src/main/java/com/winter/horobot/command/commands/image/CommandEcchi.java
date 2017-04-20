@@ -20,13 +20,18 @@ package com.winter.horobot.command.commands.image;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
+import org.xml.sax.SAXException;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class CommandEcchi implements Command {
 
@@ -43,7 +48,11 @@ public class CommandEcchi implements Command {
 		if	(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.ECCHI));
+				try {
+					builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.ECCHI));
+				} catch (Exception e) {
+					builder.appendField("Error", Localisation.getMessage(event.getGuild().getID(), "html-error"), false);
+				}
 				builder.withColor(Color.CYAN);
 				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
 				builder.withAuthorIcon(event.getAuthor().getAvatarURL());

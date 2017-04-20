@@ -19,6 +19,7 @@
 package com.winter.horobot.core;
 
 import com.winter.horobot.command.commands.admin.*;
+import com.winter.horobot.command.commands.animals.fox.CommandFox;
 import com.winter.horobot.command.commands.dev.CommandEval;
 import com.winter.horobot.command.commands.dev.CommandReboot;
 import com.winter.horobot.command.commands.image.CommandCat;
@@ -131,6 +132,7 @@ public class Main {
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
+		commands.put("fox", new CommandFox());
 		//commands.put("test", new CommandTest());
 
 		musicManagers = new HashMap<>();
