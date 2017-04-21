@@ -28,7 +28,7 @@ public class CommandFox implements Command {
 						event.getChannel(),
 						FoxProfileBuilder.generateEmbed(event.getAuthor()),
 						"Here's your fox",
-						"fox.png",
+						"fox.gif",
 						new ByteArrayInputStream(
 								FoxProfileBuilder.generateProfile(
 										event.getAuthor())));

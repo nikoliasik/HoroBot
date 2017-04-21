@@ -47,7 +47,7 @@ public class FoxProfileBuilder {
 		graphics.drawImage(template.getTemplate(), 0, 0, width, height, null);
 
 		// Draw the fox
-		graphics.drawImage(template.getFox(), 175, 20, 150, 150, null);
+		graphics.drawImage(template.getFox(), 165, 23, 110, 110, null);
 
 		// Draw the name
 		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));

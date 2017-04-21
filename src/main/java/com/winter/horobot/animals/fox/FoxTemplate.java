@@ -15,7 +15,7 @@ public class FoxTemplate {
 	private final int maxXP;
 	private final int fedTimes;
 	private final FoxState.FOX_STATE state;
-	private Image fox;
+	private BufferedImage fox;
 	private BufferedImage background;
 	private BufferedImage template;
 
@@ -27,7 +27,7 @@ public class FoxTemplate {
 		this.fedTimes = fedTimes;
 		this.state = state;
 		try {
-			this.fox = new ImageIcon(getClass().getResource("/fox/" + state.getName().toLowerCase() + ".gif")).getImage();
+			this.fox = ImageIO.read(getClass().getResourceAsStream("/fox/" + state.getName().toLowerCase() + ".gif"));
 			this.background = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.backgrounds.get(background)));
 			this.template = ImageIO.read(getClass().getResourceAsStream("/wolf/template.png"));
 		} catch(Exception e) {
@@ -59,7 +59,7 @@ public class FoxTemplate {
 		return state;
 	}
 
-	public Image getFox() { return fox; }
+	public BufferedImage getFox() { return fox; }
 
 	public BufferedImage getBackground() { return background; }
 
