@@ -18,6 +18,7 @@
 
 package com.winter.horobot.util;
 
+import at.dhyan.open_imaging.GifDecoder;
 import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.database.DataBase;
@@ -29,6 +30,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
@@ -219,5 +221,14 @@ public class Utility {
 			writer.writeToSequence(image);
 		}
 		writer.close();
+	}
+
+	public static List<BufferedImage> getGifFramesFromStream(InputStream stream) throws IOException {
+		GifDecoder.GifImage image = GifDecoder.read(stream);
+		List<BufferedImage> frames = new ArrayList<>();
+		for(int i = 0; i < image.getFrameCount(); i++) {
+			frames.add(image.getFrame(i));
+		}
+		return frames;
 	}
 }

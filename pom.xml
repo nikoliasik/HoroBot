@@ -123,9 +123,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.squareup.picasso</groupId>
-            <artifactId>picasso</artifactId>
-            <version>2.5.2</version>
+            <groupId>com.github.ArsenArsen</groupId>
+            <artifactId>Open-Imaging</artifactId>
+            <version>patch-1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
