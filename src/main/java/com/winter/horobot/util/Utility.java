@@ -29,6 +29,7 @@ import sx.blah.discord.handle.obj.Permissions;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.URL;
@@ -37,6 +38,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
@@ -202,12 +204,20 @@ public class Utility {
 		return ImageIO.read(connection.getInputStream());
 	}
 
-	public static String listAsString (ArrayList<String> list) {
+	public static String listAsString(ArrayList<String> list) {
 		StringBuilder builder = new StringBuilder();
 		for(String string : list) {
 			builder.append(string);
 			builder.append(", ");
 		}
 		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "";
+	}
+
+	public static void saveGifToStream(List<BufferedImage> images, OutputStream stream, int timeBetweenFrames, boolean loop) throws IOException {
+		GifSequenceWriter writer = new GifSequenceWriter(ImageIO.createImageOutputStream(stream), images.get(0).getType(), timeBetweenFrames, loop);
+		for(BufferedImage image : images) {
+			writer.writeToSequence(image);
+		}
+		writer.close();
 	}
 }

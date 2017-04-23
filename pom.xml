@@ -50,6 +50,18 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>oss.sonatype.org</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
         <repository> <!-- This repo fixes issues with transitive dependencies -->
             <id>jcenter</id>
             <url>http://jcenter.bintray.com</url>
