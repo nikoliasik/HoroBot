@@ -18,6 +18,7 @@ public class CommandAnime implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
+				event.getChannel().setTypingStatus(true);
 				EmbedObject anime = null;
 				try {
 					anime = HTMLHandler.requestAnime(args, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL(), 0);
@@ -30,6 +31,7 @@ public class CommandAnime implements Command {
 				} else {
 					Message.reply("html-no-results", event.getMessage());
 				}
+				event.getChannel().setTypingStatus(false);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}

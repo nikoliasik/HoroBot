@@ -204,7 +204,7 @@ public class HTMLHandler {
 				unescaped = unescaped.replaceAll("\\<.*?>","");
 				unescaped = unescaped.replaceAll("\\[.*?]","");
 
-				unescaped = unescaped.substring(0, Math.min(unescaped.length(), 1024));
+				unescaped = unescaped.substring(0, Math.min(unescaped.length(), 1000));
 				embedBuilder.appendField(StringEscapeUtils.unescapeXml(element.getElementsByTagName("title").item(0).getTextContent()), unescaped, false);
 			}
 			return embedBuilder.build();

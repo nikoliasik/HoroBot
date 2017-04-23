@@ -33,11 +33,7 @@ public class CommandExplicit implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event){
 		String mod = Utility.getChannelMod(event.getChannel().getID());
-		if(mod.equals("nsfw")) {
-			return true;
-		} else {
-			return false;
-		}
+		return mod.equals("nsfw");
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {

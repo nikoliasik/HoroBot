@@ -10,22 +10,21 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandPurge implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		if(event.getAuthor().getRolesForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR))
-			return true;
-		return false;
+		return event.getAuthor().getRolesForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
-			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_MESSAGES) &&
-					event.getChannel().getModifiedPermissions(event.getClient().getOurUser()).contains(Permissions.MANAGE_MESSAGES)) {
+			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_MESSAGES)) {
+				int messages;
 				try {
-					int messages = Integer.parseInt(args[0]);
-					event.getChannel().getMessageHistory(messages).bulkDelete();
-					Message.sendMessageInChannel(event.getChannel(),"purged-messages", messages);
+					messages = Integer.parseInt(args[0]);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Message.sendMessageInChannel(event.getChannel(), "no-number");
+					return;
 				}
+				event.getChannel().getMessageHistory(messages).bulkDelete();
+				Message.sendMessageInChannel(event.getChannel(),"purged-messages", messages);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-messages-manage-perm");
 			}

@@ -18,26 +18,31 @@ public class CommandPlay implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
-			if (event.getGuild().getConnectedVoiceChannel() != null) {
-				try {
-					URL url = new URL(raw);
-					MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), args[0]);
-				} catch(Exception e) {
-					String link;
-					try {
-						link = HTMLHandler.searchYouTube(raw);
-					} catch (Exception ee) {
-						Message.sendMessageInChannel(event.getChannel(), "html-error");
-						return;
-					}
-					if(link != null) {
-						MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
-					} else {
-						Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "html-no-results"));
-					}
+			if (event.getGuild().getConnectedVoiceChannel() == null) {
+				if(event.getAuthor().getVoiceStateForGuild(event.getGuild()).getChannel() != null) {
+					event.getAuthor().getVoiceStateForGuild(event.getGuild()).getChannel().join();
+					Message.sendMessageInChannel(event.getChannel(), "joined-voice");
+				} else {
+					Message.sendMessageInChannel(event.getChannel(), "not-in-channel");
+					return;
 				}
-			} else {
-				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+			}
+			try {
+				URL url = new URL(raw);
+				MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), args[0]);
+			} catch(Exception e) {
+				String link;
+				try {
+					link = HTMLHandler.searchYouTube(raw);
+				} catch (Exception ee) {
+					Message.sendMessageInChannel(event.getChannel(), "html-error");
+					return;
+				}
+				if(link != null) {
+					MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
+				} else {
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "html-no-results"));
+				}
 			}
 		} else {
 			Message.reply(help(), event.getMessage());

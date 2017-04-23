@@ -133,6 +133,7 @@ public class Main {
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
 		commands.put("fox", new CommandFox());
+		commands.put("volume", new CommandVolume());
 		//commands.put("test", new CommandTest());
 
 		musicManagers = new HashMap<>();

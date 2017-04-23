@@ -37,15 +37,11 @@ public class CommandEcchi implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		String mod = Utility.getChannelMod(event.getChannel().getID());
-		if(mod.equals("ecchi")) {
-			return true;
-		} else {
-			return false;
-		}
+		return mod.equals("ecchi");
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if	(args.length > 0) {
+		if (args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedBuilder builder = new EmbedBuilder();
 				try {
