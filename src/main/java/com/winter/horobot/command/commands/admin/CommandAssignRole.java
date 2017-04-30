@@ -19,6 +19,7 @@
 package com.winter.horobot.command.commands.admin;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -36,6 +37,11 @@ public class CommandAssignRole implements Command {
 		}
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.ADMIN;
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_ROLES)) {
@@ -44,7 +50,7 @@ public class CommandAssignRole implements Command {
 					user = event.getMessage().getMentions().get(0);
 				}
 				if (user == null)
-					user = event.getGuild().getUserByID(args[0]);
+					user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[0]));
 				if (user == null) {
 					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
 						user = event.getGuild().getUsersByName(args[0]).get(0);
@@ -56,7 +62,7 @@ public class CommandAssignRole implements Command {
 					role = event.getMessage().getRoleMentions().get(0);
 				}
 				if (role == null)
-					role = event.getGuild().getRoleByID(args[1]);
+					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
 				if (role == null) {
 					if (event.getGuild().getRolesByName(args[1]).size() == 1) {
 						role = event.getGuild().getRolesByName(args[1]).get(0);

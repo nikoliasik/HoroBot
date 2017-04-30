@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.fun;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -40,7 +41,7 @@ public class CommandShoot implements Command {
 
 				if(result == 0) {
 					int dmg = rand.nextInt(100);
-					Message.sendMessageInChannel(event.getChannel(), "shoot-hit", event.getAuthor().getDisplayName(event.getGuild()), args[0], dmg);
+					Message.sendMessageInChannel(event.getChannel(), "shoot-hit", event.getAuthor().getName(), args[0], dmg);
 				} else if(result == 1) {
 					Message.reply("shoot-miss", event.getMessage());
 				}
@@ -54,6 +55,11 @@ public class CommandShoot implements Command {
 
 	public String help() {
 		return "shoot-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

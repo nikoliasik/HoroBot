@@ -2,8 +2,10 @@ package com.winter.horobot.command.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
+import com.winter.horobot.util.Utility;
 import com.winter.horobot.util.music.GuildMusicManager;
 import com.winter.horobot.util.music.MusicUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -25,8 +27,8 @@ public class CommandQueue implements Command {
 		if(manager.scheduler.getQueueSize() > 0) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.withColor(Color.CYAN);
-			builder.withAuthorIcon(event.getAuthor().getAvatarURL());
-			builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
+			builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
+			builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
 
 			Iterator<AudioTrack> iterator = manager.scheduler.getQueue().iterator();
 			for(int i = 0; i < 10; i++) {
@@ -43,7 +45,7 @@ public class CommandQueue implements Command {
 					builder.appendField(title, string, false);
 				}
 			}
-			Message.sendEmbed(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "heres-queue"), builder.build(), false);
+			Message.sendEmbed(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "heres-queue"), builder.build(), false);
 		} else {
 			Message.sendMessageInChannel(event.getChannel(), "queue-empty");
 		}
@@ -61,5 +63,10 @@ public class CommandQueue implements Command {
 	@Override
 	public String help() {
 		return "queue-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 }

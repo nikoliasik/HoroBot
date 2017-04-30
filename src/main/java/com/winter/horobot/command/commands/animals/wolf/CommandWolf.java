@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.animals.wolf;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Localisation;
@@ -12,7 +13,9 @@ import com.winter.horobot.animals.wolf.WolfTemplate;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
-import java.io.ByteArrayInputStream;
+import javax.imageio.ImageIO;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -26,10 +29,15 @@ public class CommandWolf implements Command {
 	}
 
 	@Override
+	public CommandType getType() {
+		return CommandType.ANIMAL;
+	}
+
+	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			if(!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getID(), event.getAuthor());
+			if(!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
+				Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor());
 				DataBase.insertWolf(event.getAuthor());
 				Message.sendFile(
 						event.getChannel(),
@@ -40,13 +48,13 @@ public class CommandWolf implements Command {
 								WolfProfileBuilder.generateProfile(
 										event.getAuthor())));
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
 			}
 		} else if (args.length >= 1) {
 			if (event.getMessage().getMentions().size() == 1) {
 				if(!event.getMessage().getMentions().get(0).isBot()) {
-					if (!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
-						Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getID(), event.getAuthor());
+					if (!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
+						Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor());
 						DataBase.insertWolf(event.getMessage().getMentions().get(0));
 						Message.sendFile(
 								event.getChannel(),
@@ -57,7 +65,7 @@ public class CommandWolf implements Command {
 										WolfProfileBuilder.generateProfile(
 												event.getMessage().getMentions().get(0))));
 					} else {
-						Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
+						Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
 					}
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "bot-user");
@@ -67,9 +75,9 @@ public class CommandWolf implements Command {
 					case "feed":
 						if (args.length == 2) {
 							if (WolfCosmetics.foods.containsKey(args[1].toLowerCase())) {
-								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())) {
-									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getID(), event.getAuthor());
-							/*new HoroTask(event.getAuthor().getID() + "-note") {
+								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getStringID(), 7200000, event.getAuthor())) {
+									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor());
+							/*new HoroTask(event.getAuthor().getStringID() + "-note") {
 								@Override
 								public void run() {
 									Message.sendPM("wolf-ready", event.getAuthor());
@@ -87,7 +95,7 @@ public class CommandWolf implements Command {
 									DataBase.updateWolf(event.getAuthor(), "hunger", hunger);
 									DataBase.updateWolf(event.getAuthor(), "fedTimes", template.getFedTimes() + 1);
 
-									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getID(), "feed-wolf") + "\n", WordUtils.capitalizeFully(args[1])));
+									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getStringID(), "feed-wolf") + "\n", WordUtils.capitalizeFully(args[1])));
 									if (hunger >= maxHunger) {
 										int nextHunger = 1 + template.getLevel();
 										DataBase.updateWolf(event.getAuthor(), "hunger", 0);
@@ -99,9 +107,9 @@ public class CommandWolf implements Command {
 									Random rand = new Random();
 									int drop = rand.nextInt(100);
 									if (drop <= 10) {
-										String result = WolfCosmetics.drop(event.getAuthor());
+										String result = WolfCosmetics.drop();
 										if (result != null) {
-											DataBase.insertItem(event.getAuthor(), result);
+											DataBase.insertItem(event.getAuthor(), WordUtils.capitalizeFully(result));
 											message.append("**ITEM DROP!** You got **" + result + "**!\n");
 										}
 									}
@@ -118,7 +126,7 @@ public class CommandWolf implements Command {
 													WolfProfileBuilder.generateProfile(
 															event.getAuthor())));
 								} else {
-									Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed-" + event.getAuthor().getID(), 7200000, event.getAuthor())));
+									Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed-" + event.getAuthor().getStringID(), 7200000, event.getAuthor())));
 								}
 							} else {
 								Message.sendMessageInChannel(event.getChannel(), "no-food");
@@ -141,14 +149,14 @@ public class CommandWolf implements Command {
 						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
 						String item = DataBase.queryItem(event.getAuthor(), WordUtils.capitalizeFully(temp));
 						if (item != null) {
-							DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), WordUtils.capitalizeFully(temp));
+							DataBase.updateWolf(event.getAuthor(), item, WordUtils.capitalizeFully(temp));
 							Message.sendMessageInChannel(event.getChannel(), "background-success", WordUtils.capitalizeFully(temp));
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "no-item");
 						}
 						break;
 					}
-					case "strip":
+					case "strip": {
 						DataBase.updateWolf(event.getAuthor(), "background", "None");
 						DataBase.updateWolf(event.getAuthor(), "hat", "None");
 						DataBase.updateWolf(event.getAuthor(), "body", "None");
@@ -160,7 +168,8 @@ public class CommandWolf implements Command {
 						DataBase.updateWolf(event.getAuthor(), "neck", "None");
 						Message.sendMessageInChannel(event.getChannel(), "stripped-items");
 						break;
-					case "inventory":
+					}
+					case "inventory": {
 						ArrayList<String> items = (ArrayList<String>) DataBase.queryItems(event.getAuthor());
 						Message.sendRawMessageInChannel(
 								event.getChannel(),
@@ -169,29 +178,59 @@ public class CommandWolf implements Command {
 										Utility.listAsString(items) + "\n" +
 										"```");
 						break;
-					case "capsule":
+					}
+					case "capsule": {
 						if (DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
-							String drop = WolfCosmetics.drop(event.getAuthor());
+							String drop = WolfCosmetics.drop();
 							if (drop != null) {
+								boolean ownsItem;
+								ownsItem = DataBase.queryItem(event.getAuthor(), drop) != null;
 								DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
-								DataBase.insertItem(event.getAuthor(), drop);
-								Message.sendMessageInChannel(
-										event.getChannel(),
-										"capsule-opened",
-										drop);
+								if(!ownsItem) DataBase.insertItem(event.getAuthor(), WordUtils.capitalizeFully(drop));
+								InputStream stream = getClass().getResourceAsStream(WolfCosmetics.getItemPath(drop));
+								if (stream == null) return;
+								try {
+									File temp = File.createTempFile(String.valueOf(stream.hashCode()), ".png");
+									temp.deleteOnExit();
+
+									try (FileOutputStream out = new FileOutputStream(temp)) {
+										byte[] buffer = new byte[1024];
+										int bytesRead;
+										while((bytesRead = stream.read(buffer)) != -1) {
+											out.write(buffer, 0, bytesRead);
+										}
+									}
+									if (!ownsItem) {
+										Message.sendFile(
+												event.getChannel(),
+												String.format(Localisation.getMessage(event.getGuild().getStringID(), "capsule-opened"), drop),
+												temp);
+									} else {
+										Message.sendFile(
+												event.getChannel(),
+												String.format(Localisation.getMessage(event.getGuild().getStringID(), "capsule-opened-got"), drop),
+												temp);
+									}
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							} else {
 								Message.sendMessageInChannel(event.getChannel(), "got-everything");
 							}
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "insufficient-funds");
 						}
+						//Message.sendRawMessageInChannel(event.getChannel(), "This command is currently broken and under construction");
 						break;
-					case "help":
+					}
+					case "help": {
 						Message.sendMessageInChannel(event.getChannel(), help());
 						break;
-					default:
+					}
+					default: {
 						Message.sendMessageInChannel(event.getChannel(), "no-sub-command");
 						break;
+					}
 				}
 			}
 		} else {

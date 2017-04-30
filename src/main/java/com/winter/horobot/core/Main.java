@@ -19,13 +19,9 @@
 package com.winter.horobot.core;
 
 import com.winter.horobot.command.commands.admin.*;
-import com.winter.horobot.command.commands.animals.fox.CommandFox;
 import com.winter.horobot.command.commands.dev.CommandEval;
 import com.winter.horobot.command.commands.dev.CommandReboot;
-import com.winter.horobot.command.commands.image.CommandCat;
-import com.winter.horobot.command.commands.image.CommandEcchi;
-import com.winter.horobot.command.commands.image.CommandExplicit;
-import com.winter.horobot.command.commands.image.CommandKona;
+import com.winter.horobot.command.commands.image.*;
 import com.winter.horobot.command.commands.misc.*;
 import com.winter.horobot.command.commands.profile.CommandProfile;
 import com.winter.horobot.command.commands.utility.*;
@@ -36,6 +32,7 @@ import com.winter.horobot.command.proccessing.CommandContainer;
 import com.winter.horobot.command.proccessing.CommandParser;
 import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.FontTemplate;
+import com.winter.horobot.util.Message;
 import com.winter.horobot.util.music.GuildMusicManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -47,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.events.EventDispatcher;
 import sx.blah.discord.util.RequestBuffer;
 
+import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +60,7 @@ public class Main {
 	public static AudioPlayerManager playerManager;
 	public static Map<String, GuildMusicManager> musicManagers;
 
-	//public static HashMap<String, Color> colors = new HashMap<String, Color>();
+	public static HashMap<String, Color> colors = new HashMap<>();
 
 	public static void main(String[] args) {
 		LOGGER.info(ManagementFactory.getRuntimeMXBean().getName());
@@ -106,7 +104,7 @@ public class Main {
 		commands.put("cat", new CommandCat());
 		commands.put("ping", new CommandPing());
 		commands.put("github", new CommandGitHub());
-		commands.put("channel", new CommandChannel());
+		//commands.put("channel", new CommandChannel());
 		commands.put("kick", new CommandKick());
 		commands.put("ban", new CommandBan());
 		commands.put("rate", new CommandRate());
@@ -132,16 +130,25 @@ public class Main {
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
-		commands.put("fox", new CommandFox());
+		//commands.put("fox", new CommandFox());
 		commands.put("volume", new CommandVolume());
 		//commands.put("test", new CommandTest());
+		commands.put("server", new CommandServerInfo());
+		commands.put("logchannel", new CommandLogChannel());
+		commands.put("welcomemessage", new CommandWelcomeMessage());
+		commands.put("pmmessage", new CommandPMMessage());
+		commands.put("autorole", new CommandAutoRole());
+		commands.put("yandere", new CommandYandere());
+		commands.put("rule34", new CommandR34());
+		commands.put("gelbooru", new CommandGelbooru());
+		commands.put("danbooru", new CommandDanbooru());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		AudioSourceManagers.registerLocalSource(playerManager);
 
-		/*colors.put("black", Color.BLACK);
+		colors.put("black", Color.BLACK);
 		colors.put("blue", Color.BLUE);
 		colors.put("cyan", Color.CYAN);
 		colors.put("darkgray", Color.DARK_GRAY);
@@ -153,17 +160,25 @@ public class Main {
 		colors.put("pink", Color.PINK);
 		colors.put("red", Color.RED);
 		colors.put("white", Color.WHITE);
-		colors.put("yellow", Color.YELLOW);*/
+		colors.put("yellow", Color.YELLOW);
 	}
 
 	public static void handleCommand(CommandContainer cmd) {
 		if (commands.containsKey(cmd.invoke)) {
+			if(cmd.event.getChannel().isPrivate()) {
+				if (!cmd.invoke.equals("help") && !cmd.invoke.equals("invite")) {
+					Message.sendRawMessageInChannel(cmd.event.getChannel(), "I can only execute the commands `.horohelp` and `.horoinvite` in pm, sorry!");
+					return;
+				}
+			}
 			boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-			if(cmd.event.getAuthor().getID().equals("288996157202497536")) safe = true;
+			if(cmd.event.getAuthor().getStringID().equals("288996157202497536")) safe = true;
 
 			if(safe) {
+				cmd.event.getChannel().setTypingStatus(true);
 				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
 				commands.get(cmd.invoke).executed(safe, cmd.event);
+				cmd.event.getChannel().setTypingStatus(false);
 			} else {
 				RequestBuffer.request(() -> {
 					cmd.event.getMessage().addReaction("\uD83D\uDEAB");

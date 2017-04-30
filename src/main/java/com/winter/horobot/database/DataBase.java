@@ -43,9 +43,11 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS guilds.guild (" +
 										"id TEXT PRIMARY KEY NOT NULL," +
-										"language TEXT NOT NULL," +
-										"prefix TEXT," +
-										"welcome TEXT);";
+										"language TEXT DEFAULT 'en'," +
+										"prefix TEXT DEFAULT '.horo'," +
+										"welcome TEXT DEFAULT 'Welcome~! %s'," +
+										"role TEXT DEFAULT 'none'," +
+										"pm TEXT DEFAULT 'none');";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(SQLException e) {
@@ -272,7 +274,7 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = String.format(
 					"INSERT INTO users.user (id) VALUES (%s) ON CONFLICT DO NOTHING;",
-					user.getID());
+					user.getStringID());
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -293,7 +295,7 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement("UPDATE users.user SET " + index + " = ? WHERE id = ?");
 			if(value instanceof String) statement.setString(1, (String) value);
 			if(value instanceof Integer) statement.setInt(1, (int) value);
-			statement.setString(2, user.getID());
+			statement.setString(2, user.getStringID());
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
@@ -315,7 +317,7 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = String.format(
 					"SELECT * FROM users.user WHERE id='%s'",
-					user.getID());
+					user.getStringID());
 			ResultSet set = statement.executeQuery(sql);
 			while(set.next()) {
 				template = new ProfileTemplate(
@@ -348,7 +350,7 @@ public class DataBase {
 			String sql = "SELECT id, level, rank() OVER (ORDER BY level DESC) FROM users.user;";
 			ResultSet set = statement.executeQuery(sql);
 			while(set.next()) {
-				if(set.getString("id").equals(user.getID())) {
+				if(set.getString("id").equals(user.getStringID())) {
 					return set.getInt("rank");
 				}
 			}
@@ -376,7 +378,7 @@ public class DataBase {
 			for (int i = 0; i < amount; i++) {
 				set.next();
 				String id = set.getString("id");
-				String name = Main.INSTANCE.client.getUserByID(id).getName();
+				String name = Main.INSTANCE.client.getUserByID(Long.parseUnsignedLong(id)).getName();
 				int rank = set.getInt("rank");
 				String complete = "#" + rank + " " + name + "\n";
 				builder.append(complete);
@@ -400,7 +402,7 @@ public class DataBase {
 			con = source.getConnection();
 			String sql = "INSERT INTO users.item (id, item) VALUES (?, ?) ON CONFLICT DO NOTHING;";
 			PreparedStatement statement = con.prepareStatement(sql);
-			statement.setString(1, user.getID());
+			statement.setString(1, user.getStringID());
 			statement.setString(2, item);
 			statement.executeUpdate();
 			statement.close();
@@ -421,7 +423,7 @@ public class DataBase {
 			con = source.getConnection();
 			String sql = "SELECT item FROM users.item WHERE id=? AND item=?;";
 			PreparedStatement statement = con.prepareStatement(sql);
-			statement.setString(1, user.getID());
+			statement.setString(1, user.getStringID());
 			statement.setString(2, item);
 			ResultSet set = statement.executeQuery();
 			if(!set.next())
@@ -445,7 +447,7 @@ public class DataBase {
 			con = source.getConnection();
 			String sql = "SELECT item FROM users.item WHERE id=?;";
 			PreparedStatement statement = con.prepareStatement(sql);
-			statement.setString(1, user.getID());
+			statement.setString(1, user.getStringID());
 			ResultSet set = statement.executeQuery();
 			List<String> list = new ArrayList<>();
 			while (set.next()) {
@@ -470,7 +472,7 @@ public class DataBase {
 			con = source.getConnection();
 			String sql = "INSERT INTO foxes.fox (id) VALUES (?) ON CONFLICT DO NOTHING;";
 			PreparedStatement statement = con.prepareStatement(sql);
-			statement.setString(1, user.getID());
+			statement.setString(1, user.getStringID());
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
@@ -491,7 +493,7 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement("UPDATE foxes.fox SET " + index + " = ? WHERE id = ?");
 			if(value instanceof String) statement.setString(1, (String) value);
 			if(value instanceof Integer) statement.setInt(1, (int) value);
-			statement.setString(2, user.getID());
+			statement.setString(2, user.getStringID());
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
@@ -511,7 +513,7 @@ public class DataBase {
 		try {
 			con = source.getConnection();
 			Statement statement = con.createStatement();
-			String sql = String.format("SELECT * FROM foxes.fox WHERE id='%s'", user.getID());
+			String sql = String.format("SELECT * FROM foxes.fox WHERE id='%s'", user.getStringID());
 			ResultSet set = statement.executeQuery(sql);
 
 			set.next();
@@ -544,7 +546,7 @@ public class DataBase {
 			con = source.getConnection();
 			String sql = "INSERT INTO wolves.wolf (id) VALUES (?) ON CONFLICT DO NOTHING;";
 			PreparedStatement statement = con.prepareStatement(sql);
-			statement.setString(1, user.getID());
+			statement.setString(1, user.getStringID());
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
@@ -565,7 +567,7 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement("UPDATE wolves.wolf SET " + index + " = ? WHERE id = ?");
 			if(value instanceof String) statement.setString(1, (String) value);
 			if(value instanceof Integer) statement.setInt(1, (int) value);
-			statement.setString(2, user.getID());
+			statement.setString(2, user.getStringID());
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
@@ -585,7 +587,7 @@ public class DataBase {
 			con = source.getConnection();
 			Statement statement = con.createStatement();
 			String sql = String.format(
-					"INSERT INTO guilds.guild (id, language, prefix, welcome) VALUES ('%s', 'en', '.horo', 'Welcome~!') ON CONFLICT DO NOTHING;",
+					"INSERT INTO guilds.guild (id, language, prefix, welcome, role) VALUES ('%s', 'en', '.horo', 'Welcome~!', 'none') ON CONFLICT DO NOTHING;",
 					guildID);
 			statement.executeUpdate(sql);
 			statement.close();
@@ -713,7 +715,7 @@ public class DataBase {
 		try {
 			con = source.getConnection();
 			Statement statement = con.createStatement();
-			String sql = String.format("SELECT * FROM wolves.wolf WHERE id='%s'", user.getID());
+			String sql = String.format("SELECT * FROM wolves.wolf WHERE id='%s'", user.getStringID());
 			ResultSet set = statement.executeQuery(sql);
 
 			set.next();
@@ -790,7 +792,7 @@ public class DataBase {
 		try {
 			con = source.getConnection();
 			PreparedStatement statement = con.prepareStatement("DELETE FROM wolves.wolf WHERE id=?;");
-			statement.setString(1, user.getID());
+			statement.setString(1, user.getStringID());
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {

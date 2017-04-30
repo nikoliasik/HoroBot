@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.music;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.music.MusicUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -22,5 +23,10 @@ public class CommandClear implements Command {
 	@Override
 	public String help() {
 		return "clear-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 }

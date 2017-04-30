@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.utility;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -25,8 +26,8 @@ public class CommandInvert implements Command {
 
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.withColor(Color.CYAN);
-				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
-				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+				builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
+				builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 				builder.appendField("Here's the inverted text", inverted.toString(), false);
 
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
@@ -40,6 +41,11 @@ public class CommandInvert implements Command {
 
 	public String help() {
 		return "invert-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.UTILITY;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

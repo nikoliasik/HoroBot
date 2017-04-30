@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.image;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.HTMLHandler;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
@@ -42,11 +43,11 @@ public class CommandCat implements Command {
 				try {
 					builder.withImage(HTMLHandler.requestCat());
 				} catch (Exception e) {
-					builder.appendField("Error", Localisation.getMessage(event.getGuild().getID(), "html-error"), false);
+					builder.appendField("Error", Localisation.getMessage(event.getGuild().getStringID(), "html-error"), false);
 				}
 				builder.withColor(Color.CYAN);
-				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
-				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+				builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
+				builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 			} else {
@@ -59,6 +60,11 @@ public class CommandCat implements Command {
 
 	public String help() {
 		return "cat-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.IMAGE;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

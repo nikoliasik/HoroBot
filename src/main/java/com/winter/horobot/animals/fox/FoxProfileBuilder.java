@@ -1,18 +1,18 @@
 package com.winter.horobot.animals.fox;
 
-import com.winter.horobot.animals.wolf.WolfTemplate;
 import com.winter.horobot.database.DataBase;
+import com.winter.horobot.util.Utility;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class FoxProfileBuilder {
 
@@ -24,7 +24,7 @@ public class FoxProfileBuilder {
 		final FoxTemplate template = DataBase.foxQuery(user);
 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.withAuthorIcon(user.getAvatarURL());
+		builder.withAuthorIcon(Utility.getAvatar(user));
 		builder.withAuthorName(user.getName() + "'s Fox");
 		builder.withColor(Color.CYAN);
 		builder.appendField("Level", "" + template.getLevel(), true);
@@ -36,7 +36,8 @@ public class FoxProfileBuilder {
 
 	public static byte[] generateProfile(IUser user) {
 		FoxTemplate template = DataBase.foxQuery(user);
-		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+		/*BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics = bufferedImage.createGraphics();
 		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -47,7 +48,7 @@ public class FoxProfileBuilder {
 		graphics.drawImage(template.getTemplate(), 0, 0, width, height, null);
 
 		// Draw the fox
-		graphics.drawImage(template.getFox(), 165, 23, 110, 110, null);
+		//graphics.drawImage(template.getFox(), 165, 23, 110, 110, null);
 
 		// Draw the name
 		graphics.setFont(new Font("Roboto Regular", Font.PLAIN, 18));
@@ -83,12 +84,22 @@ public class FoxProfileBuilder {
 		graphics.drawString(template.getXp() + " / " + template.getMaxXP(), textX, textY);
 
 		graphics.dispose();
+
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
 		try {
 			ImageIO.write(bufferedImage, "gif", bytes);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}*/
+
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		try {
+			Utility.saveGifToStream(Utility.getGifFramesFromStream(new FileInputStream(template.getFox())), bytes, 40, true);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
 		return bytes.toByteArray();
 	}
 }

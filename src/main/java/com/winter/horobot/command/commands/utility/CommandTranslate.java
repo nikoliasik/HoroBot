@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.utility;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.HTMLHandler;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -20,7 +21,7 @@ public class CommandTranslate implements Command {
 				String text = raw.replaceFirst(args[0] + " " + args[1], "");
 				EmbedObject embed = null;
 				try {
-					embed = HTMLHandler.requestTranslation(args[0], args[1], text, event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator(), event.getAuthor().getAvatarURL());
+					embed = HTMLHandler.requestTranslation(args[0], args[1], text, event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), Utility.getAvatar(event.getAuthor()));
 				} catch (Exception e) {
 					Message.sendMessageInChannel(event.getChannel(), "html-error");
 					return;
@@ -40,6 +41,11 @@ public class CommandTranslate implements Command {
 
 	public String help() {
 		return "translate-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.UTILITY;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

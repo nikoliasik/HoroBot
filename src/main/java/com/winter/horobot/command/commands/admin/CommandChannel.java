@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.admin;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -34,14 +35,17 @@ public class CommandChannel implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
 			if (args[1].equals("ecchi") || args[1].equals("nsfw") || args[1].equals("none")) {
-				IChannel channel = event.getGuild().getChannelByID(args[0]);
+				IChannel channel = null;
+				try {
+					channel = event.getGuild().getChannelByID(Long.parseUnsignedLong(args[0]));
+				} catch (NumberFormatException e) { }
 				if (channel != null) {
-					Utility.storeChannelMod(channel.getID(), args[1]);
+					Utility.storeChannelMod(channel.getStringID(), args[1]);
 					Message.reply("mod-added", event.getMessage());
 				} else {
 					if (event.getGuild().getChannelsByName(args[0]).size() == 1) {
 						channel = event.getGuild().getChannelsByName(args[0]).get(0);
-						Utility.storeChannelMod(channel.getID(), args[1]);
+						Utility.storeChannelMod(channel.getStringID(), args[1]);
 						Message.reply("mod-added", event.getMessage());
 					} else {
 						Message.reply("no-channels", event.getMessage());
@@ -57,6 +61,11 @@ public class CommandChannel implements Command {
 
 	public String help() {
 		return "channel-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.ADMIN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

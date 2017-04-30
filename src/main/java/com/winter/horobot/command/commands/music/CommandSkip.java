@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.music;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -18,7 +19,7 @@ public class CommandSkip implements Command {
 		if(args.length == 0) {
 			if(MusicUtils.getGuildAudioPlayer(event.getGuild()).player.getPlayingTrack() != null) {
 				MusicUtils.skipTrack(event.getChannel());
-				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "track-skipped"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "track-skipped"));
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "nothing-playing");
 			}
@@ -29,6 +30,11 @@ public class CommandSkip implements Command {
 
 	public String help() {
 		return "skip-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

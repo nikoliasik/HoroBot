@@ -24,12 +24,13 @@ import java.util.ResourceBundle;
 
 public class Localisation {
 
-	public static ResourceBundle enLang = ResourceBundle.getBundle("locale.en");
-	public static ResourceBundle nlLang = ResourceBundle.getBundle("locale.nl");
-	public static ResourceBundle esLang = ResourceBundle.getBundle("locale.es");
-	public static ResourceBundle ptLang = ResourceBundle.getBundle("locale.pt");
+	private static ResourceBundle enLang = ResourceBundle.getBundle("locale.en");
+	private static ResourceBundle nlLang = ResourceBundle.getBundle("locale.nl");
+	private static ResourceBundle esLang = ResourceBundle.getBundle("locale.es");
+	private static ResourceBundle ptLang = ResourceBundle.getBundle("locale.pt");
+	private static ResourceBundle hiLang = ResourceBundle.getBundle("locale.hi");
 
-	public static String checkLanguage(String guildID) {
+	private static String checkLanguage(String guildID) {
 		return DataBase.guildQuery(guildID, "language");
 	}
 
@@ -47,33 +48,36 @@ public class Localisation {
 			case "pt":
 				updateGuildLanguage(guildID, "pt");
 				return true;
+			case "hi":
+				updateGuildLanguage(guildID, "hi");
+				return true;
 		}
 		return false;
 	}
 
-	public static void updateGuildLanguage (String guildID, String language) {
+	private static void updateGuildLanguage (String guildID, String language) {
 		DataBase.insertGuild(guildID);
 		DataBase.updateGuild(guildID, "language", language);
 	}
 	
 	public static String getMessage(String guildID, String str) {
 		String lang = checkLanguage(guildID);
-		if(lang.equals("en")) {
-			if (enLang.containsKey(str)) {
-				return enLang.getString(str);
-			}
-		} else if(lang.equals("nl")) {
-			if (nlLang.containsKey(str)) {
-				return nlLang.getString(str);
-			}
-		} else if(lang.equals("es")) {
-			if (esLang.containsKey(str)) {
-				return esLang.getString(str);
-			}
-		} else if(lang.equals("pt")) {
-			if (ptLang.containsKey(str)) {
-				return ptLang.getString(str);
-			}
+		switch (lang) {
+			case "en":
+				if (enLang.containsKey(str))
+					return enLang.getString(str);
+			case "nl":
+				if (nlLang.containsKey(str))
+					return nlLang.getString(str);
+			case "es":
+				if (esLang.containsKey(str))
+					return esLang.getString(str);
+			case "pt":
+				if (ptLang.containsKey(str))
+					return ptLang.getString(str);
+			case "hi":
+				if (hiLang.containsKey(str))
+					return hiLang.getString(str);
 		}
 		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}

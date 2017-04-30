@@ -58,10 +58,10 @@ public class Message {
 		});
 	}
 
-	public static void sendEmbed(IChannel channel, String message, EmbedObject embed, boolean inline) {
+	public static void sendEmbed(IChannel channel, String message, EmbedObject embed, boolean tts) {
 		RequestBuffer.request(() -> {
 			try {
-				channel.sendMessage(message, embed, inline);
+				channel.sendMessage(message, embed, tts);
 			} catch (Exception e) {
 				if(e instanceof RateLimitException) {
 					throw e;
@@ -72,9 +72,15 @@ public class Message {
 		});
 	}
 
+	public static void sendPMEmbed(IUser user, String message, EmbedObject embed, boolean tts) {
+		RequestBuffer.request(() -> {
+			user.getOrCreatePMChannel().sendMessage(message, embed, tts);
+		});
+	}
+
 	public static void reply(String str, IMessage message) {
 		RequestBuffer.request(() -> {
-			message.reply(Localisation.getMessage(message.getGuild().getID(), str));
+			message.reply(Localisation.getMessage(message.getGuild().getStringID(), str));
 		});
 	}
 
@@ -86,7 +92,7 @@ public class Message {
 
 	public static void sendMessageInChannel(IChannel channel, String message, Object... args) {
 		RequestBuffer.request(() -> {
-			channel.sendMessage(String.format(Localisation.getMessage(channel.getGuild().getID(), message), args));
+			channel.sendMessage(String.format(Localisation.getMessage(channel.getGuild().getStringID(), message), args));
 		});
 	}
 
@@ -96,9 +102,9 @@ public class Message {
 		});
 	}
 
-	public static void sendPM(String message, IUser user) {
+	public static void sendPM(IUser user, String message, Object... args) {
 		RequestBuffer.request(() -> {
-			user.getOrCreatePMChannel().sendMessage(Localisation.getPMMessage(message));
+			user.getOrCreatePMChannel().sendMessage(String.format(Localisation.getPMMessage(message), args));
 		});
 	}
 

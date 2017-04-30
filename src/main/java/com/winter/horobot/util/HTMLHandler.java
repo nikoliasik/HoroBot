@@ -26,12 +26,15 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.request.GetRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.http.HttpException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -47,6 +50,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Random;
@@ -122,10 +126,79 @@ public class HTMLHandler {
 					.header("Accept", "text/plain")
 					.asJson();
 
-			return response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("definition");
+			if(!response.getBody().getObject().getString("result_type").equals("no_results")) {
+				return response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("definition");
+			} else {
+				return Localisation.getMessage(guildID, "html-no-results");
+			}
 		} catch (Exception e) {
 			return Localisation.getMessage(guildID, "html-error");
 		}
+	}
+
+	public static String requestR34(String[] tags) throws SAXException, ParserConfigurationException, URISyntaxException, IOException {
+		String url = "http://rule34.xxx/index.php?page=dapi&s=post&q=index";
+		String search = "";
+		for(String tag : tags) {
+			search += tag + " ";
+		}
+		URIBuilder builder = new URIBuilder(new URI(url));
+		builder.addParameter("limit", "100");
+		builder.addParameter("tags", search);
+
+		HttpGet request = new HttpGet(builder.build());
+		HttpClient client = HttpClientBuilder.create().build();
+		org.apache.http.HttpResponse response = client.execute(request);
+
+		if(response.getStatusLine().getStatusCode() == 200) {
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = db.parse(response.getEntity().getContent());
+
+			NodeList results = doc.getElementsByTagName("posts");
+			Element posts = (Element) results.item(0);
+			Random rand = new Random();
+			Element post = (Element) posts.getElementsByTagName("post").item(rand.nextInt(posts.getElementsByTagName("post").getLength()));
+			try {
+				URL urll = new URL("http:" + post.getAttribute("file_url"));
+				return "http:" + post.getAttribute("file_url");
+			} catch (Exception e) {
+				return "https:" + post.getAttribute("file_url");
+			}
+		}
+		return Localisation.getPMMessage("html-error");
+	}
+
+	public static String requestGelbooru(String[] tags) throws SAXException, ParserConfigurationException, URISyntaxException, IOException {
+		String url = "http://gelbooru.com/index.php?page=dapi&s=post&q=index";
+		String search = "";
+		for(String tag : tags) {
+			search += tag + " ";
+		}
+		URIBuilder builder = new URIBuilder(new URI(url));
+		builder.addParameter("limit", "100");
+		builder.addParameter("tags", search);
+
+		HttpGet request = new HttpGet(builder.build());
+		HttpClient client = HttpClientBuilder.create().build();
+		org.apache.http.HttpResponse response = client.execute(request);
+
+		if(response.getStatusLine().getStatusCode() == 200) {
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = db.parse(response.getEntity().getContent());
+
+			NodeList results = doc.getElementsByTagName("posts");
+			Element posts = (Element) results.item(0);
+			Random rand = new Random();
+			Element post = (Element) posts.getElementsByTagName("post").item(rand.nextInt(posts.getElementsByTagName("post").getLength()));
+			try {
+				URL urll = new URL("http:" + post.getAttribute("file_url"));
+				return "http:" + post.getAttribute("file_url");
+			} catch (Exception e) {
+				return "https:" + post.getAttribute("file_url");
+			}
+		}
+
+		return Localisation.getPMMessage("html-error");
 	}
 
 	public static EmbedObject requestAnime(String[] tags, String author, String authorIcon, int searchType) throws URISyntaxException, IOException, ParserConfigurationException, SAXException {
@@ -157,7 +230,6 @@ public class HTMLHandler {
 		HttpClient client = HttpClientBuilder.create().build();
 		org.apache.http.HttpResponse response = client.execute(request);
 
-		response = client.execute(request);
 		int status = response.getStatusLine().getStatusCode();
 
 		if (status == 200) {
@@ -212,6 +284,65 @@ public class HTMLHandler {
 		return null;
 	}
 
+	public static String requestDanbooru(String[] tags) throws URISyntaxException, UnirestException {
+		String url = "https://danbooru.donmai.us/posts.json?limit=100?tags=";
+		for(String tag : tags) {
+			if(tags.length == 1) {
+				url += tag;
+			} else {
+				url += tag + "+";
+			}
+		}
+
+		HttpResponse<JsonNode> response = Unirest.get(url)
+				.header("Accept", "text/plain")
+				.asJson();
+
+		if(response.getStatus() == 200) {
+			if(response.getBody().getArray().length() > 0) {
+				if(response.getBody().getArray().length() == 1) {
+					System.out.println("https://danbooru.donmai.us" + response.getBody().getArray().getJSONObject(0).getString("file_url"));
+					return "https://danbooru.donmai.us" + response.getBody().getArray().getJSONObject(0).getString("file_url");
+				} else {
+					Random rand = new Random();
+					return "https://danbooru.donmai.us" + response.getBody().getArray().getJSONObject(rand.nextInt(response.getBody().getArray().length())).getString("file_url");
+				}
+			} else {
+				return "html-no-results";
+			}
+		}
+		return Localisation.getPMMessage("html-error");
+	}
+
+	public static String requestYandere(String[] tags) throws URISyntaxException, UnirestException {
+		String url = "https://yande.re/post.json";
+		String search = "";
+		for(String tag : tags) {
+			search += tag + " ";
+		}
+		URIBuilder builder = new URIBuilder(new URI(url));
+		builder.addParameter("limit", "100");
+		builder.addParameter("tags", search);
+
+		HttpResponse<JsonNode> response = Unirest.get(builder.build().toASCIIString())
+				.header("Accept", "text/plain")
+				.asJson();
+
+		if(response.getStatus() == 200) {
+			if(response.getBody().getArray().length() > 0) {
+				if(response.getBody().getArray().length() == 1) {
+					return response.getBody().getArray().getJSONObject(0).getString("file_url");
+				} else {
+					Random rand = new Random();
+					return response.getBody().getArray().getJSONObject(rand.nextInt(response.getBody().getArray().length())).getString("file_url");
+				}
+			} else {
+				return "html-no-results";
+			}
+		}
+		return Localisation.getPMMessage("html-error");
+	}
+
 	public static String requestKona(String[] tags, KONA_RATING rating) throws URISyntaxException, IOException, ParserConfigurationException, SAXException {
 		HttpClient client = HttpClients.createDefault();
 		HttpGet request = new HttpGet("http://www.konachan.com/post.xml");
@@ -263,9 +394,7 @@ public class HTMLHandler {
 			Node node = list.item(index);
 			NamedNodeMap map = node.getAttributes();
 			Node url = map.getNamedItem("file_url");
-			String name = "http:" + url.getNodeValue();
-			System.out.println(name);
-			return name;
+			return "http:" + url.getNodeValue();
 		}
 		return Localisation.getPMMessage("html-error");
 	}

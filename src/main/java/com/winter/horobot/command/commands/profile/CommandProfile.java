@@ -1,18 +1,22 @@
 package com.winter.horobot.command.commands.profile;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.database.DataBase;
 import com.winter.horobot.profile.ProfileBuilder;
 import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.animals.wolf.WolfCosmetics;
+import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CommandProfile implements Command {
@@ -25,8 +29,8 @@ public class CommandProfile implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			if(!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getID(), event.getAuthor());
+			if(!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
+				Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor());
 				DataBase.insertUser(event.getAuthor());
 				Message.sendFile(
 						event.getChannel(),
@@ -37,13 +41,13 @@ public class CommandProfile implements Command {
 						new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 								event.getAuthor())));
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
 			}
 		} else if(args.length >= 1) {
 			if (event.getMessage().getMentions().size() == 1) {
 				if(!event.getMessage().getMentions().get(0).isBot()) {
-					if (!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())) {
-						Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getID(), event.getAuthor());
+					if (!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
+						Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor());
 						DataBase.insertUser(event.getMessage().getMentions().get(0));
 						Message.sendFile(
 								event.getChannel(),
@@ -54,7 +58,7 @@ public class CommandProfile implements Command {
 								new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 										event.getMessage().getMentions().get(0))));
 					} else {
-						Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getID(), 10000, event.getAuthor())));
+						Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
 					}
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "bot-user");
@@ -86,39 +90,25 @@ public class CommandProfile implements Command {
 						}
 						break;
 					}
-					case "capsule":
-						if (DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
-							String drop = WolfCosmetics.drop(event.getAuthor());
-							if (drop != null) {
-								DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
-								DataBase.insertItem(event.getAuthor(), drop);
-								Message.sendMessageInChannel(
-										event.getChannel(),
-										"capsule-opened",
-										drop);
-							} else {
-								Message.sendMessageInChannel(event.getChannel(), "got-everything");
-							}
-						} else {
-							Message.sendMessageInChannel(event.getChannel(), "insufficient-funds");
-						}
-						break;
-					case "ranking":
+					case "ranking": {
 						String result = DataBase.queryRanks(10);
 						EmbedBuilder builder = new EmbedBuilder();
-						builder.withAuthorIcon(event.getAuthor().getAvatarURL());
-						builder.withAuthorName(event.getAuthor().getDisplayName(event.getGuild()));
+						builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
+						builder.withAuthorName(event.getAuthor().getName());
 						builder.withColor(Color.CYAN);
 						builder.appendField("Global Ranking", result, false);
 
 						Message.sendEmbed(event.getChannel(), "Here's the current ranking chart", builder.build(), false);
 						break;
-					case "help":
+					}
+					case "help": {
 						Message.sendMessageInChannel(event.getChannel(), help());
 						break;
-					default:
+					}
+					default: {
 						Message.sendMessageInChannel(event.getChannel(), "no-sub-command");
 						break;
+					}
 				}
 			}
 		}
@@ -127,6 +117,11 @@ public class CommandProfile implements Command {
 	@Override
 	public String help() {
 		return "profile-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.PROFILE;
 	}
 
 	@Override

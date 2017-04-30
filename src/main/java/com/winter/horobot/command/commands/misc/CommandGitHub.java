@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.misc;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -39,6 +40,11 @@ public class CommandGitHub implements Command {
 
 	public String help() {
 		return "github-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MISC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

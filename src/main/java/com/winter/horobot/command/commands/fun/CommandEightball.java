@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.fun;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -48,9 +49,9 @@ public class CommandEightball implements Command {
 
 				EmbedBuilder builder = new EmbedBuilder();
 				builder.withColor(Color.CYAN);
-				builder.appendField(raw, Localisation.getMessage(event.getGuild().getID(), "8ball-" + index), false);
-				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
-				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+				builder.appendField(raw, Localisation.getMessage(event.getGuild().getStringID(), "8ball-" + index), false);
+				builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
+				builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 			} else {
@@ -63,6 +64,11 @@ public class CommandEightball implements Command {
 
 	public String help() {
 		return "8ball-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

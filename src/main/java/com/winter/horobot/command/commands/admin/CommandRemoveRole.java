@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.admin;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -44,7 +45,7 @@ public class CommandRemoveRole implements Command {
 					user = event.getMessage().getMentions().get(0);
 				}
 				if (user == null)
-					user = event.getGuild().getUserByID(args[0]);
+					user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[0]));
 				if (user == null) {
 					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
 						user = event.getGuild().getUsersByName(args[0]).get(0);
@@ -56,7 +57,7 @@ public class CommandRemoveRole implements Command {
 					role = event.getMessage().getRoleMentions().get(0);
 				}
 				if (role == null)
-					role = event.getGuild().getRoleByID(args[1]);
+					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
 				if (role == null) {
 					if (event.getGuild().getRolesByName(args[1]).size() == 1) {
 						role = event.getGuild().getRolesByName(args[1]).get(0);
@@ -91,6 +92,11 @@ public class CommandRemoveRole implements Command {
 
 	public String help() {
 		return "remove-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.ADMIN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

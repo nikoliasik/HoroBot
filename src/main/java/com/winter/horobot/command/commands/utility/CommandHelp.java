@@ -19,13 +19,21 @@
 package com.winter.horobot.command.commands.utility;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
+import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.util.EmbedBuilder;
 
+import java.awt.*;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CommandHelp implements Command {
 
@@ -170,16 +178,53 @@ public class CommandHelp implements Command {
 //								"	* Usage: .horoprofile <background/info/capsule> - Display your profile or execute one of the sub-commands\n" +
 //								"```",
 //						event.getAuthor());
-				StringBuilder builder = new StringBuilder("```bf\n");
+				/*StringBuilder builder = new StringBuilder("```bf\n");
 				for(Map.Entry<String, Command> c : Main.commands.entrySet()) {
+					String message;
+					if(event.getChannel().isPrivate()) {
+						message = Localisation.getPMMessage(c.getValue().help());
+					} else {
+						message = Localisation.getMessage(event.getGuild().getStringID(), c.getValue().help());
+					}
 					String formatted = String.format(".horo%s:\n    * %s\n\n", c.getKey(),
-							Localisation.getMessage(event.getGuild().getID(), c.getValue().help()));
+							message);
 					if(builder.length() + formatted.length() > 1995) {
 						Message.sendRawPM(builder + "\n```", event.getAuthor());
 						builder = new StringBuilder("```bf\n" + formatted);
 					} else builder.append(formatted);
 				}
-				Message.sendRawPM(builder + "\n```", event.getAuthor());
+				Message.sendRawPM(builder + "\n```", event.getAuthor());*/
+
+				for(CommandType c : CommandType.getTypes()) {
+					EmbedBuilder builder = new EmbedBuilder();
+					builder.withColor(Color.CYAN);
+					String help;
+					if(!event.getChannel().isPrivate()) {
+						help = c.getCommands(c)
+								.stream()
+								.map(command -> "**.horo" + command + "** - " + Localisation.getMessage(event.getGuild().getStringID(), Main.commands.get(command).help()) + "\n")
+								.collect(Collectors.joining(""));
+					} else {
+						help = c.getCommands(c)
+								.stream()
+								.map(command -> "**.horo" + command + "** - " + Localisation.getPMMessage(Main.commands.get(command).help()) + "\n")
+								.collect(Collectors.joining(""));
+					}
+					/*String[] result = new String[(int) Math.ceil(((help.length() / (double) 1024)))];
+					int j = 0;
+					for (int i = 0; i < result.length - 1; i++) {
+						result[i] = help.substring(j, j + 1024);
+						j += 1024;
+					}
+					result[result.length - 1] = help.substring(j);
+					for (String actual : result) {
+						builder.appendField(WordUtils.capitalizeFully(c.toString()), actual, false);
+					}*/
+					builder.withTitle(WordUtils.capitalizeFully(c.toString()));
+					builder.withDescription(help);
+					Message.sendPMEmbed(event.getAuthor(), "", builder.build(), false);
+				}
+
 				Message.sendRawPM("Hey there!\n\n" +
 						"I know everyone hates these kinds of messages and so do I so I'll keep it short,\n" +
 						"HoroBot is a project which I've been working on for the past month for fun but I am in desperate need of funds to keep her running.\n" +
@@ -188,7 +233,7 @@ public class CommandHelp implements Command {
 				if(!event.getMessage().getChannel().isPrivate()) event.getMessage().delete();
 			} else if(args.length == 1) {
 				if(!event.getMessage().getChannel().isPrivate()) {
-					String guildID = event.getMessage().getGuild().getID();
+					String guildID = event.getMessage().getGuild().getStringID();
 					if (Main.commands.containsKey(args[0])) {
 						Message.replyRaw(Localisation.getMessage(guildID, Main.commands.get(args[0]).help()), event.getMessage());
 					} else {
@@ -207,6 +252,11 @@ public class CommandHelp implements Command {
 
 	public String help() {
 		return "help-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.UTILITY;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

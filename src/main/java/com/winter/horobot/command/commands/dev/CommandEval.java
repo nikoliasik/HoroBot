@@ -1,8 +1,10 @@
 package com.winter.horobot.command.commands.dev;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -21,8 +23,13 @@ import javax.script.ScriptException;
 public class CommandEval implements Command {
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getID().equals("288996157202497536")
-				|| event.getAuthor().getID().equals("155954930191040513");
+		return event.getAuthor().getStringID().equals("288996157202497536")
+				|| event.getAuthor().getStringID().equals("155954930191040513");
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.DEVELOPER;
 	}
 
 	@Override

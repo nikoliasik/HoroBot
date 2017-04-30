@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.music;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.util.music.MusicUtils;
@@ -27,6 +28,11 @@ public class CommandPause implements Command {
 
 	public String help() {
 		return "pause-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

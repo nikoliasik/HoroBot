@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.misc;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -10,6 +11,11 @@ import sx.blah.discord.util.EmbedBuilder;
 import java.awt.*;
 
 public class CommandPatreon implements Command {
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MISC;
+	}
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		return true;

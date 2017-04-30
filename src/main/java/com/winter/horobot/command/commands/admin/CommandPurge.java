@@ -1,16 +1,26 @@
 package com.winter.horobot.command.commands.admin;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.MessageHistory;
+import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RequestBuffer;
 
 public class CommandPurge implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getRolesForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.ADMIN;
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
@@ -23,8 +33,20 @@ public class CommandPurge implements Command {
 					Message.sendMessageInChannel(event.getChannel(), "no-number");
 					return;
 				}
-				event.getChannel().getMessageHistory(messages).bulkDelete();
-				Message.sendMessageInChannel(event.getChannel(),"purged-messages", messages);
+				int i = 0;
+				try {
+					try {
+						event.getChannel().getMessageHistory(messages).bulkDelete();
+					} catch (DiscordException e) {
+						Message.sendMessageInChannel(event.getChannel(), "limit-exceeded");
+						return;
+					}
+					Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
+				} catch (MissingPermissionsException e) {
+					Message.sendMessageInChannel(event.getChannel(), "missing-messages-manage-perm");
+				} catch (ArrayIndexOutOfBoundsException e) {
+					Message.sendMessageInChannel(event.getChannel(), "purged-messages", i);
+				}
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-messages-manage-perm");
 			}

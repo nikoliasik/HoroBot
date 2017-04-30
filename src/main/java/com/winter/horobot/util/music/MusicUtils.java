@@ -14,8 +14,11 @@ import sx.blah.discord.handle.obj.IGuild;
 public class MusicUtils {
 
 	public static synchronized GuildMusicManager getGuildAudioPlayer(IGuild guild) {
-		String guildID = guild.getID();
-		GuildMusicManager musicManager = Main.musicManagers.get(guildID);
+		String guildID = guild.getStringID();
+		GuildMusicManager musicManager = null;
+		try {
+			musicManager = Main.musicManagers.get(guildID);
+		} catch (Exception e) { }
 
 		if(musicManager == null) {
 			musicManager = new GuildMusicManager(Main.playerManager);
@@ -34,26 +37,26 @@ public class MusicUtils {
 			Main.playerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
 				public void trackLoaded(AudioTrack audioTrack) {
 					play(channel.getGuild(), musicManager, audioTrack);
-					sendMessage(event, Localisation.getMessage(channel.getGuild().getID(), "queue-added"));
+					sendMessage(event, Localisation.getMessage(channel.getGuild().getStringID(), "queue-added"));
 				}
 
 				public void playlistLoaded(AudioPlaylist audioPlaylist) {
 					for(AudioTrack track : audioPlaylist.getTracks()) {
 						play(event.getGuild(), musicManager, track);
 					}
-					sendMessage(event, Localisation.getMessage(channel.getGuild().getID(), "playlist-loaded"));
+					sendMessage(event, Localisation.getMessage(channel.getGuild().getStringID(), "playlist-loaded"));
 				}
 
 				public void noMatches() {
-					sendMessage(event, Localisation.getMessage(channel.getGuild().getID(), "no-matches"));
+					sendMessage(event, Localisation.getMessage(channel.getGuild().getStringID(), "no-matches"));
 				}
 
 				public void loadFailed(FriendlyException e) {
-					sendMessage(event, Localisation.getMessage(channel.getGuild().getID(), "load-failed"));
+					sendMessage(event, Localisation.getMessage(channel.getGuild().getStringID(), "load-failed"));
 				}
 			});
 		} else {
-			sendMessage(event, Localisation.getMessage(event.getGuild().getID(), "queue-full"));
+			sendMessage(event, Localisation.getMessage(event.getGuild().getStringID(), "queue-full"));
 		}
 	}
 

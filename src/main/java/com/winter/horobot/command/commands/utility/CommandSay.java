@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.utility;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -49,6 +50,11 @@ public class CommandSay implements Command {
 
 	public String help() {
 		return "say-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.UTILITY;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

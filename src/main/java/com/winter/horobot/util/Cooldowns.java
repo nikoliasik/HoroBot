@@ -19,12 +19,12 @@ public class Cooldowns {
 	 */
 	public static boolean onCooldown(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-		return System.currentTimeMillis() - bket.computeIfAbsent(user.getID(), d -> 0L) < length;
+		return System.currentTimeMillis() - bket.computeIfAbsent(user.getStringID(), d -> 0L) < length;
 	}
 
 	public static long getRemaining(String bucket, long length, IUser user) {
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-		return (length - (System.currentTimeMillis() - bket.putIfAbsent(user.getID(), 0L)));
+		return (length - (System.currentTimeMillis() - bket.putIfAbsent(user.getStringID(), 0L)));
 	}
 
 	/**
@@ -35,6 +35,6 @@ public class Cooldowns {
 	 */
 	public static void putOnCooldown(String bucket, IUser user){
 		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d -> new HashMap<>());
-		bket.put(user.getID(), System.currentTimeMillis());
+		bket.put(user.getStringID(), System.currentTimeMillis());
 	}
 }

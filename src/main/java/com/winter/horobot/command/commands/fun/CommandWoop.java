@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.fun;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -69,6 +70,11 @@ public class CommandWoop implements Command {
 
 	public String help() {
 		return "woop-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

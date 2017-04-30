@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.music;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -20,7 +21,7 @@ public class CommandLeave implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if(event.getGuild().getConnectedVoiceChannel() != null) {
-				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "left-voice"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "left-voice"));
 				MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
 				event.getGuild().getConnectedVoiceChannel().leave();
 			} else {
@@ -33,6 +34,11 @@ public class CommandLeave implements Command {
 
 	public String help() {
 		return "leave-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

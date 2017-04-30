@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.fun;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -24,6 +25,11 @@ public class CommandLoop implements Command {
 	@Override
 	public String help() {
 		return "loop-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	@Override

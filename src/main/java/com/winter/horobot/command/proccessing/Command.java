@@ -25,6 +25,7 @@ public interface Command {
 	boolean called(String[] args, MessageReceivedEvent event);
 	void action(String[] args, String raw, MessageReceivedEvent event);
 	String help();
+	CommandType getType();
 	default void executed(boolean success, MessageReceivedEvent event) {
 		if(success)
 			Utility.commandsExecuted++;

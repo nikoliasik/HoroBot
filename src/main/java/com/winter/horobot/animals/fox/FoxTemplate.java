@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class FoxTemplate {
 
@@ -15,7 +16,7 @@ public class FoxTemplate {
 	private final int maxXP;
 	private final int fedTimes;
 	private final FoxState.FOX_STATE state;
-	private BufferedImage fox;
+	private File fox;
 	private BufferedImage background;
 	private BufferedImage template;
 
@@ -27,7 +28,7 @@ public class FoxTemplate {
 		this.fedTimes = fedTimes;
 		this.state = state;
 		try {
-			this.fox = ImageIO.read(getClass().getResourceAsStream("/fox/" + state.getName().toLowerCase() + ".gif"));
+			this.fox = new File(getClass().getResource("/fox/" + state.getName().toLowerCase() + ".gif").toURI());
 			this.background = ImageIO.read(getClass().getResourceAsStream(WolfCosmetics.backgrounds.get(background)));
 			this.template = ImageIO.read(getClass().getResourceAsStream("/wolf/template.png"));
 		} catch(Exception e) {
@@ -59,7 +60,7 @@ public class FoxTemplate {
 		return state;
 	}
 
-	public BufferedImage getFox() { return fox; }
+	public File getFox() { return fox; }
 
 	public BufferedImage getBackground() { return background; }
 

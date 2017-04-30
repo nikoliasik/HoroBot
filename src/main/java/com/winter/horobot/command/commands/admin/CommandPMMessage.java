@@ -1,13 +1,13 @@
-package com.winter.horobot.command.commands.music;
+package com.winter.horobot.command.commands.admin;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
+import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.Message;
-import com.winter.horobot.util.music.MusicUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.Permissions;
 
-public class CommandVolume implements Command {
+public class CommandPMMessage implements Command {
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
@@ -16,17 +16,15 @@ public class CommandVolume implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(args.length == 1) {
-			int volume;
-			try {
-				volume = Integer.parseInt(args[0]);
-				if (volume > 100 || volume < 0) throw new Exception();
-			} catch (Exception e) {
-				Message.sendMessageInChannel(event.getChannel(), "no-number");
-				return;
+		if (args.length > 0) {
+			DataBase.insertGuild(event.getGuild().getStringID());
+			if(raw.toLowerCase().equals("none")) {
+				DataBase.updateGuild(event.getGuild().getStringID(), "pm", "none");
+				Message.sendMessageInChannel(event.getChannel(), "pm-changed", "None");
+			} else {
+				DataBase.updateGuild(event.getGuild().getStringID(), "pm", raw);
+				Message.sendMessageInChannel(event.getChannel(), "pm-changed", raw);
 			}
-			MusicUtils.getGuildAudioPlayer(event.getGuild()).player.setVolume(volume);
-			Message.sendMessageInChannel(event.getChannel(), "volume-changed", volume + "%");
 		} else {
 			Message.sendMessageInChannel(event.getChannel(), help());
 		}
@@ -34,11 +32,11 @@ public class CommandVolume implements Command {
 
 	@Override
 	public String help() {
-		return "volume-help";
+		return "help-pm-message";
 	}
 
 	@Override
 	public CommandType getType() {
-		return CommandType.MUSIC;
+		return CommandType.ADMIN;
 	}
 }

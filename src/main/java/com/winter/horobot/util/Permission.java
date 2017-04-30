@@ -52,7 +52,7 @@ public class Permission {
 
 	public static boolean hasUserPermission(IGuild guild, IUser user, String permission) {
 		try {
-			File file = new File("guilds" + File.separator + guild.getID() + ".xml");
+			File file = new File("guilds" + File.separator + guild.getStringID() + ".xml");
 			if(!file.exists())
 				createFile(file, guild);
 
@@ -63,7 +63,7 @@ public class Permission {
 			NodeList users = doc.getElementsByTagName("user");
 			for(int i = 0; i < users.getLength(); i++) {
 				Node node = users.item(i);
-				if(node.getNodeName().equals(user.getID())) {
+				if(node.getNodeName().equals(user.getStringID())) {
 					Element element = (Element) node;
 					NodeList perms = element.getElementsByTagName("permissions");
 					for(int x = 0; x < perms.getLength(); x++) {

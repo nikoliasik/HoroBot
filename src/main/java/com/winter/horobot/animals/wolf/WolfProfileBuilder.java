@@ -1,6 +1,7 @@
 package com.winter.horobot.animals.wolf;
 
 import com.winter.horobot.database.DataBase;
+import com.winter.horobot.util.Utility;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
@@ -23,7 +24,7 @@ public class WolfProfileBuilder {
 		final WolfTemplate template = DataBase.wolfQuery(user);
 
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.withAuthorIcon(user.getAvatarURL());
+		builder.withAuthorIcon(Utility.getAvatar(user));
 		builder.withAuthorName(user.getName() + "'s Wolf");
 		builder.withColor(Color.CYAN);
 		builder.appendField("Level", "" + template.getLevel(), true);

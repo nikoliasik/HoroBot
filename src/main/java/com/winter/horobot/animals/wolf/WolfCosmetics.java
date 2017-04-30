@@ -123,7 +123,7 @@ public class WolfCosmetics {
 
 	private static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
 
-	public static String drop(IUser user) {
+	public static String drop() {
 		Random rand = new Random();
 		int type = rand.nextInt(8);
 		int drop;
@@ -132,82 +132,64 @@ public class WolfCosmetics {
 				drop = rand.nextInt(backgrounds.size());
 				String value = (new ArrayList<>(backgrounds.values())).get(drop);
 				String item = getKeyName(backgrounds, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 1: {
 				drop = rand.nextInt(hats.size());
 				String value = (new ArrayList<>(hats.values())).get(drop);
 				String item = getKeyName(hats, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 2: {
 				drop = rand.nextInt(bodies.size());
 				String value = (new ArrayList<>(bodies.values())).get(drop);
 				String item = getKeyName(bodies, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 3: {
 				drop = rand.nextInt(paws.size());
 				String value = (new ArrayList<>(paws.values())).get(drop);
 				String item = getKeyName(paws, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 4: {
 				drop = rand.nextInt(tails.size());
 				String value = (new ArrayList<>(tails.values())).get(drop);
 				String item = getKeyName(tails, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 5: {
 				drop = rand.nextInt(shirts.size());
 				String value = (new ArrayList<>(shirts.values())).get(drop);
 				String item = getKeyName(shirts, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 6: {
 				drop = rand.nextInt(noses.size());
 				String value = (new ArrayList<>(noses.values())).get(drop);
 				String item = getKeyName(noses, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 7: {
 				drop = rand.nextInt(neck.size());
 				String value = (new ArrayList<>(neck.values())).get(drop);
 				String item = getKeyName(neck, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 			case 8: {
 				drop = rand.nextInt(eyes.size());
 				String value = (new ArrayList<>(eyes.values())).get(drop);
 				String item = getKeyName(eyes, value);
-				if(item.equals("None")) return drop(user);
-				if(!hasItem(user, item)) return item;
-				if(!hasAllItems(user)) return drop(user);
-				if(hasItem(user, item)) return drop(user);
+				if(item.equals("None")) return drop();
+				return item;
 			}
 		}
 		return null;
@@ -218,6 +200,20 @@ public class WolfCosmetics {
 			if(entry.getValue().equals(value)) return entry.getKey();
 		}
 		return "None";
+	}
+
+	public static String getItemPath(String item) {
+		return
+		backgrounds.containsKey(item) ? backgrounds.get(item) :
+		hats.containsKey(item) ? hats.get(item) :
+		paws.containsKey(item) ? paws.get(item) :
+		bodies.containsKey(item) ? bodies.get(item) :
+		tails.containsKey(item) ? tails.get(item) :
+		shirts.containsKey(item) ? shirts.get(item) :
+		noses.containsKey(item) ? noses.get(item) :
+		neck.containsKey(item) ? neck.get(item) :
+		eyes.containsKey(item) ? eyes.get(item) :
+		null;
 	}
 
 	private static boolean hasItem(IUser user, String item) {

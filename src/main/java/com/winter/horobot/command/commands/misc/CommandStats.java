@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.misc;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
@@ -33,7 +34,7 @@ public class CommandStats implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				Message.sendRawMessageInChannel(event.getChannel(), Utility.getStats(event.getClient().getOurUser().getShard().getInfo()[0], event.getClient().getShardCount(), event.getClient().getGuilds().size()));
+				Message.sendEmbed(event.getChannel(), "Here's the current stats", Utility.getStats(event.getClient().getOurUser().getShard().getInfo()[0], event.getClient().getShardCount(), event.getClient().getGuilds().size()), false);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}
@@ -44,6 +45,11 @@ public class CommandStats implements Command {
 
 	public String help() {
 		return "stats-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MISC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

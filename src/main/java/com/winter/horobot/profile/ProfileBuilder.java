@@ -21,7 +21,7 @@ public class ProfileBuilder {
 
 	public static EmbedObject generateEmbed(IUser user) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.withAuthorIcon(user.getAvatarURL());
+		builder.withAuthorIcon(Utility.getAvatar(user));
 		builder.withAuthorName(user.getName() + "'s Profile");
 		builder.withColor(Color.CYAN);
 		builder.withImage("attachment://" + "profile.png");

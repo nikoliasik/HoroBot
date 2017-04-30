@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.fun;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -37,9 +38,9 @@ public class CommandCoinFlip implements Command {
 			Random rand = new Random();
 			int result = rand.nextInt(2);
 			if(result == 1) {
-				Message.sendMessageInChannel(event.getChannel(), "coinflip-head", event.getAuthor().getNicknameForGuild(event.getGuild()));
+				Message.sendMessageInChannel(event.getChannel(), "coinflip-head", event.getAuthor().getName());
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "coinflip-tails", event.getAuthor().getNicknameForGuild(event.getGuild()));
+				Message.sendMessageInChannel(event.getChannel(), "coinflip-tails", event.getAuthor().getName());
 			}
 		} else {
 			Message.reply(help(), event.getMessage());
@@ -48,6 +49,11 @@ public class CommandCoinFlip implements Command {
 
 	public String help() {
 		return "coinflip-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

@@ -19,6 +19,7 @@
 package com.winter.horobot.command.commands.image;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.HTMLHandler;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
@@ -36,8 +37,7 @@ import java.net.URISyntaxException;
 public class CommandEcchi implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		String mod = Utility.getChannelMod(event.getChannel().getID());
-		return mod.equals("ecchi");
+		return event.getChannel().isNSFW();
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
@@ -47,11 +47,11 @@ public class CommandEcchi implements Command {
 				try {
 					builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.ECCHI));
 				} catch (Exception e) {
-					builder.appendField("Error", Localisation.getMessage(event.getGuild().getID(), "html-error"), false);
+					builder.appendField("Error", Localisation.getMessage(event.getGuild().getStringID(), "html-error"), false);
 				}
 				builder.withColor(Color.CYAN);
-				builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
-				builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+				builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
+				builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 			} else {
@@ -64,6 +64,11 @@ public class CommandEcchi implements Command {
 
 	public String help() {
 		return "ecchi-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.IMAGE;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

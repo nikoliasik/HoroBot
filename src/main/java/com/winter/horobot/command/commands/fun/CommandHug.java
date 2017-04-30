@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.fun;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -55,10 +56,10 @@ public class CommandHug implements Command {
 					builder.withImage(message);
 					builder.withColor(Color.CYAN);
 
-					Message.sendEmbed(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getID(),
+					Message.sendEmbed(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getStringID(),
 							"hug-from"),
-							event.getMessage().getMentions().get(0).getDisplayName(event.getGuild()),
-							event.getAuthor().getDisplayName(event.getGuild())
+							event.getMessage().getMentions().get(0).getName(),
+							event.getAuthor().getName()
 					), builder.build(), false);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,6 +74,11 @@ public class CommandHug implements Command {
 
 	public String help() {
 		return "hug-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

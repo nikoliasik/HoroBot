@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.dev;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.command.proccessing.Command;
@@ -34,15 +35,9 @@ public class CommandReboot implements Command {
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(event.getMessage().getAuthor().getID().equals("288996157202497536")) {
+		if(event.getMessage().getAuthor().getStringID().equals("288996157202497536")) {
 			try {
 				//Message.reply("shut-down", event.getMessage());
-
-				Iterator iterator = Main.INSTANCE.client.getOurUser().getVoiceStates().entrySet().iterator();
-				while(iterator.hasNext()) {
-					Map.Entry<String, IVoiceState> pair = (Map.Entry) iterator.next();
-					pair.getValue().getChannel().leave();
-				}
 
 				/*String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 				File currentJar = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -69,6 +64,11 @@ public class CommandReboot implements Command {
 
 	public String help() {
 		return "reboot-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.DEVELOPER;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.fun;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -38,14 +39,14 @@ public class CommandPornStar implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			String guildID = event.getMessage().getGuild().getID();
+			String guildID = event.getMessage().getGuild().getStringID();
 			
 			Random rand = new Random();
 			String prefix = pre[rand.nextInt(pre.length)];
 			String suffix = suf[rand.nextInt(suf.length)];
 			String name = prefix + " " + suffix;
 			
-			Message.sendMessageInChannel(event.getChannel(),"pornstar-name", event.getAuthor().getDisplayName(event.getGuild()), name);
+			Message.sendMessageInChannel(event.getChannel(),"pornstar-name", event.getAuthor().getName(), name);
 		} else {
 			Message.reply(help(), event.getMessage());
 		}
@@ -53,6 +54,11 @@ public class CommandPornStar implements Command {
 
 	public String help() {
 		return "ps-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

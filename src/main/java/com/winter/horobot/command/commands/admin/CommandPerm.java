@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.admin;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Permission;
 import com.winter.horobot.util.Utility;
@@ -40,6 +41,11 @@ public class CommandPerm implements Command {
 
 	public String help() {
 		return "ecchi-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.ADMIN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

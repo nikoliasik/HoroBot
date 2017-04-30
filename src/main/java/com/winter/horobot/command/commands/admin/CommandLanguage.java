@@ -18,6 +18,7 @@
 
 package com.winter.horobot.command.commands.admin;
 
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -28,16 +29,12 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandLanguage implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		if(event.getMessage().getAuthor().getPermissionsForGuild(event.getMessage().getGuild()).contains(Permissions.MANAGE_SERVER)) {
-			return true;
-		} else {
-			return false;
-		}
+		return event.getMessage().getAuthor().getPermissionsForGuild(event.getMessage().getGuild()).contains(Permissions.MANAGE_SERVER);
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
-			if(Localisation.changeLanguage(event.getMessage().getGuild().getID(), args[0])) {
+			if(Localisation.changeLanguage(event.getMessage().getGuild().getStringID(), args[0])) {
 				Message.reply("language-changed", event.getMessage());
 			} else {
 				Message.reply("no-language", event.getMessage());
@@ -45,6 +42,11 @@ public class CommandLanguage implements Command {
 		} else {
 			Message.reply(help(), event.getMessage());
 		}
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.ADMIN;
 	}
 
 	public String help() {

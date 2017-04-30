@@ -34,6 +34,7 @@ public class CommandParser {
 		
 		String invoke = split.get(0);
 		beheaded = raw.substring(prefix.length() + invoke.length(), raw.length());
+		if(beheaded.length() > 0) beheaded = beheaded.substring(1, beheaded.length());
 		String[] args = new String[split.size() - 1];
 		split.subList(1, split.size()).toArray(args);
 		

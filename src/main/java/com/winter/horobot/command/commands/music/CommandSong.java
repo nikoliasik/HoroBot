@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.music;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -36,16 +37,16 @@ public class CommandSong implements Command {
 
 					EmbedBuilder builder = new EmbedBuilder();
 					builder.withColor(Color.CYAN);
-					builder.withAuthorName("Requested by @" + event.getAuthor().getDisplayName(event.getGuild()) + "#" + event.getAuthor().getDiscriminator());
-					builder.withAuthorIcon(event.getAuthor().getAvatarURL());
+					builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
+					builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 					builder.appendField("Current Song", string.toString(), false);
 
 					Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 				} else {
-					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getID(), "no-song-playing"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "no-song-playing"));
 				}
 			} else {
-				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "not-in-channel"));
+				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getStringID(), "not-in-channel"));
 			}
 		} else {
 			Message.reply(help(), event.getMessage());
@@ -54,6 +55,11 @@ public class CommandSong implements Command {
 
 	public String help() {
 		return "song-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

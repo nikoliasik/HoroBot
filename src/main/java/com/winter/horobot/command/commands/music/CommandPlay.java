@@ -1,6 +1,7 @@
 package com.winter.horobot.command.commands.music;
 
 import com.winter.horobot.command.proccessing.Command;
+import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.HTMLHandler;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
@@ -41,7 +42,7 @@ public class CommandPlay implements Command {
 				if(link != null) {
 					MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
 				} else {
-					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getID(), "html-no-results"));
+					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getStringID(), "html-no-results"));
 				}
 			}
 		} else {
@@ -51,6 +52,11 @@ public class CommandPlay implements Command {
 
 	public String help() {
 		return "play-help";
+	}
+
+	@Override
+	public CommandType getType() {
+		return CommandType.MUSIC;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

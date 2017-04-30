@@ -23,11 +23,14 @@ import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.database.DataBase;
 import sx.blah.discord.Discord4J;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.EmbedBuilder;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,8 +41,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -80,23 +85,30 @@ public class Utility {
 		HTMLHandler.postStats(Config.discordBotsToken, shard, shardCount, serverCount);
 	}
 
-	public static String getStats(int shard, int shardCount, int serverCount) {
+	public static EmbedObject getStats(int shard, int shardCount, int serverCount) {
 		updateStats();
 		if (!Config.debug) postStats(shard, shardCount, serverCount);
 
-		return "```\n" +
-				"Discord4J version: " + Discord4JVersion + "\n" +
-				"Shards: " + shardCount + "\n" +
-				"Guilds: " + serverCount + "\n" +
-				"Commands executed: " + commandsExecuted + "\n" +
-				"Total commands available: " + totalCommands + "\n" +
-				"App start date: " + runStart + "\n" +
-				"App up time: " + runTime + "\n" +
-				"Reconnected times: " + reconnectedTimes + "\n" +
-				"Memory usage: " + memory + "\n" +
-				"Messages received: " + messagesReceived + "\n" +
-				"Messages sent: " + messagesSent + "\n" +
-				"```";
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withColor(Color.CYAN);
+		builder.withTimestamp(LocalDateTime.now());
+		builder.withAuthorName("HoroBot");
+		builder.withAuthorIcon(Utility.getAvatar(Main.INSTANCE.client.getOurUser()));
+		builder.withThumbnail(Utility.getAvatar(Main.INSTANCE.client.getOurUser()));
+
+		builder.appendField("Discord4J Version", Discord4JVersion, false);
+		builder.appendField("Shards", String.valueOf(shardCount), true);
+		builder.appendField("Guilds", String.valueOf(serverCount), true);
+		builder.appendField("Commands Executed", String.valueOf(commandsExecuted), true);
+		builder.appendField("Commands Available", String.valueOf(totalCommands), true);
+		builder.appendField("App Start", runStart, true);
+		builder.appendField("App Up", runTime, true);
+		builder.appendField("Reconnected Times", String.valueOf(reconnectedTimes), true);
+		builder.appendField("Memory Usage", memory, true);
+		builder.appendField("Messages Received", String.valueOf(messagesReceived), true);
+		builder.appendField("Messages Sent", String.valueOf(messagesSent), true);
+
+		return builder.build();
 	}
 
 	public static void updateStats() {
@@ -206,10 +218,19 @@ public class Utility {
 		return ImageIO.read(connection.getInputStream());
 	}
 
-	public static String listAsString(ArrayList<String> list) {
+	public static String listAsString(List<String> list) {
 		StringBuilder builder = new StringBuilder();
 		for(String string : list) {
 			builder.append(string);
+			builder.append(", ");
+		}
+		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "";
+	}
+
+	public static String permissionsAsString(EnumSet<Permissions> permissions) {
+		StringBuilder builder = new StringBuilder();
+		for(Permissions perm : permissions) {
+			builder.append(perm.name());
 			builder.append(", ");
 		}
 		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "";
