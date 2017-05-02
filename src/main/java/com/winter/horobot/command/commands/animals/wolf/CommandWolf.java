@@ -149,7 +149,7 @@ public class CommandWolf implements Command {
 						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
 						String item = DataBase.queryItem(event.getAuthor(), WordUtils.capitalizeFully(temp));
 						if (item != null) {
-							DataBase.updateWolf(event.getAuthor(), item, WordUtils.capitalizeFully(temp));
+							DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), item);
 							Message.sendMessageInChannel(event.getChannel(), "background-success", WordUtils.capitalizeFully(temp));
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "no-item");

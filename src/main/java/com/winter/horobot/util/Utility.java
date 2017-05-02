@@ -82,7 +82,7 @@ public class Utility {
 	}
 
 	public static void postStats(int shard, int shardCount, int serverCount) {
-		HTMLHandler.postStats(Config.discordBotsToken, shard, shardCount, serverCount);
+		HTMLHandler.postStats(shard, shardCount, serverCount);
 	}
 
 	public static EmbedObject getStats(int shard, int shardCount, int serverCount) {

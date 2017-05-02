@@ -60,7 +60,7 @@ public class Main {
 	public static AudioPlayerManager playerManager;
 	public static Map<String, GuildMusicManager> musicManagers;
 
-	public static HashMap<String, Color> colors = new HashMap<>();
+	//public static HashMap<String, Color> colors = new HashMap<>();
 
 	public static void main(String[] args) {
 		LOGGER.info(ManagementFactory.getRuntimeMXBean().getName());
@@ -142,13 +142,14 @@ public class Main {
 		commands.put("rule34", new CommandR34());
 		commands.put("gelbooru", new CommandGelbooru());
 		commands.put("danbooru", new CommandDanbooru());
+		commands.put("togglelvlup", new CommandToggleLevelUp());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		AudioSourceManagers.registerLocalSource(playerManager);
 
-		colors.put("black", Color.BLACK);
+		/*colors.put("black", Color.BLACK);
 		colors.put("blue", Color.BLUE);
 		colors.put("cyan", Color.CYAN);
 		colors.put("darkgray", Color.DARK_GRAY);
@@ -160,7 +161,7 @@ public class Main {
 		colors.put("pink", Color.PINK);
 		colors.put("red", Color.RED);
 		colors.put("white", Color.WHITE);
-		colors.put("yellow", Color.YELLOW);
+		colors.put("yellow", Color.YELLOW);*/
 	}
 
 	public static void handleCommand(CommandContainer cmd) {

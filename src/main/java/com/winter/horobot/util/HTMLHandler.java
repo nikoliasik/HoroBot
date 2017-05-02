@@ -63,7 +63,7 @@ public class HTMLHandler {
 		NSFW
 	}
 
-	public static void postStats(String botToken, int shard, int shardCount, int serverCount) {
+	public static void postStats(int shard, int shardCount, int serverCount) {
 		JSONObject obj = new JSONObject();
 		obj.put("server_count", serverCount);
 		obj.put("shard_id", shard);
@@ -71,11 +71,20 @@ public class HTMLHandler {
 
 		try {
 			Unirest.post("https://bots.discord.pw/api/bots/289381714885869568/stats")
-			.header("Authorization", botToken)
-			.header("Content-Type", "application/json")
-			.body(obj.toString())
-			.asJson();
-		} catch(Exception e) {
+					.header("Authorization", Config.discordBotsToken)
+					.header("Content-Type", "application/json")
+					.body(obj.toString())
+					.asJson();
+		} catch(UnirestException e) {
+			e.printStackTrace();
+		}
+		try {
+			Unirest.post("https://discordbots.org/api/bots/289381714885869568/stats")
+					.header("Authorization", Config.discordBotsOrgToken)
+					.header("Content-Type", "application/json")
+					.body(obj.toString())
+					.asJson();
+		} catch(UnirestException e) {
 			e.printStackTrace();
 		}
 	}

@@ -7,6 +7,7 @@ import com.winter.horobot.core.Main;
 import com.winter.horobot.profile.ProfileTemplate;
 import com.winter.horobot.animals.wolf.WolfTemplate;
 import org.postgresql.ds.PGPoolingDataSource;
+import org.postgresql.util.PSQLException;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.sql.*;
@@ -685,6 +686,28 @@ public class DataBase {
 			}
 		}
 		return null;
+	}
+
+	public static boolean queryLvlUp(String guildID) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = String.format("SELECT lvlup FROM guilds.guild WHERE id='%s';", guildID);
+			ResultSet set = statement.executeQuery(sql);
+			if(set.next()) {
+				return set.getBoolean("lvlup");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return true;
 	}
 
 	public static String channelQuery(String channelID) {

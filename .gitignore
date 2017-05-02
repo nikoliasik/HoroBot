@@ -65,3 +65,4 @@ src/main/java/META-INF/MANIFEST.MF
 !/src/main/java/com/fuyusan/horobot/command/commands/wolf/CommandWolf.java
 target/*
 *.log
+src/main/java/com/winter/horobot/core/Config.java

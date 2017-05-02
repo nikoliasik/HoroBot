@@ -107,18 +107,20 @@ public class AnnotationListener {
 					DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
 					DataBase.updateUser(event.getAuthor(), "xp", 0);
 					DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
-					IChannel channel = null;
-					for(IChannel temp : event.getGuild().getChannels()) {
-						if (DataBase.channelQuery(temp.getStringID()).equals("log"))
-							channel = temp;
+					if(DataBase.queryLvlUp(event.getGuild().getStringID())) {
+						IChannel channel = null;
+						for (IChannel temp : event.getGuild().getChannels()) {
+							if (DataBase.channelQuery(temp.getStringID()).equals("log"))
+								channel = temp;
+						}
+						if (channel == null) channel = event.getChannel();
+						Message.sendFile(
+								channel,
+								"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
+										"**+100 Coins** for leveling up!",
+								"level-up.png",
+								new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
 					}
-					if(channel == null) channel = event.getChannel();
-					Message.sendFile(
-							channel,
-							"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
-									"**+100 Coins** for leveling up!",
-							"level-up.png",
-							new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
 				}
 			}
 			Utility.messagesReceived++;
