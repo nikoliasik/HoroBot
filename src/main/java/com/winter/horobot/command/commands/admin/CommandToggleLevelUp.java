@@ -19,8 +19,10 @@ public class CommandToggleLevelUp implements Command {
 		if(args.length == 0) {
 			if (DataBase.queryLvlUp(event.getGuild().getStringID())) {
 				DataBase.updateGuild(event.getGuild().getStringID(), "lvlup", false);
+				Message.sendMessageInChannel(event.getChannel(), "toggle-lvlup-off");
 			} else {
 				DataBase.updateGuild(event.getGuild().getStringID(), "lvlup", true);
+				Message.sendMessageInChannel(event.getChannel(), "toggle-lvlup-on");
 			}
 		} else {
 			Message.sendMessageInChannel(event.getChannel(), help());

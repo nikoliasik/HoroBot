@@ -7,12 +7,11 @@ import com.winter.horobot.core.Main;
 import com.winter.horobot.profile.ProfileTemplate;
 import com.winter.horobot.animals.wolf.WolfTemplate;
 import org.postgresql.ds.PGPoolingDataSource;
-import org.postgresql.util.PSQLException;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DataBase {
 
@@ -48,7 +47,10 @@ public class DataBase {
 										"prefix TEXT DEFAULT '.horo'," +
 										"welcome TEXT DEFAULT 'Welcome~! %s'," +
 										"role TEXT DEFAULT 'none'," +
-										"pm TEXT DEFAULT 'none');";
+										"pm TEXT DEFAULT 'none'," +
+										"lvlup BOOLEAN DEFAULT true," +
+										"bpresentban BOOLEAN DEFAULT true," +
+										"bignore BOOLEAN DEFAULT false);";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(SQLException e) {
@@ -188,6 +190,48 @@ public class DataBase {
 					"nose TEXT NOT NULL DEFAULT 'None'," +
 					"eye TEXT NOT NULL DEFAULT 'None'," +
 					"neck TEXT NOT NULL DEFAULT 'None');";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static void createBlacklistSchema() {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = "CREATE SCHEMA IF NOT EXISTS blacklists;";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static void createBlacklistTable() {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS blacklists.blacklist(" +
+					"id TEXT NOT NULL," +
+					"userID TEXT NOT NULL," +
+					"by TEXT NOT NULL," +
+					"PRIMARY KEY (id, userID));";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -418,6 +462,28 @@ public class DataBase {
 		}
 	}
 
+	public static void insertBlacklistEntry(String guildID, String blacklistedUser, String blacklistedBy) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "INSERT INTO blacklists.blacklist (id, userID, by) VALUES (?, ?, ?) ON CONFLICT DO NOTHING;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guildID);
+			statement.setString(2, blacklistedUser);
+			statement.setString(3, blacklistedBy);
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
 	public static String queryItem(IUser user, String item) {
 		Connection con = null;
 		try {
@@ -459,6 +525,85 @@ public class DataBase {
 			e.printStackTrace();
 		} finally {
 			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return null;
+	}
+
+	public static boolean queryIsBlacklisted(IGuild guild, IUser user) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "SELECT userID FROM blacklists.blacklist WHERE id=? AND userID=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guild.getStringID());
+			statement.setString(2, user.getStringID());
+			ResultSet set = statement.executeQuery();
+			while (set.next()) {
+				if (user.getStringID().equals(set.getString("userID"))) return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) { }
+		}
+		return false;
+	}
+
+	public static boolean queryIsBlacklisted(IGuild guild, String userID) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "SELECT userID FROM blacklists.blacklist WHERE id=? AND userID=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guild.getStringID());
+			statement.setString(2, userID);
+			ResultSet set = statement.executeQuery();
+			while (set.next()) {
+				if (userID.equals(set.getString("userID"))) return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) { }
+		}
+		return false;
+	}
+
+	public static Map<String, String> queryBlacklist(IGuild guild) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "SELECT userID, by FROM blacklists.blacklist WHERE id=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guild.getStringID());
+			ResultSet set = statement.executeQuery();
+			Map<String, String> blacklist = new HashMap<>();
+			while(set.next()) {
+				String user = null;
+				String by = null;
+				try {
+					user = set.getString("userID");
+				} catch (NullPointerException | NumberFormatException e) { }
+
+				try {
+					by = set.getString("by");
+				} catch (NullPointerException | NumberFormatException e) { }
+
+				blacklist.put(user, by);
+			}
+			return blacklist;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
 				try {
 					con.close();
 				} catch (SQLException e) { }
@@ -610,6 +755,7 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement("UPDATE guilds.guild SET " + index + "=? WHERE id=?;");
 			if (value instanceof String) statement.setString(1, (String) value);
 			if (value instanceof Integer) statement.setInt(1, (int) value);
+			if (value instanceof Boolean) statement.setBoolean(1, (boolean) value);
 			statement.setString(2, guildID);
 			statement.executeUpdate();
 			statement.close();
@@ -686,6 +832,28 @@ public class DataBase {
 			}
 		}
 		return null;
+	}
+
+	public static boolean guildBooleanQuery(String guildID, String index) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = String.format("SELECT * FROM guilds.guild WHERE id='%s';", guildID);
+			ResultSet set = statement.executeQuery(sql);
+			if(set.next()) {
+				return set.getBoolean(index);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return true;
 	}
 
 	public static boolean queryLvlUp(String guildID) {
@@ -779,6 +947,27 @@ public class DataBase {
 			Statement statement = con.createStatement();
 			String sql = String.format("DELETE FROM guilds.guild WHERE id='%s';", guildID);
 			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static void removeBlacklistEntry(String guildID, String userID) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "DELETE FROM blacklists.blacklist WHERE id=? AND userID=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guildID);
+			statement.setString(2, userID);
+			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {
 			e.printStackTrace();

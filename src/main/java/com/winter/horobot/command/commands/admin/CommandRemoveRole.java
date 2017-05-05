@@ -30,11 +30,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandRemoveRole implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		if(event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR)) {
-			return true;
-		} else {
-			return false;
-		}
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.MANAGE_ROLES);
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
@@ -56,8 +52,11 @@ public class CommandRemoveRole implements Command {
 				if (event.getMessage().getRoleMentions().size() == 1) {
 					role = event.getMessage().getRoleMentions().get(0);
 				}
-				if (role == null)
-					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
+				if (role == null) {
+					try {
+						role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
+					} catch (NumberFormatException e) { }
+				}
 				if (role == null) {
 					if (event.getGuild().getRolesByName(args[1]).size() == 1) {
 						role = event.getGuild().getRolesByName(args[1]).get(0);

@@ -21,6 +21,7 @@ package com.winter.horobot.core;
 import com.winter.horobot.command.commands.admin.*;
 import com.winter.horobot.command.commands.dev.CommandEval;
 import com.winter.horobot.command.commands.dev.CommandReboot;
+import com.winter.horobot.command.commands.dev.CommandTest;
 import com.winter.horobot.command.commands.image.*;
 import com.winter.horobot.command.commands.misc.*;
 import com.winter.horobot.command.commands.profile.CommandProfile;
@@ -79,6 +80,8 @@ public class Main {
 		DataBase.createUserTable();
 		DataBase.createFoxSchema();
 		DataBase.createFoxTable();
+		DataBase.createBlacklistSchema();
+		DataBase.createBlacklistTable();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
@@ -120,7 +123,7 @@ public class Main {
 		commands.put("leave", new CommandLeave());
 		commands.put("play", new CommandPlay());
 		commands.put("pause", new CommandPause());
-		commands.put("unpause", new CommandUnpause());
+		commands.put("resume", new CommandUnpause());
 		commands.put("skip", new CommandSkip());
 		commands.put("repeat", new CommandRepeat());
 		commands.put("song", new CommandSong());
@@ -143,6 +146,7 @@ public class Main {
 		commands.put("gelbooru", new CommandGelbooru());
 		commands.put("danbooru", new CommandDanbooru());
 		commands.put("togglelvlup", new CommandToggleLevelUp());
+		commands.put("blacklist", new CommandBlackList());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
@@ -178,13 +182,13 @@ public class Main {
 			if(safe) {
 				cmd.event.getChannel().setTypingStatus(true);
 				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
-				commands.get(cmd.invoke).executed(safe, cmd.event);
+				commands.get(cmd.invoke).executed(true, cmd.event);
 				cmd.event.getChannel().setTypingStatus(false);
 			} else {
 				RequestBuffer.request(() -> {
 					cmd.event.getMessage().addReaction("\uD83D\uDEAB");
 				});
-				commands.get(cmd.invoke).executed(safe, cmd.event);
+				commands.get(cmd.invoke).executed(false, cmd.event);
 			}
 		} else {
 			RequestBuffer.request(() -> {

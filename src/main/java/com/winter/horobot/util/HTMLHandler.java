@@ -40,6 +40,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IGuild;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -128,20 +129,53 @@ public class HTMLHandler {
 		return null;
 	}
 
-	public static String requestUrban(String term, String guildID) {
+	public static EmbedObject requestUrban(String[] term, String guildID, IUser user) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withColor(Color.CYAN);
+		builder.withAuthorName("Requested by @" + user.getName());
+		builder.withAuthorIcon(Utility.getAvatar(user));
 		try {
-			HttpResponse<JsonNode> response = Unirest.get("https://mashape-community-urban-dictionary.p.mashape.com/define?term=" + term)
+			String url = "https://mashape-community-urban-dictionary.p.mashape.com/define?term=";
+			for(String tag : term) {
+				if(term.length == 1) {
+					url += tag;
+				} else {
+					url += tag + "+";
+				}
+			}
+
+			HttpResponse<JsonNode> response = Unirest.get(url)
 					.header("X-Mashape-Key", Config.mashapeKey)
 					.header("Accept", "text/plain")
 					.asJson();
 
 			if(!response.getBody().getObject().getString("result_type").equals("no_results")) {
-				return response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("definition");
+				String definition = response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("definition");
+				if(definition.length() >= 1024) {
+					definition = definition.substring(0, 1021);
+					definition += "...";
+				}
+				builder.appendField("Definition", definition, false);
+
+				try {
+					String example = response.getBody().getObject().getJSONArray("list").getJSONObject(0).getString("example");
+					if(example.length() >= 1024) {
+						example = definition.substring(0, 1021);
+						example += "...";
+					}
+					builder.appendField("Example", example, false);
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+				}
+
+				return builder.build();
 			} else {
-				return Localisation.getMessage(guildID, "html-no-results");
+				builder.appendField("Error", Localisation.getMessage(guildID, "html-no-results"), false);
+				return builder.build();
 			}
-		} catch (Exception e) {
-			return Localisation.getMessage(guildID, "html-error");
+		} catch (UnirestException e) {
+			builder.appendField("Error", Localisation.getMessage(guildID, "html-error"), false);
+			return builder.build();
 		}
 	}
 
@@ -222,15 +256,11 @@ public class HTMLHandler {
 		String authHeader = "Basic " + new String(encodedPath);
 		request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
 
-		String msgSearch = "";
 		String searchOrig = "";
-		for(int i = 0; i < tags.length; i++) {
-			if(tags.length == 1) {
-				searchOrig += tags[i];
-			} else {
-				searchOrig += msgSearch + tags[i] + " ";
-			}
+		for(String tag : tags) {
+			searchOrig += tag + " ";
 		}
+		searchOrig = searchOrig.substring(0, searchOrig.length() - 1);
 
 		URIBuilder builder = new URIBuilder(request.getURI());
 		builder.addParameter("q", searchOrig);
@@ -253,15 +283,14 @@ public class HTMLHandler {
 			NodeList results = doc.getElementsByTagName("entry");
 			if(results.getLength() == 0) {
 				return null;
-			} else if(results.getLength() > 5) {
-				embedBuilder.withTitle("Too many results found, please be more specific");
-				return embedBuilder.build();
 			}
 
 			Element thumb = (Element) results.item(0);
 			embedBuilder.withThumbnail(thumb.getElementsByTagName("image").item(0).getTextContent());
 
-			for(int i = 0; i < results.getLength(); i++) {
+			int cycle = results.getLength();
+			if(results.getLength() > 5) cycle = 5;
+			for(int i = 0; i < cycle; i++) {
 				Element element = (Element) results.item(i);
 
 				StringBuilder stringBuilder = new StringBuilder();

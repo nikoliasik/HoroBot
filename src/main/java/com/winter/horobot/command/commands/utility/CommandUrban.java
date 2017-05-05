@@ -20,14 +20,7 @@ public class CommandUrban implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				EmbedBuilder embedBuilder = new EmbedBuilder();
-				embedBuilder.withColor(Color.CYAN);
-				embedBuilder.withAuthorName("Requested by @" + event.getAuthor().getName());
-				embedBuilder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
-				System.out.println(raw);
-				embedBuilder.appendField(raw, HTMLHandler.requestUrban(raw, event.getGuild().getStringID()), false);
-
-				Message.sendEmbed(event.getChannel(), "", embedBuilder.build(), false);
+				Message.sendEmbed(event.getChannel(), "", HTMLHandler.requestUrban(args, event.getGuild().getStringID(), event.getAuthor()), false);
 			} else {
 				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}

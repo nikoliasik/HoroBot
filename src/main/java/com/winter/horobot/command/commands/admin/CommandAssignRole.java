@@ -30,11 +30,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandAssignRole implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		if(event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR)) {
-			return true;
-		} else {
-			return false;
-		}
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.MANAGE_ROLES);
 	}
 
 	@Override
@@ -49,8 +45,11 @@ public class CommandAssignRole implements Command {
 				if (event.getMessage().getMentions().size() == 1) {
 					user = event.getMessage().getMentions().get(0);
 				}
-				if (user == null)
-					user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[0]));
+				if (user == null) {
+					try {
+						user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[0]));
+					} catch (NumberFormatException e) { }
+				}
 				if (user == null) {
 					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
 						user = event.getGuild().getUsersByName(args[0]).get(0);

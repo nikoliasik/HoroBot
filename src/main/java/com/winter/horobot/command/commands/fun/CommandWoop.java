@@ -38,25 +38,8 @@ public class CommandWoop implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				Random rand = new Random();
-				String message = "Error";
-				int result = rand.nextInt(4);
-				switch (result) {
-					case 1:
-						message = "https://media.giphy.com/media/4SGFq4W8Zx36U/giphy.gif";
-						break;
-					case 2:
-						message = "https://cdn.discordapp.com/attachments/290211327337562112/290538154551803904/jEcxTcM.gif";
-						break;
-					case 3:
-						message = "https://cdn.discordapp.com/attachments/290211327337562112/290539177395879937/2CeU2VK.gif";
-						break;
-					case 4:
-						message = "https://cdn.discordapp.com/attachments/290211327337562112/290540017988927498/25c.gif";
-						break;
-				}
 				EmbedBuilder builder = new EmbedBuilder();
-				builder.withImage(message);
+				builder.withImage("https://media.giphy.com/media/4SGFq4W8Zx36U/giphy.gif");
 				builder.withColor(Color.CYAN);
 
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
@@ -64,7 +47,7 @@ public class CommandWoop implements Command {
 				Message.sendMessageInChannel(event.getChannel(), "missing-embed-perm");
 			}
 		} else {
-			Message.reply("woop-help", event.getMessage());
+			Message.reply(help(), event.getMessage());
 		}
 	}
 

@@ -24,10 +24,13 @@ import com.winter.horobot.core.Main;
 import com.winter.horobot.database.DataBase;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RequestBuffer;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -83,6 +86,71 @@ public class Utility {
 
 	public static void postStats(int shard, int shardCount, int serverCount) {
 		HTMLHandler.postStats(shard, shardCount, serverCount);
+	}
+
+	public static EmbedObject banUser(IGuild guild, IUser user, IUser author, String reason) {
+		EmbedBuilder builder = new EmbedBuilder();
+		try {
+			RequestBuffer.request(() -> {
+				guild.banUser(user);
+			});
+
+			builder.withAuthorIcon(Utility.getAvatar(user));
+			builder.withAuthorName("User " + user.getName() + " was banned");
+			builder.withColor(Color.RED);
+			builder.withTimestamp(LocalDateTime.now());
+			builder.withThumbnail(Utility.getAvatar(user));
+
+			builder.appendField("User banned", user.getName(), true);
+			builder.appendField("ID", user.getStringID(), true);
+			builder.appendField("Banned by", author.getName(), true);
+			builder.appendField("ID", author.getStringID(), true);
+			builder.appendField("Reason", reason, false);
+		} catch (MissingPermissionsException e) {
+			builder.withTitle("Error");
+			if(e.getMissingPermissions().size() == 0) {
+				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), "Role hierarchy is too high"));
+			} else {
+				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), Utility.permissionsAsString(e.getMissingPermissions())));
+			}
+		}
+		return builder.build();
+	}
+
+	public static EmbedObject kickUser(IGuild guild, IUser user, IUser author, String reason) {
+		EmbedBuilder builder = new EmbedBuilder();
+		try {
+			RequestBuffer.request(() -> {
+				guild.kickUser(user);
+			});
+
+			builder.withAuthorIcon(Utility.getAvatar(user));
+			builder.withAuthorName("User " + user.getName() + " was banned");
+			builder.withColor(Color.RED);
+			builder.withTimestamp(LocalDateTime.now());
+			builder.withThumbnail(Utility.getAvatar(user));
+
+			builder.appendField("User banned", user.getName(), true);
+			builder.appendField("ID", user.getStringID(), true);
+			builder.appendField("Banned by", author.getName(), true);
+			builder.appendField("ID", author.getStringID(), true);
+			builder.appendField("Reason", reason, false);
+		} catch (MissingPermissionsException e) {
+			builder.withTitle("Error");
+			if(e.getMissingPermissions().size() == 0) {
+				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), "Role hierarchy is too high"));
+			} else {
+				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), Utility.permissionsAsString(e.getMissingPermissions())));
+			}
+		}
+		return builder.build();
+	}
+
+	public static IChannel getLogChannel(IGuild guild) {
+		for (IChannel channel : guild.getChannels()) {
+			if (DataBase.channelQuery(channel.getStringID()).equals("log")) return channel;
+		}
+		return null;
 	}
 
 	public static EmbedObject getStats(int shard, int shardCount, int serverCount) {

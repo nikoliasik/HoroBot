@@ -9,6 +9,7 @@ import com.winter.horobot.util.Message;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.MessageTokenizer;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.ByteArrayInputStream;
@@ -23,14 +24,7 @@ public class CommandTest implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		IRole role = event.getGuild().getRoleByID(305349640008761346L);
-		for(IUser user : event.getGuild().getUsers()) {
-			RequestBuffer.request(() -> {
-				user.addRole(role);
-				event.getGuild().getUserByID(288996157202497536L).removeRole(event.getGuild().getRoleByID(305349640008761346L));
-			});
-			System.out.println("success");
-		}
+
 	}
 
 	@Override

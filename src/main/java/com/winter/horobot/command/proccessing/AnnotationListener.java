@@ -23,6 +23,7 @@ import com.winter.horobot.database.DataBase;
 import com.winter.horobot.profile.ProfileBuilder;
 import com.winter.horobot.profile.ProfileTemplate;
 import com.winter.horobot.util.Cooldowns;
+import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.util.music.GuildMusicManager;
@@ -84,6 +85,11 @@ public class AnnotationListener {
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
 		if(event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
 			if(!event.getChannel().isPrivate()) {
+				if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
+					if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
+						return;
+					}
+				}
 				DataBase.insertGuild(event.getGuild().getStringID());
 				String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
 				if (event.getMessage().getContent().startsWith(".horo")) {
@@ -147,6 +153,33 @@ public class AnnotationListener {
 
 	@EventSubscriber
 	public void onUserJoinEvent(UserJoinEvent event) {
+		IChannel channel = Utility.getLogChannel(event.getGuild());
+		if (channel != null) {
+			EmbedBuilder builder = new EmbedBuilder();
+			builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
+			builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
+			builder.withColor(Color.GREEN);
+			builder.withThumbnail(Utility.getAvatar(event.getUser()));
+			builder.withTimestamp(event.getJoinTime());
+
+			builder.appendField("Name", event.getUser().getName(), true);
+			builder.appendField("ID", event.getUser().getStringID(), true);
+			builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
+			builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
+			String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
+			if (!welcome.equals("none"))
+				builder.appendField("Welcome Message", String.format(welcome, event.getUser().mention()), false);
+			Message.sendEmbed(channel, "", builder.build(), false);
+		}
+		String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
+		if(!pm.equals("none")) event.getUser().getOrCreatePMChannel().sendMessage(String.format(pm, event.getUser().mention()));
+
+		if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
+			if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban")) {
+				Message.sendEmbed(channel, "", Utility.banUser(event.getGuild(), event.getUser(), event.getClient().getOurUser(), "[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1")), false);
+			}
+		}
+
 		String roleID = DataBase.guildQuery(event.getGuild().getStringID(), "role");
 		if(roleID != null) {
 			IRole role = null;
@@ -162,27 +195,6 @@ public class AnnotationListener {
 				} catch (MissingPermissionsException e) {
 					Message.sendPM(event.getGuild().getOwner(), "missing-role-perm", event.getUser().getName());
 				}
-			}
-		}
-
-		for(IChannel channel : event.getGuild().getChannels()) {
-			if(DataBase.channelQuery(channel.getStringID()).equals("log")) {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
-				builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
-				builder.withColor(Color.GREEN);
-				builder.withThumbnail(Utility.getAvatar(event.getUser()));
-				builder.withTimestamp(event.getJoinTime());
-
-				builder.appendField("Name", event.getUser().getName(), true);
-				builder.appendField("ID", event.getUser().getStringID(), true);
-				builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
-				builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
-				String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
-				if(!welcome.equals("none")) builder.appendField("Welcome Message", String.format(welcome, event.getUser().mention()), false);
-				Message.sendEmbed(channel, "", builder.build(), false);
-				String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
-				if(!pm.equals("none")) event.getUser().getOrCreatePMChannel().sendMessage(String.format(pm, event.getUser().mention()));
 			}
 		}
 	}

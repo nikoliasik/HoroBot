@@ -36,6 +36,10 @@ public enum CommandType {
 		return new CommandType[]{ADMIN, ANIMAL, DEVELOPER, FUN, IMAGE, MISC, MUSIC, PROFILE, UTILITY};
 	}
 
+	public static int getTypeCount() {
+		return new CommandType[]{ADMIN, ANIMAL, DEVELOPER, FUN, IMAGE, MISC, MUSIC, PROFILE, UTILITY}.length;
+	}
+
 	public List<String> getCommands(CommandType type) {
 		return new ArrayList<>(Main.commands.keySet()).stream().filter(command -> Main.commands.get(command).getType() == type).collect(Collectors.toList());
 	}
