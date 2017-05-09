@@ -48,7 +48,7 @@ public class CommandAssignRole implements Command {
 				if (user == null) {
 					try {
 						user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[0]));
-					} catch (NumberFormatException e) { }
+					} catch (NumberFormatException ignored) { }
 				}
 				if (user == null) {
 					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
@@ -60,8 +60,11 @@ public class CommandAssignRole implements Command {
 				if (event.getMessage().getRoleMentions().size() == 1) {
 					role = event.getMessage().getRoleMentions().get(0);
 				}
-				if (role == null)
-					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
+				if (role == null) {
+					try {
+						role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
+					} catch (NumberFormatException ignored) { }
+				}
 				if (role == null) {
 					if (event.getGuild().getRolesByName(args[1]).size() == 1) {
 						role = event.getGuild().getRolesByName(args[1]).get(0);

@@ -304,6 +304,16 @@ public class Utility {
 		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "";
 	}
 
+	public static void sendMissingPermissions(IChannel channel, MissingPermissionsException e) {
+		String permissions;
+		if (e.getMissingPermissions().size() == 0) {
+			permissions = "Role hierarchy too high";
+		} else {
+			permissions = Utility.permissionsAsString(e.getMissingPermissions());
+		}
+		Message.sendMessageInChannel(channel, "missing-permissions", permissions);
+	}
+
 	public static void saveGifToStream(List<BufferedImage> images, OutputStream stream, int timeBetweenFrames, boolean loop) throws IOException {
 		GifSequenceWriter writer = new GifSequenceWriter(ImageIO.createImageOutputStream(stream), images.get(0).getType(), timeBetweenFrames, loop);
 		for(BufferedImage image : images) {

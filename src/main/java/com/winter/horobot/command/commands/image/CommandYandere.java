@@ -4,6 +4,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
+import com.winter.horobot.core.Main;
 import com.winter.horobot.util.HTMLHandler;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;

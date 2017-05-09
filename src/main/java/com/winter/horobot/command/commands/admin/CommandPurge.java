@@ -6,11 +6,16 @@ import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.MessageHistory;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
+
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
+import java.util.stream.Collectors;
 
 public class CommandPurge implements Command {
 
@@ -25,34 +30,38 @@ public class CommandPurge implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
-			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_MESSAGES)) {
+			int messages;
+			try {
+				messages = Integer.parseUnsignedInt(args[0]);
+			} catch (NumberFormatException e) { return; }
+
+			try {
+				event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages));
+				Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
+				return;
+			} catch (MissingPermissionsException e) {
+				Utility.sendMissingPermissions(event.getChannel(), e);
+				return;
+			}
+		} else if (args.length == 2) {
+			if (event.getMessage().getMentions().size() == 1) {
+				IUser user = event.getMessage().getMentions().get(0);
 				int messages;
 				try {
-					messages = Integer.parseInt(args[0]);
-				} catch (Exception e) {
-					Message.sendMessageInChannel(event.getChannel(), "no-number");
+					messages = Integer.parseUnsignedInt(args[1]);
+				} catch (NumberFormatException e) { return; }
+
+				try {
+					event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages).stream().filter(message -> message.getAuthor().equals(user)).collect(Collectors.toList()));
+					Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
+					return;
+				} catch (MissingPermissionsException e) {
+					Utility.sendMissingPermissions(event.getChannel(), e);
 					return;
 				}
-				int i = 0;
-				try {
-					try {
-						event.getChannel().getMessageHistory(messages).bulkDelete();
-					} catch (DiscordException e) {
-						Message.sendMessageInChannel(event.getChannel(), "limit-exceeded");
-						return;
-					}
-					Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
-				} catch (MissingPermissionsException e) {
-					Message.sendMessageInChannel(event.getChannel(), "missing-messages-manage-perm");
-				} catch (ArrayIndexOutOfBoundsException e) {
-					Message.sendMessageInChannel(event.getChannel(), "purged-messages", i);
-				}
-			} else {
-				Message.sendMessageInChannel(event.getChannel(), "missing-messages-manage-perm");
 			}
-		} else {
-			Message.reply(help(), event.getMessage());
 		}
+		Message.sendMessageInChannel(event.getChannel(), help());
 	}
 
 	public String help() {

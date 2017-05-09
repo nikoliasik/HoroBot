@@ -245,6 +245,48 @@ public class DataBase {
 		}
 	}
 
+	public static void createTagSchema() {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = "CREATE SCHEMA IF NOT EXISTS tags;";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static void createTagTable() {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS tags.tag(" +
+					"id TEXT NOT NULL," +
+					"tag TEXT NOT NULL," +
+					"content TEXT NOT NULL," +
+					"PRIMARY KEY (id, tag));";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
 	public static void createUserSchema() {
 		Connection con = null;
 		try {
@@ -462,6 +504,28 @@ public class DataBase {
 		}
 	}
 
+	public static void insertTag(String guildID, String tag, String content) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "INSERT INTO tags.tag (id, tag, content) VALUES (?, ?, ?) ON CONFLICT DO NOTHING;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guildID);
+			statement.setString(2, tag);
+			statement.setString(3, content);
+			statement.executeUpdate();
+			statement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
 	public static void insertBlacklistEntry(String guildID, String blacklistedUser, String blacklistedBy) {
 		Connection con = null;
 		try {
@@ -600,6 +664,55 @@ public class DataBase {
 				blacklist.put(user, by);
 			}
 			return blacklist;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return null;
+	}
+
+	public static Map<String, String> queryTags(IGuild guild) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "SELECT tag, content FROM tags.tag WHERE id=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guild.getStringID());
+			ResultSet set = statement.executeQuery();
+			Map<String, String> tags = new HashMap<>();
+			while(set.next()) {
+				tags.put(set.getString("tag"), set.getString("content"));
+			}
+			return tags;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return null;
+	}
+
+	public static String queryTag(String guildID, String tag) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "SELECT content FROM tags.tag WHERE id=? AND tag=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guildID);
+			statement.setString(2, tag);
+			ResultSet set = statement.executeQuery();
+			if (set.next()) {
+				return set.getString("content");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -967,6 +1080,27 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(1, guildID);
 			statement.setString(2, userID);
+			statement.executeUpdate();
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+	}
+
+	public static void removeTag(String guildID, String tag) {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "DELETE FROM tags.tag WHERE id=? AND tag=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guildID);
+			statement.setString(2, tag);
 			statement.executeUpdate();
 			statement.close();
 		} catch(Exception e) {

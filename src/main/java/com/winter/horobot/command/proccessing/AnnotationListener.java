@@ -83,53 +83,55 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
-		if(event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
-			if(!event.getChannel().isPrivate()) {
-				if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
-					if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
-						return;
-					}
-				}
-				DataBase.insertGuild(event.getGuild().getStringID());
-				String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
-				if (event.getMessage().getContent().startsWith(".horo")) {
-					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-				} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
-					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
-				}
-			} else {
-				if (event.getMessage().getContent().startsWith(".horo")) {
-					Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-				}
-			}
-
-			DataBase.insertUser(event.getAuthor());
-			if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), 120000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor());
-				DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
-				ProfileTemplate template = DataBase.queryUser(event.getAuthor());
-				if (template.getXp() >= template.getMaxXp()) {
-					DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
-					DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
-					DataBase.updateUser(event.getAuthor(), "xp", 0);
-					DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
-					if(DataBase.queryLvlUp(event.getGuild().getStringID())) {
-						IChannel channel = null;
-						for (IChannel temp : event.getGuild().getChannels()) {
-							if (DataBase.channelQuery(temp.getStringID()).equals("log"))
-								channel = temp;
+		if(event.getClient().isReady()) {
+			if (event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
+				if (!event.getChannel().isPrivate()) {
+					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
+						if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
+							return;
 						}
-						if (channel == null) channel = event.getChannel();
-						Message.sendFile(
-								channel,
-								"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
-										"**+100 Coins** for leveling up!",
-								"level-up.png",
-								new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
+					}
+					DataBase.insertGuild(event.getGuild().getStringID());
+					String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
+					if (event.getMessage().getContent().startsWith(".horo")) {
+						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
+					} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
+						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+					}
+				} else {
+					if (event.getMessage().getContent().startsWith(".horo")) {
+						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
 					}
 				}
+
+				DataBase.insertUser(event.getAuthor());
+				if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), 120000, event.getAuthor())) {
+					Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor());
+					DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
+					ProfileTemplate template = DataBase.queryUser(event.getAuthor());
+					if (template.getXp() >= template.getMaxXp()) {
+						DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
+						DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
+						DataBase.updateUser(event.getAuthor(), "xp", 0);
+						DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
+						if (!event.getChannel().isPrivate() && DataBase.queryLvlUp(event.getGuild().getStringID())) {
+							IChannel channel = null;
+							for (IChannel temp : event.getGuild().getChannels()) {
+								if (DataBase.channelQuery(temp.getStringID()).equals("log"))
+									channel = temp;
+							}
+							if (channel == null) channel = event.getChannel();
+							Message.sendFile(
+									channel,
+									"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
+											"**+100 Coins** for leveling up!",
+									"level-up.png",
+									new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
+						}
+					}
+				}
+				Utility.messagesReceived++;
 			}
-			Utility.messagesReceived++;
 		}
 	}
 	
@@ -145,55 +147,61 @@ public class AnnotationListener {
 
 	@EventSubscriber
 	public void onVoiceLeaveEvent(UserVoiceChannelLeaveEvent event) {
-		if(event.getUser() == event.getClient().getOurUser()) {
-			GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
-			manager.player.stopTrack();
+		if(event.getClient().isReady()) {
+			if (event.getUser() == event.getClient().getOurUser()) {
+				GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
+				manager.player.stopTrack();
+			}
 		}
 	}
 
 	@EventSubscriber
 	public void onUserJoinEvent(UserJoinEvent event) {
-		IChannel channel = Utility.getLogChannel(event.getGuild());
-		if (channel != null) {
-			EmbedBuilder builder = new EmbedBuilder();
-			builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
-			builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
-			builder.withColor(Color.GREEN);
-			builder.withThumbnail(Utility.getAvatar(event.getUser()));
-			builder.withTimestamp(event.getJoinTime());
+		if(event.getClient().isReady()) {
+			IChannel channel = Utility.getLogChannel(event.getGuild());
+			if (channel != null) {
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
+				builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
+				builder.withColor(Color.GREEN);
+				builder.withThumbnail(Utility.getAvatar(event.getUser()));
+				builder.withTimestamp(event.getJoinTime());
 
-			builder.appendField("Name", event.getUser().getName(), true);
-			builder.appendField("ID", event.getUser().getStringID(), true);
-			builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
-			builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
-			String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
-			if (!welcome.equals("none"))
-				builder.appendField("Welcome Message", String.format(welcome, event.getUser().mention()), false);
-			Message.sendEmbed(channel, "", builder.build(), false);
-		}
-		String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
-		if(!pm.equals("none")) event.getUser().getOrCreatePMChannel().sendMessage(String.format(pm, event.getUser().mention()));
-
-		if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
-			if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban")) {
-				Message.sendEmbed(channel, "", Utility.banUser(event.getGuild(), event.getUser(), event.getClient().getOurUser(), "[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1")), false);
+				builder.appendField("Name", event.getUser().getName(), true);
+				builder.appendField("ID", event.getUser().getStringID(), true);
+				builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
+				builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
+				String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
+				if (!welcome.equals("none"))
+					builder.appendField("Welcome Message", String.format(welcome, event.getUser().mention()), false);
+				Message.sendEmbed(channel, "", builder.build(), false);
 			}
-		}
+			String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
+			if (!pm.equals("none"))
+				event.getUser().getOrCreatePMChannel().sendMessage(String.format(pm, event.getUser().mention()));
 
-		String roleID = DataBase.guildQuery(event.getGuild().getStringID(), "role");
-		if(roleID != null) {
-			IRole role = null;
-			try {
-				role = event.getGuild().getRoleByID(Long.parseUnsignedLong(roleID));
-			} catch (NumberFormatException e) { }
-			if(role != null) {
+			if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
+				if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban")) {
+					Message.sendEmbed(channel, "", Utility.banUser(event.getGuild(), event.getUser(), event.getClient().getOurUser(), "[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1")), false);
+				}
+			}
+
+			String roleID = DataBase.guildQuery(event.getGuild().getStringID(), "role");
+			if (roleID != null) {
+				IRole role = null;
 				try {
-					final IRole temp = role;
-					RequestBuffer.request(() -> {
-						event.getUser().addRole(temp);
-					});
-				} catch (MissingPermissionsException e) {
-					Message.sendPM(event.getGuild().getOwner(), "missing-role-perm", event.getUser().getName());
+					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(roleID));
+				} catch (NumberFormatException e) {
+				}
+				if (role != null) {
+					try {
+						final IRole temp = role;
+						RequestBuffer.request(() -> {
+							event.getUser().addRole(temp);
+						});
+					} catch (MissingPermissionsException e) {
+						Message.sendPM(event.getGuild().getOwner(), "missing-role-perm", event.getUser().getName());
+					}
 				}
 			}
 		}
@@ -201,20 +209,22 @@ public class AnnotationListener {
 
 	@EventSubscriber
 	public void onUserLeaveEvent(UserLeaveEvent event) {
-		for(IChannel channel : event.getGuild().getChannels()) {
-			if(DataBase.channelQuery(channel.getStringID()).equals("log")) {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
-				builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
-				builder.withColor(Color.RED);
-				builder.withThumbnail(Utility.getAvatar(event.getUser()));
-				builder.withTimestamp(LocalDateTime.now());
+		if (event.getClient().isReady()) {
+			for (IChannel channel : event.getGuild().getChannels()) {
+				if (DataBase.channelQuery(channel.getStringID()).equals("log")) {
+					EmbedBuilder builder = new EmbedBuilder();
+					builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
+					builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
+					builder.withColor(Color.RED);
+					builder.withThumbnail(Utility.getAvatar(event.getUser()));
+					builder.withTimestamp(LocalDateTime.now());
 
-				builder.appendField("Name", event.getUser().getName(), true);
-				builder.appendField("ID", event.getUser().getStringID(), true);
-				builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
-				builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
-				Message.sendEmbed(channel, "", builder.build(), false);
+					builder.appendField("Name", event.getUser().getName(), true);
+					builder.appendField("ID", event.getUser().getStringID(), true);
+					builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
+					builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
+					Message.sendEmbed(channel, "", builder.build(), false);
+				}
 			}
 		}
 	}

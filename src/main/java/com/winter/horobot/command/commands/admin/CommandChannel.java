@@ -28,10 +28,12 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandChannel implements Command {
 
+	@Deprecated
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
 	}
 
+	@Deprecated
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
 			if (args[1].equals("ecchi") || args[1].equals("nsfw") || args[1].equals("none")) {
@@ -59,15 +61,18 @@ public class CommandChannel implements Command {
 		}
 	}
 
+	@Deprecated
 	public String help() {
 		return "channel-help";
 	}
 
+	@Deprecated
 	@Override
 	public CommandType getType() {
 		return CommandType.ADMIN;
 	}
 
+	@Deprecated
 	public void executed(boolean success, MessageReceivedEvent event) {
 		if(success)
 			Utility.commandsExecuted++;

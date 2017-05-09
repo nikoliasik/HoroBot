@@ -61,6 +61,8 @@ public class Main {
 	public static AudioPlayerManager playerManager;
 	public static Map<String, GuildMusicManager> musicManagers;
 
+	public static String[] bannedTags = {"loli", "shota", "child", "young", "guro", "scat", "snuff"};
+
 	//public static HashMap<String, Color> colors = new HashMap<>();
 
 	public static void main(String[] args) {
@@ -82,6 +84,8 @@ public class Main {
 		DataBase.createFoxTable();
 		DataBase.createBlacklistSchema();
 		DataBase.createBlacklistTable();
+		DataBase.createTagSchema();
+		DataBase.createTagTable();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
@@ -147,6 +151,7 @@ public class Main {
 		commands.put("danbooru", new CommandDanbooru());
 		commands.put("togglelvlup", new CommandToggleLevelUp());
 		commands.put("blacklist", new CommandBlackList());
+		commands.put("tag", new CommandTag());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
@@ -180,6 +185,14 @@ public class Main {
 			if(cmd.event.getAuthor().getStringID().equals("288996157202497536")) safe = true;
 
 			if(safe) {
+				for (String arg : cmd.args) {
+					for (String tag : bannedTags) {
+						if (arg.equals(tag)) {
+							Message.sendMessageInChannel(cmd.event.getChannel(), "banned-tag");
+							return;
+						}
+					}
+				}
 				cmd.event.getChannel().setTypingStatus(true);
 				commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
 				commands.get(cmd.invoke).executed(true, cmd.event);

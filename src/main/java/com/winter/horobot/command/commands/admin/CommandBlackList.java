@@ -11,6 +11,7 @@ import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.RequestBuffer;
 
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class CommandBlackList implements Command {
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.MANAGE_SERVER);
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class CommandBlackList implements Command {
 						IUser user = null;
 						String id = null;
 						try {
-							user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[1]));
+							user = event.getClient().getUserByID(Long.parseUnsignedLong(args[1]));
 						} catch (NumberFormatException ignored) { }
 						if (user == null && event.getMessage().getMentions().size() == 1)
 							user = event.getMessage().getMentions().get(0);
@@ -97,6 +98,9 @@ public class CommandBlackList implements Command {
 							IChannel channel = Utility.getLogChannel(event.getGuild());
 							if (channel == null) channel = event.getChannel();
 							Message.sendEmbed(channel, "", builder.build(), false);
+							RequestBuffer.request(() -> {
+								event.getMessage().addReaction("✅");
+							});
 							if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban"))
 								Message.sendEmbed(channel, "", Utility.banUser(event.getGuild(), user, event.getClient().getOurUser(), "[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1")), false);
 							Message.sendRawPM("[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1"), user);
@@ -116,6 +120,9 @@ public class CommandBlackList implements Command {
 							IChannel channel = Utility.getLogChannel(event.getGuild());
 							if (channel == null) channel = event.getChannel();
 							Message.sendEmbed(channel, "", builder.build(), false);
+							RequestBuffer.request(() -> {
+								event.getMessage().addReaction("✅");
+							});
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "failed-blacklist");
 							return;
@@ -157,6 +164,9 @@ public class CommandBlackList implements Command {
 							IChannel channel = Utility.getLogChannel(event.getGuild());
 							if (channel == null) channel = event.getChannel();
 							Message.sendEmbed(channel, "", builder.build(), false);
+							RequestBuffer.request(() -> {
+								event.getMessage().addReaction("✅");
+							});
 						} else if (id != null) {
 							DataBase.removeBlacklistEntry(event.getGuild().getStringID(), id);
 
@@ -173,6 +183,9 @@ public class CommandBlackList implements Command {
 							IChannel channel = Utility.getLogChannel(event.getGuild());
 							if (channel == null) channel = event.getChannel();
 							Message.sendEmbed(channel, "", builder.build(), false);
+							RequestBuffer.request(() -> {
+								event.getMessage().addReaction("✅");
+							});
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "failed-blacklist");
 							return;
