@@ -655,11 +655,15 @@ public class DataBase {
 				String by = null;
 				try {
 					user = set.getString("userID");
-				} catch (NullPointerException | NumberFormatException e) { }
+				} catch (NullPointerException | NumberFormatException e) {
+					e.printStackTrace();
+				}
 
 				try {
 					by = set.getString("by");
-				} catch (NullPointerException | NumberFormatException e) { }
+				} catch (NullPointerException | NumberFormatException e) {
+					e.printStackTrace();
+				}
 
 				blacklist.put(user, by);
 			}
