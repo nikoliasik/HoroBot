@@ -25,6 +25,7 @@ import com.winter.horobot.core.Main;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
@@ -45,8 +46,7 @@ public class CommandHelp implements Command {
 		if (args.length == 0) {
 			for(int i = 0; i < CommandType.getTypeCount(); i++) {
 				CommandType c = CommandType.getTypes()[i];
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.withColor(Color.CYAN);
+
 				String help;
 				if(!event.getChannel().isPrivate()) {
 					help = c.getCommands(c)
@@ -59,8 +59,23 @@ public class CommandHelp implements Command {
 							.map(command -> "**.horo" + command + "** - " + Localisation.getPMMessage(Main.commands.get(command).help()) + "\n")
 							.collect(Collectors.joining(""));
 				}
-				builder.withTitle(WordUtils.capitalizeFully(c.toString()));
-				builder.withDescription(help);
+
+				int arrayLength = (int) Math.ceil(((help.length() / (double) 1024)));
+				String result[] = new String[arrayLength];
+
+				int j = 0;
+				int lastIndex = result.length - 1;
+				for (int x = 0; x < lastIndex; x++) {
+					result[x] = help.substring(j, j + 1024);
+					j += 1024;
+				}
+				result[lastIndex] = help.substring(j);
+
+				EmbedBuilder builder = new EmbedBuilder();
+				builder.withColor(Color.CYAN);
+				for (String part : result) {
+					builder.appendField(WordUtils.capitalizeFully(c.toString()), part, false);
+				}
 				Message.sendPMEmbed(event.getAuthor(), "", builder.build(), false);
 			}
 

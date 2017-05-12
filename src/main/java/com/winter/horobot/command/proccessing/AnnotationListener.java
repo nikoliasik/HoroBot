@@ -173,12 +173,12 @@ public class AnnotationListener {
 				builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
 				String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
 				if (!welcome.equals("none"))
-					builder.appendField("Welcome Message", String.format(welcome, event.getUser().mention()), false);
+					builder.appendField("Welcome Message", Utility.formatWelcome(event.getGuild(), event.getUser(), welcome), false);
 				Message.sendEmbed(channel, "", builder.build(), false);
 			}
 			String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
 			if (!pm.equals("none"))
-				event.getUser().getOrCreatePMChannel().sendMessage(String.format(pm, event.getUser().mention()));
+				event.getUser().getOrCreatePMChannel().sendMessage(Utility.formatWelcome(event.getGuild(), event.getUser(), pm));
 
 			if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
 				if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban")) {
@@ -191,8 +191,7 @@ public class AnnotationListener {
 				IRole role = null;
 				try {
 					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(roleID));
-				} catch (NumberFormatException e) {
-				}
+				} catch (NumberFormatException ignored) { }
 				if (role != null) {
 					try {
 						final IRole temp = role;

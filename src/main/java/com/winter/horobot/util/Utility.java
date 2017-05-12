@@ -71,6 +71,13 @@ public class Utility {
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
 
+	public static String formatWelcome(IGuild guild, IUser user, String welcome) {
+		welcome = welcome.replace("{guild}", guild.getName());
+		welcome = welcome.replace("{name}", user.getName());
+		welcome = welcome.replace("{mention}", user.mention());
+		return welcome;
+	}
+
 	public static boolean checkUserPermission(IGuild guild, IUser user, Permissions permission) {
 		return (user.getPermissionsForGuild(guild).contains(permission));
 	}
