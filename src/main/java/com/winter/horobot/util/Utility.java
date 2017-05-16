@@ -24,10 +24,7 @@ import com.winter.horobot.core.Main;
 import com.winter.horobot.database.DataBase;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IChannel;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
@@ -71,6 +68,30 @@ public class Utility {
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
 
+	public static EmbedObject scanMessageAndAction(IGuild guild, IMessage message) {
+		String content = message.getContent();
+		List<IMessage.Attachment> attachments = message.getAttachments();
+		List<IChannel> channelMentions = message.getChannelMentions();
+		List<IRole> roleMentions = message.getRoleMentions();
+		List<IUser> userMentions = message.getMentions();
+
+		for (String bannedString : DataBase.getBannedStrings(guild)) {
+			if (content.contains(bannedString)) {
+				return generateScanEmbed(message.getAuthor(), Color.RED);
+			}
+		}
+		return null;
+	}
+
+	public static EmbedObject generateScanEmbed(IUser author, Color c, FilterReason reason) {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withColor(c);
+		builder.withTitle("Filtered a message sent by " + author.mention());
+		builder.appendField("Reason", reason.getHumanReadable(), true);
+
+		return builder.build();
+	}
+
 	public static String formatWelcome(IGuild guild, IUser user, String welcome) {
 		welcome = welcome.replace("{guild}", guild.getName());
 		welcome = welcome.replace("{name}", user.getName());
@@ -82,6 +103,7 @@ public class Utility {
 		return (user.getPermissionsForGuild(guild).contains(permission));
 	}
 
+	@Deprecated
 	public static String getChannelMod(String channelID) {
 		return DataBase.channelQuery(channelID);
 	}

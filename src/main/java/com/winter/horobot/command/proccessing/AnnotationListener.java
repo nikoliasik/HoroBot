@@ -30,6 +30,7 @@ import com.winter.horobot.util.music.GuildMusicManager;
 import com.winter.horobot.util.music.MusicUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.api.events.EventSubscriber;
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
@@ -86,6 +87,11 @@ public class AnnotationListener {
 		if(event.getClient().isReady()) {
 			if (event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
 				if (!event.getChannel().isPrivate()) {
+					EmbedObject scanned = Utility.scanMessageAndAction(event.getGuild(), event.getMessage());
+					if (scanned != null) {
+						Message.sendEmbed(event.getChannel(), "", scanned, false);
+					}
+
 					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
 						if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
 							return;
