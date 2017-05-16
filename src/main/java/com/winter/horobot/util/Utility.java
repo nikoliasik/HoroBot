@@ -75,11 +75,11 @@ public class Utility {
 		List<IRole> roleMentions = message.getRoleMentions();
 		List<IUser> userMentions = message.getMentions();
 
-		for (String bannedString : DataBase.getBannedStrings(guild)) {
+		/*for (String bannedString : DataBase.getBannedStrings(guild)) {
 			if (content.contains(bannedString)) {
 				return generateScanEmbed(message.getAuthor(), Color.RED);
 			}
-		}
+		}*/
 		return null;
 	}
 

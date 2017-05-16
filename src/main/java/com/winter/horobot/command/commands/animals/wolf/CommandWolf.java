@@ -74,8 +74,14 @@ public class CommandWolf implements Command {
 				switch (args[0]) {
 					case "feed":
 						if (args.length == 2) {
-							if (WolfCosmetics.foods.containsKey(args[1].toLowerCase())) {
-								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getStringID(), 7200000, event.getAuthor())) {
+							WolfCosmetics.FOODS food = null;
+							try {
+								food = WolfCosmetics.FOODS.valueOf(args[1].toLowerCase());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							if (food != null) {
+								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getStringID(), food.getCooldown(), event.getAuthor())) {
 									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor());
 							/*new HoroTask(event.getAuthor().getStringID() + "-note") {
 								@Override
@@ -90,13 +96,14 @@ public class CommandWolf implements Command {
 									}
 									int hunger = template.getHunger();
 									int maxHunger = template.getMaxHunger();
-									int foodValue = WolfCosmetics.foods.get(args[1].toLowerCase());
+									int foodValue = food.getValue();
 									hunger += foodValue;
 									DataBase.updateWolf(event.getAuthor(), "hunger", hunger);
 									DataBase.updateWolf(event.getAuthor(), "fedTimes", template.getFedTimes() + 1);
 
-									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getStringID(), "feed-wolf") + "\n", WordUtils.capitalizeFully(args[1])));
+									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getStringID(), "feed-wolf") + "\n", food.getName()));
 									if (hunger >= maxHunger) {
+										int calculated = 2 * (template.getLevel() + 1 ^ 2);
 										int nextHunger = 1 + template.getLevel();
 										DataBase.updateWolf(event.getAuthor(), "hunger", 0);
 										DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);

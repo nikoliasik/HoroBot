@@ -7,14 +7,35 @@ import java.util.*;
 
 public class WolfCosmetics {
 
-	public static HashMap<String, Integer> foods = new HashMap<>();
-	static {
-		foods.put("cracker", 2);
-		foods.put("meat", 2);
-		foods.put("turnip", 2);
-		foods.put("bread", 2);
-		foods.put("fries", 2);
-		foods.put("beer", 2);
+	public enum FOODS {
+		CRACKER("cracker", 2, 14400000),
+		MEAT("meat", 6, 43200000),
+		TURNIP("turnip", 1, 7200000),
+		BREAD("bread", 5, 36000000),
+		FRIES("fries", 3, 21600000),
+		BEER("beer", 4, 28800000);
+
+		private String name;
+		private int value;
+		private int cooldown;
+
+		FOODS(String name, int value, int cooldown) {
+			this.name = name;
+			this.value = value;
+			this.cooldown = cooldown;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		public int getCooldown() {
+			return cooldown;
+		}
 	}
 
 	public static LinkedHashMap<String, String> backgrounds = new LinkedHashMap<>();
@@ -121,7 +142,7 @@ public class WolfCosmetics {
 		neck.put("Scarf 2", "/wolf/neck/scarf-2.png");
 	}
 
-	private static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
+	public static int totalItems = (backgrounds.size() + hats.size() + bodies.size() + paws.size() + tails.size() + noses.size() + neck.size() + shirts.size() + eyes.size());
 
 	public static String drop() {
 		Random rand = new Random();

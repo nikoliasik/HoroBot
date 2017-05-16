@@ -24,7 +24,9 @@ public class CommandTest implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-
+		//int calculated = 2 * (Integer.parseUnsignedInt(args[0]) + 1 ^ 2);
+		int calculated = (int)Math.exp(Integer.parseUnsignedInt(args[0]));
+		System.out.println(calculated);
 	}
 
 	@Override
