@@ -74,9 +74,9 @@ public class CommandWolf implements Command {
 				switch (args[0]) {
 					case "feed":
 						if (args.length == 2) {
-							WolfCosmetics.FOODS food = null;
+							WolfCosmetics.foods food = null;
 							try {
-								food = WolfCosmetics.FOODS.valueOf(args[1].toLowerCase());
+								food = WolfCosmetics.foods.valueOf(args[1].toLowerCase());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -109,16 +109,6 @@ public class CommandWolf implements Command {
 										DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
 										DataBase.updateWolf(event.getAuthor(), "level", template.getLevel() + 1);
 										message.append(String.format("**LEVEL UP!** Your wolf is now level **%s**!\n", template.getLevel() + 1));
-									}
-
-									Random rand = new Random();
-									int drop = rand.nextInt(100);
-									if (drop <= 10) {
-										String result = WolfCosmetics.drop();
-										if (result != null) {
-											DataBase.insertItem(event.getAuthor(), WordUtils.capitalizeFully(result));
-											message.append("**ITEM DROP!** You got **" + result + "**!\n");
-										}
 									}
 
 									DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() + 100));
