@@ -1,11 +1,11 @@
 package com.winter.horobot.animals;
 
-public class Animal {
+public class Template {
 	private final String path;
 	private final String name;
 	private final int baseHunger;
 
-	Animal(String path, String name, int baseHunger) {
+	Template(String path, String name, int baseHunger) {
 		this.path = path;
 		this.name = name;
 		this.baseHunger = baseHunger;
