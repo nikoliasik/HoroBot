@@ -1,9 +1,14 @@
 package com.winter.horobot.animals;
 
+<<<<<<< HEAD
 import java.awt.image.BufferedImage;
 
 public class Template {
 
+=======
+public class Template {
+	private final String path;
+>>>>>>> ff1001a677fbe8abf9b939c28ddf585b0ef0581f
 	private final String name;
 	private final int level;
 	private final int hunger;
@@ -21,7 +26,12 @@ public class Template {
 	private BufferedImage neck;
 	private BufferedImage template;
 
+<<<<<<< HEAD
 	public Template(String name, int level, int hunger, int maxHunger, int fedTimes, BufferedImage base, BufferedImage background, BufferedImage hat, BufferedImage body, BufferedImage paws, BufferedImage tail, BufferedImage shirt, BufferedImage nose, BufferedImage eye, BufferedImage neck, BufferedImage template) {
+=======
+	Template(String path, String name, int baseHunger) {
+		this.path = path;
+>>>>>>> ff1001a677fbe8abf9b939c28ddf585b0ef0581f
 		this.name = name;
 		this.level = level;
 		this.hunger = hunger;
