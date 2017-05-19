@@ -340,7 +340,8 @@ public class DataBase {
 					"xp INTEGER NOT NULL DEFAULT 0," +
 					"maxXp INTEGER NOT NULL DEFAULT 300," +
 					"foxCoins INTEGER NOT NULL DEFAULT 0," +
-					"background TEXT NOT NULL DEFAULT 'None');";
+					"background TEXT NOT NULL DEFAULT 'None'," +
+					"notifications BOOLEAN NOT NULL DEFAULT false);";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -406,7 +407,7 @@ public class DataBase {
 					"SELECT * FROM users.user WHERE id='%s'",
 					user.getStringID());
 			ResultSet set = statement.executeQuery(sql);
-			while(set.next()) {
+			if(set.next()) {
 				template = new ProfileTemplate(
 						user.getName(),
 						set.getString("description"),
@@ -414,7 +415,8 @@ public class DataBase {
 						set.getInt("xp"),
 						set.getInt("maxXp"),
 						set.getInt("foxCoins"),
-						set.getString("background"));
+						set.getString("background"),
+						set.getBoolean("notifications"));
 			}
 			statement.close();
 		} catch(Exception e) {

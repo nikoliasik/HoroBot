@@ -19,6 +19,9 @@
 package com.winter.horobot.util;
 
 import at.dhyan.open_imaging.GifDecoder;
+import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
+import com.winter.horobot.animals.Item;
+import com.winter.horobot.animals.wolf.WolfCosmetics;
 import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.database.DataBase;
@@ -42,9 +45,7 @@ import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -67,6 +68,27 @@ public class Utility {
 	public static String memory;
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
+
+	public static Item dropItem() {
+		Random rand = new Random();
+		int category = rand.nextInt(WolfCosmetics.categories - 1);
+
+		switch (category) {
+			case 0:
+
+		}
+	}
+
+	public static Item pickItemFromEnum(Enum e) {
+		Item item = null;
+		if (e instanceof WolfCosmetics.backgrounds) {
+			List<WolfCosmetics.backgrounds> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.backgrounds.values()));
+			WolfCosmetics.backgrounds result = values.get(new Random().nextInt(values.size()));
+			item = new Item(result.getFile(), result.getName());
+		} 
+
+		return item;
+	}
 
 	public static EmbedObject scanMessageAndAction(IGuild guild, IMessage message) {
 		String content = message.getContent();

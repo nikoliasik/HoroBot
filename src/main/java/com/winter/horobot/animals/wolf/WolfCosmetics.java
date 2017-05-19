@@ -1,6 +1,9 @@
 package com.winter.horobot.animals.wolf;
 
 public class WolfCosmetics {
+
+	public static int categories = 9;
+
 	public enum foods {
 		CRACKER("cracker", 2, 14400000),
 		MEAT("meat", 6, 43200000),
@@ -95,10 +98,17 @@ public class WolfCosmetics {
 			this.file = file;
 			this.name = name;
 		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
+		}
 	}
 
 	public enum hats {
-		// TODO: Hat customizables
 		NONE("/wolf/hats/none.png", "None");
 
 		private final String file;
@@ -107,6 +117,14 @@ public class WolfCosmetics {
 		hats(String file, String name) {
 			this.file = file;
 			this.name = name;
+		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
 		}
 	}
 
@@ -120,6 +138,14 @@ public class WolfCosmetics {
 			this.file = file;
 			this.name = name;
 		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
+		}
 	}
 
 	public enum paws {
@@ -131,6 +157,14 @@ public class WolfCosmetics {
 		paws(String file, String name) {
 			this.file = file;
 			this.name = name;
+		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
 		}
 	}
 
@@ -145,6 +179,14 @@ public class WolfCosmetics {
 			this.file = file;
 			this.name = name;
 		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
+		}
 	}
 
 	public enum shirts {
@@ -158,6 +200,14 @@ public class WolfCosmetics {
 			this.file = file;
 			this.name = name;
 		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
+		}
 	}
 
 	public enum noses {
@@ -170,6 +220,14 @@ public class WolfCosmetics {
 		noses(String file, String name) {
 			this.file = file;
 			this.name = name;
+		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
 		}
 	}
 
@@ -185,6 +243,14 @@ public class WolfCosmetics {
 			this.file = file;
 			this.name = name;
 		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
+		}
 	}
 
 	public enum neck {
@@ -199,6 +265,14 @@ public class WolfCosmetics {
 		neck(String file, String name) {
 			this.file = file;
 			this.name = name;
+		}
+
+		public String getFile() {
+			return this.file;
+		}
+
+		public String getName() {
+			return this.name;
 		}
 	}
 }

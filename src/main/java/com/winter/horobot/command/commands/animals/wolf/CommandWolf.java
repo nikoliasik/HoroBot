@@ -1,8 +1,10 @@
 package com.winter.horobot.command.commands.animals.wolf;
 
+import com.winter.horobot.animals.Item;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.database.DataBase;
+import com.winter.horobot.scheduler.HoroTask;
 import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
@@ -83,12 +85,14 @@ public class CommandWolf implements Command {
 							if (food != null) {
 								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getStringID(), food.getCooldown(), event.getAuthor())) {
 									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor());
-							/*new HoroTask(event.getAuthor().getStringID() + "-note") {
-								@Override
-								public void run() {
-									Message.sendPM("wolf-ready", event.getAuthor());
-								}
-							}.delay(7200000);*/
+									if (DataBase.queryUser(event.getAuthor()).getNotifications()) {
+										new HoroTask(event.getAuthor().getStringID() + "-note") {
+											@Override
+											public void run() {
+												Message.sendPM(event.getAuthor(), "wolf-ready");
+											}
+										}.delay(7200000);
+									}
 									WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 									if (template == null) {
 										DataBase.insertWolf(event.getAuthor());
@@ -103,7 +107,6 @@ public class CommandWolf implements Command {
 
 									StringBuilder message = new StringBuilder(String.format(Localisation.getMessage(event.getGuild().getStringID(), "feed-wolf") + "\n", food.getName()));
 									if (hunger >= maxHunger) {
-										int calculated = 2 * (template.getLevel() + 1 ^ 2);
 										int nextHunger = 1 + template.getLevel();
 										DataBase.updateWolf(event.getAuthor(), "hunger", 0);
 										DataBase.updateWolf(event.getAuthor(), "maxHunger", nextHunger);
@@ -146,7 +149,7 @@ public class CommandWolf implements Command {
 						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
 						String item = DataBase.queryItem(event.getAuthor(), WordUtils.capitalizeFully(temp));
 						if (item != null) {
-							DataBase.updateWolf(event.getAuthor(), WolfCosmetics.getType(item), item);
+							DataBase.updateWolf(event.getAuthor(), Utility.getType(item), item);
 							Message.sendMessageInChannel(event.getChannel(), "background-success", WordUtils.capitalizeFully(temp));
 						} else {
 							Message.sendMessageInChannel(event.getChannel(), "no-item");
@@ -178,13 +181,13 @@ public class CommandWolf implements Command {
 					}
 					case "capsule": {
 						if (DataBase.queryUser(event.getAuthor()).getFoxCoins() >= 100) {
-							String drop = WolfCosmetics.drop();
+							Item drop = Utility.dropItem();
 							if (drop != null) {
 								boolean ownsItem;
-								ownsItem = DataBase.queryItem(event.getAuthor(), drop) != null;
+								ownsItem = DataBase.queryItem(event.getAuthor(), drop.getFile()) != null;
 								DataBase.updateUser(event.getAuthor(), "foxCoins", (DataBase.queryUser(event.getAuthor()).getFoxCoins() - 100));
-								if(!ownsItem) DataBase.insertItem(event.getAuthor(), WordUtils.capitalizeFully(drop));
-								InputStream stream = getClass().getResourceAsStream(WolfCosmetics.getItemPath(drop));
+								if(!ownsItem) DataBase.insertItem(event.getAuthor(), WordUtils.capitalizeFully(drop.getFile()));
+								InputStream stream = getClass().getResourceAsStream(drop.getFile());
 								if (stream == null) return;
 								try {
 									File temp = File.createTempFile(String.valueOf(stream.hashCode()), ".png");

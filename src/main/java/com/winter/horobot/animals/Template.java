@@ -1,25 +1,106 @@
 package com.winter.horobot.animals;
 
-public class Animal {
-	private final String path;
+import java.awt.image.BufferedImage;
+
+public class Template {
+
 	private final String name;
-	private final int baseHunger;
+	private final int level;
+	private final int hunger;
+	private final int maxHunger;
+	private final int fedTimes;
+	private BufferedImage base;
+	private BufferedImage background;
+	private BufferedImage hat;
+	private BufferedImage body;
+	private BufferedImage paws;
+	private BufferedImage tail;
+	private BufferedImage shirt;
+	private BufferedImage nose;
+	private BufferedImage eye;
+	private BufferedImage neck;
+	private BufferedImage template;
 
-	Animal(String path, String name, int baseHunger) {
-		this.path = path;
+	public Template(String name, int level, int hunger, int maxHunger, int fedTimes, BufferedImage base, BufferedImage background, BufferedImage hat, BufferedImage body, BufferedImage paws, BufferedImage tail, BufferedImage shirt, BufferedImage nose, BufferedImage eye, BufferedImage neck, BufferedImage template) {
 		this.name = name;
-		this.baseHunger = baseHunger;
-	}
-
-	public String getPath() {
-		return this.path;
+		this.level = level;
+		this.hunger = hunger;
+		this.maxHunger = maxHunger;
+		this.fedTimes = fedTimes;
+		this.base = base;
+		this.background = background;
+		this.hat = hat;
+		this.body = body;
+		this.paws = paws;
+		this.tail = tail;
+		this.shirt = shirt;
+		this.nose = nose;
+		this.eye = eye;
+		this.neck = neck;
+		this.template = template;
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
-	public int getBaseHunger() {
-		return this.baseHunger;
+	public int getLevel() {
+		return level;
+	}
+
+	public int getHunger() {
+		return hunger;
+	}
+
+	public int getMaxHunger() {
+		return maxHunger;
+	}
+
+	public int getFedTimes() {
+		return fedTimes;
+	}
+
+	public BufferedImage getBase() {
+		return base;
+	}
+
+	public BufferedImage getBackground() {
+		return background;
+	}
+
+	public BufferedImage getHat() {
+		return hat;
+	}
+
+	public BufferedImage getBody() {
+		return body;
+	}
+
+	public BufferedImage getPaws() {
+		return paws;
+	}
+
+	public BufferedImage getTail() {
+		return tail;
+	}
+
+	public BufferedImage getShirt() {
+		return shirt;
+	}
+
+	public BufferedImage getNose() {
+		return nose;
+	}
+
+	public BufferedImage getEye() {
+		return eye;
+	}
+
+	public BufferedImage getNeck() {
+		return neck;
+	}
+
+	public BufferedImage getTemplate() {
+		return template;
 	}
 }
