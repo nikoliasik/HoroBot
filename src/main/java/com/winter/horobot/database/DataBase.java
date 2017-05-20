@@ -384,6 +384,7 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement("UPDATE users.user SET " + index + " = ? WHERE id = ?");
 			if(value instanceof String) statement.setString(1, (String) value);
 			if(value instanceof Integer) statement.setInt(1, (int) value);
+			if(value instanceof Boolean) statement.setBoolean(1, (boolean) value);
 			statement.setString(2, user.getStringID());
 			statement.executeUpdate();
 			statement.close();

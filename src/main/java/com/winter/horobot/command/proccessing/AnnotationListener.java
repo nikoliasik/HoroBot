@@ -111,8 +111,8 @@ public class AnnotationListener {
 				}
 
 				DataBase.insertUser(event.getAuthor());
-				if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), 120000, event.getAuthor())) {
-					Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor());
+				if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor())) {
+					Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor(), 120000);
 					DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
 					ProfileTemplate template = DataBase.queryUser(event.getAuthor());
 					if (template.getXp() >= template.getMaxXp()) {

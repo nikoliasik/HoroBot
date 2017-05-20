@@ -43,8 +43,8 @@ public class CommandWolf implements Command {
 		if (args.length == 0) {
 			DataBase.insertUser(event.getAuthor());
 			DataBase.insertWolf(event.getAuthor());
-			if(!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor());
+			if(!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor())) {
+				Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor(), 10000);
 				DataBase.insertWolf(event.getAuthor());
 				try {
 					Message.sendFile(
@@ -59,13 +59,13 @@ public class CommandWolf implements Command {
 					Message.sendMessageInChannel(event.getChannel(), "wolf-wrong-config");
 				}
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor())));
 			}
 		} else if (args.length >= 1) {
 			if (event.getMessage().getMentions().size() == 1) {
 				if(!event.getMessage().getMentions().get(0).isBot()) {
-					if (!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
-						Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor());
+					if (!Cooldowns.onCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor())) {
+						Cooldowns.putOnCooldown("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor(), 10000);
 						DataBase.insertWolf(event.getMessage().getMentions().get(0));
 						try {
 							Message.sendFile(
@@ -80,7 +80,7 @@ public class CommandWolf implements Command {
 							Message.sendMessageInChannel(event.getChannel(), "wolf-wrong-config");
 						}
 					} else {
-						Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
+						Message.sendMessageInChannel(event.getChannel(), "on-cooldown", Utility.formatTime(Cooldowns.getRemaining("wolf-stats-" + event.getAuthor().getStringID(), event.getAuthor())));
 					}
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "bot-user");
@@ -96,8 +96,8 @@ public class CommandWolf implements Command {
 								e.printStackTrace();
 							}
 							if (food != null) {
-								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getStringID(), food.getCooldown(), event.getAuthor())) {
-									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor());
+								if (!Cooldowns.onCooldown("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor())) {
+									Cooldowns.putOnCooldown("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor(), food.getCooldown());
 									if (DataBase.queryUser(event.getAuthor()).getNotifications()) {
 										new HoroTask(event.getAuthor().getStringID() + "-note") {
 											@Override
@@ -105,6 +105,7 @@ public class CommandWolf implements Command {
 												Message.sendPM(event.getAuthor(), "wolf-ready");
 											}
 										}.delay(food.getCooldown());
+										// TODO: Fix the feeding notifications and cooldown system
 									}
 									WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 									if (template == null) {
@@ -139,7 +140,7 @@ public class CommandWolf implements Command {
 													WolfProfileBuilder.generateProfile(
 															event.getAuthor())));
 								} else {
-									Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed-" + event.getAuthor().getStringID(), 7200000, event.getAuthor())));
+									Message.sendMessageInChannel(event.getChannel(), "wolf-full", Utility.formatTime(Cooldowns.getRemaining("wolf-feed-" + event.getAuthor().getStringID(), event.getAuthor())));
 								}
 							} else {
 								Message.sendMessageInChannel(event.getChannel(), "no-food");
@@ -235,6 +236,7 @@ public class CommandWolf implements Command {
 											String.format(Localisation.getMessage(event.getGuild().getStringID(), "capsule-opened"), WordUtils.capitalizeFully(drop.getName().toLowerCase())),
 											temp);
 								} catch (IOException e) {
+									Message.sendMessageInChannel(event.getChannel(), "html-server-error");
 									e.printStackTrace();
 								}
 							} else {
@@ -244,6 +246,16 @@ public class CommandWolf implements Command {
 							Message.sendMessageInChannel(event.getChannel(), "insufficient-funds");
 						}
 						//Message.sendRawMessageInChannel(event.getChannel(), "This command is currently broken and under construction");
+						break;
+					}
+					case "notifications": {
+						if(DataBase.queryUser(event.getAuthor()).getNotifications()) {
+							DataBase.updateUser(event.getAuthor(), "notifications", false);
+							Message.sendMessageInChannel(event.getChannel(), "notifications-off");
+						} else {
+							DataBase.updateUser(event.getAuthor(), "notifications", true);
+							Message.sendMessageInChannel(event.getChannel(), "notifications-on");
+						}
 						break;
 					}
 					case "foods": {

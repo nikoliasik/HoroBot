@@ -30,8 +30,8 @@ public class CommandProfile implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			if(!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
-				Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor());
+			if(!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor())) {
+				Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor(), 10000);
 				DataBase.insertUser(event.getAuthor());
 				Message.sendFile(
 						event.getChannel(),
@@ -42,13 +42,13 @@ public class CommandProfile implements Command {
 						new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 								event.getAuthor())));
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
+				Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor())));
 			}
 		} else if(args.length >= 1) {
 			if (event.getMessage().getMentions().size() == 1) {
 				if(!event.getMessage().getMentions().get(0).isBot()) {
-					if (!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())) {
-						Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor());
+					if (!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor())) {
+						Cooldowns.putOnCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor(), 10000);
 						DataBase.insertUser(event.getMessage().getMentions().get(0));
 						Message.sendFile(
 								event.getChannel(),
@@ -59,7 +59,7 @@ public class CommandProfile implements Command {
 								new ByteArrayInputStream(ProfileBuilder.generateProfileImage(
 										event.getMessage().getMentions().get(0))));
 					} else {
-						Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getStringID(), 10000, event.getAuthor())));
+						Message.sendMessageInChannel(event.getChannel(), "on-cooldown2", Utility.formatTime(Cooldowns.getRemaining("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor())));
 					}
 				} else {
 					Message.sendMessageInChannel(event.getChannel(), "bot-user");
