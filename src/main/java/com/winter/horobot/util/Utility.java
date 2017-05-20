@@ -50,6 +50,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class Utility {
 
@@ -247,81 +248,19 @@ public class Utility {
 	}
 
 	public static List<Item> getUnownedItems(List<Item> owned) {
-		List<Item> all = getAllItems();
-		List<Item> unowned = new ArrayList<>();
-		for (Item item : all) {
-			if (!owned.contains(item)) unowned.add(item);
-		}
+		List<Item> unowned = getAllItems().stream().filter(i -> !i.getName().toUpperCase().contains("NONE")).collect(Collectors.toList());
+		unowned.removeAll(owned);
 		return unowned;
 	}
 
 	public static Item randomItem(List<Item> items) {
 		Item item = null;
-		Random rand = new Random();
 
-		List<Item> unowned = Utility.getUnownedItems(items);
+		List<Item> unowned = getUnownedItems(items).stream().filter(i -> !i.getName().contains("NONE")).collect(Collectors.toList());
 		if (unowned.size() > 0) {
-			item = unowned.get(rand.nextInt(unowned.size()));
+			item = unowned.get(new Random().nextInt(unowned.size()));
 		}
 		return item;
-		/*int category = rand.nextInt(WolfCosmetics.categories - 1);
-
-		switch (category) {
-			case 0: {
-				List<WolfCosmetics.backgrounds> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.backgrounds.values()));
-				WolfCosmetics.backgrounds result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 0);
-				break;
-			}
-			case 1: {
-				List<WolfCosmetics.hats> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.hats.values()));
-				WolfCosmetics.hats result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 1);
-				break;
-			}
-			case 2: {
-				List<WolfCosmetics.bodies> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.bodies.values()));
-				WolfCosmetics.bodies result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 2);
-				break;
-			}
-			case 3: {
-				List<WolfCosmetics.paws> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.paws.values()));
-				WolfCosmetics.paws result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 3);
-				break;
-			}
-			case 4: {
-				List<WolfCosmetics.tails> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.tails.values()));
-				WolfCosmetics.tails result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 4);
-				break;
-			}
-			case 5: {
-				List<WolfCosmetics.shirts> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.shirts.values()));
-				WolfCosmetics.shirts result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 5);
-				break;
-			}
-			case 6: {
-				List<WolfCosmetics.noses> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.noses.values()));
-				WolfCosmetics.noses result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 6);
-				break;
-			}
-			case 7: {
-				List<WolfCosmetics.eyes> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.eyes.values()));
-				WolfCosmetics.eyes result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 7);
-				break;
-			}
-			case 8: {
-				List<WolfCosmetics.neck> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.neck.values()));
-				WolfCosmetics.neck result = values.get(new Random().nextInt(values.size()));
-				item = new Item(result.getFile(), result.getName(), 8);
-				break;
-			}
-		}*/
 	}
 
 	public static String getItemStringType(Item item) {
@@ -330,7 +269,7 @@ public class Utility {
 				return "background";
 			}
 			case 1: {
-				return "hats";
+				return "hat";
 			}
 			case 2: {
 				return "body";
@@ -348,7 +287,7 @@ public class Utility {
 				return "nose";
 			}
 			case 7: {
-				return "eyes";
+				return "eye";
 			}
 			case 8: {
 				return "neck";

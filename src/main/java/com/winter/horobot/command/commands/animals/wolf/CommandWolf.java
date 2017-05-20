@@ -197,6 +197,10 @@ public class CommandWolf implements Command {
 						builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 						builder.withAuthorName(event.getAuthor().getName() + "'s Inventory");
 						if (inventory != null) {
+							if (Utility.hasAllItems(event.getAuthor()))
+								builder.appendField("Yep, you got them all!", "You currently own all available items!", false);
+							else
+								builder.appendField("Nope, not there yet!", "You don't own all items yet, keep collecting!", false);
 							builder.appendField("Backgrounds", Utility.itemsAsString(inventory.getBackgrounds()), false);
 							builder.appendField("Hats", Utility.itemsAsString(inventory.getHats()), false);
 							builder.appendField("Bodies", Utility.itemsAsString(inventory.getBodies()), false);

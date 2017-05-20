@@ -21,4 +21,9 @@ public class Item {
 	}
 
 	public int getType() { return type; }
+
+	@Override
+	public boolean equals(Object o) {
+		return o == this || (o instanceof Item && ((Item) o).getName().toUpperCase().equals(this.getName().toUpperCase()));
+	}
 }
