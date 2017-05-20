@@ -1,15 +1,16 @@
 package com.winter.horobot.database;
 
-import com.winter.horobot.animals.fox.FoxState;
-import com.winter.horobot.animals.fox.FoxTemplate;
+import com.winter.horobot.animals.Item;
 import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.profile.ProfileTemplate;
 import com.winter.horobot.animals.wolf.WolfTemplate;
+import com.winter.horobot.util.Utility;
 import org.postgresql.ds.PGPoolingDataSource;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
+import javax.imageio.ImageIO;
 import java.sql.*;
 import java.util.*;
 
@@ -181,15 +182,15 @@ public class DataBase {
 					"hunger INTEGER NOT NULL DEFAULT 0," +
 					"maxHunger INTEGER NOT NULL DEFAULT 2," +
 					"fedTimes INTEGER NOT NULL DEFAULT 0," +
-					"background TEXT NOT NULL DEFAULT 'None'," +
-					"hat TEXT NOT NULL DEFAULT 'None'," +
-					"body TEXT NOT NULL DEFAULT 'None'," +
-					"paws TEXT NOT NULL DEFAULT 'None'," +
-					"tail TEXT NOT NULL DEFAULT 'None'," +
-					"shirt TEXT NOT NULL DEFAULT 'None'," +
-					"nose TEXT NOT NULL DEFAULT 'None'," +
-					"eye TEXT NOT NULL DEFAULT 'None'," +
-					"neck TEXT NOT NULL DEFAULT 'None');";
+					"background TEXT NOT NULL DEFAULT 'NONE0'," +
+					"hat TEXT NOT NULL DEFAULT 'NONE1'," +
+					"body TEXT NOT NULL DEFAULT 'NONE2'," +
+					"paws TEXT NOT NULL DEFAULT 'NONE3'," +
+					"tail TEXT NOT NULL DEFAULT 'NONE4'," +
+					"shirt TEXT NOT NULL DEFAULT 'NONE5'," +
+					"nose TEXT NOT NULL DEFAULT 'NONE6'," +
+					"eye TEXT NOT NULL DEFAULT 'NONE7'," +
+					"neck TEXT NOT NULL DEFAULT 'NONE8');";
 			statement.executeUpdate(sql);
 			statement.close();
 		} catch(Exception e) {
@@ -340,7 +341,7 @@ public class DataBase {
 					"xp INTEGER NOT NULL DEFAULT 0," +
 					"maxXp INTEGER NOT NULL DEFAULT 300," +
 					"foxCoins INTEGER NOT NULL DEFAULT 0," +
-					"background TEXT NOT NULL DEFAULT 'None'," +
+					"background TEXT NOT NULL DEFAULT 'NONE0'," +
 					"notifications BOOLEAN NOT NULL DEFAULT false);";
 			statement.executeUpdate(sql);
 			statement.close();
@@ -416,7 +417,8 @@ public class DataBase {
 						set.getInt("maxXp"),
 						set.getInt("foxCoins"),
 						set.getString("background"),
-						set.getBoolean("notifications"));
+						set.getBoolean("notifications")
+				);
 			}
 			statement.close();
 		} catch(Exception e) {
@@ -429,6 +431,30 @@ public class DataBase {
 			}
 		}
 		return template;
+	}
+
+	public static boolean queryNotifications(IUser user) {
+		Connection con = null;
+		ProfileTemplate template = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = String.format(
+					"SELECT notifications FROM users.user WHERE id='%s'",
+					user.getStringID());
+			ResultSet set = statement.executeQuery(sql);
+			if (set.next()) return set.getBoolean("notifications");
+			statement.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) { }
+			}
+		}
+		return false;
 	}
 
 	public static int queryRank(IUser user) {
@@ -550,7 +576,7 @@ public class DataBase {
 		}
 	}
 
-	public static String queryItem(IUser user, String item) {
+	public static Item queryItem(IUser user, String item) {
 		Connection con = null;
 		try {
 			con = source.getConnection();
@@ -561,7 +587,7 @@ public class DataBase {
 			ResultSet set = statement.executeQuery();
 			if(!set.next())
 				return null;
-			return set.getString("item");
+			return Utility.getItemByName(set.getString("item").toUpperCase());
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -574,7 +600,7 @@ public class DataBase {
 		return null;
 	}
 
-	public static List<String> queryItems(IUser user) {
+	public static List<Item> queryItems(IUser user) {
 		Connection con = null;
 		try {
 			con = source.getConnection();
@@ -582,9 +608,9 @@ public class DataBase {
 			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(1, user.getStringID());
 			ResultSet set = statement.executeQuery();
-			List<String> list = new ArrayList<>();
+			List<Item> list = new ArrayList<>();
 			while (set.next()) {
-				list.add(String.valueOf(set.getString("item")));
+				list.add(Utility.getItemByName(String.valueOf(set.getString("item").toUpperCase())));
 			}
 			return list;
 		} catch(Exception e) {
@@ -770,39 +796,6 @@ public class DataBase {
 				} catch (SQLException e) { }
 			}
 		}
-	}
-
-	public static FoxTemplate foxQuery(IUser user) {
-		Connection con = null;
-		FoxTemplate template = null;
-		try {
-			con = source.getConnection();
-			Statement statement = con.createStatement();
-			String sql = String.format("SELECT * FROM foxes.fox WHERE id='%s'", user.getStringID());
-			ResultSet set = statement.executeQuery(sql);
-
-			set.next();
-			template = new FoxTemplate(
-					set.getString("name"),
-					set.getInt("level"),
-					set.getInt("xp"),
-					set.getInt("maxXP"),
-					set.getInt("fedTimes"),
-					FoxState.FOX_STATE.valueOf(set.getString("state")),
-					set.getString("background")
-			);
-			set.close();
-			statement.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(con != null) {
-				try {
-					con.close();
-				} catch (SQLException e) { }
-			}
-		}
-		return template;
 	}
 
 	public static void insertWolf(IUser user) {
@@ -1035,15 +1028,15 @@ public class DataBase {
 					set.getInt("hunger"),
 					set.getInt("maxHunger"),
 					set.getInt("fedTimes"),
-					set.getString("background"),
-					set.getString("hat"),
-					set.getString("body"),
-					set.getString("paws"),
-					set.getString("tail"),
-					set.getString("shirt"),
-					set.getString("nose"),
-					set.getString("eye"),
-					set.getString("neck")
+					Utility.getItemByName(set.getString("background").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("hat").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("body").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("paws").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("tail").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("shirt").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("nose").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("eye").toUpperCase()).getFile(),
+					Utility.getItemByName(set.getString("neck").toUpperCase()).getFile()
 			);
 			set.close();
 			statement.close();

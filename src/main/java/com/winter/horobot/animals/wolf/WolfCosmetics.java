@@ -3,14 +3,25 @@ package com.winter.horobot.animals.wolf;
 public class WolfCosmetics {
 
 	public static int categories = 9;
+	public static int totalItems =
+			backgrounds.values().length +
+			hats.values().length +
+			bodies.values().length +
+			paws.values().length +
+			tails.values().length +
+			shirts.values().length +
+			noses.values().length +
+			eyes.values().length +
+			neck.values().length -
+			categories;
 
 	public enum foods {
-		CRACKER("cracker", 2, 14400000),
-		MEAT("meat", 6, 43200000),
-		TURNIP("turnip", 1, 7200000),
-		BREAD("bread", 5, 36000000),
-		FRIES("fries", 3, 21600000),
-		BEER("beer", 4, 28800000);
+		CRACKER("CRACKER", 2, 14400000),
+		MEAT("MEAT", 6, 43200000),
+		TURNIP("TURNIP", 1, 7200000),
+		BREAD("BREAD", 5, 36000000),
+		FRIES("FRIES", 3, 21600000),
+		BEER("BEER", 4, 28800000);
 
 		private final String name;
 		private final int value;
@@ -36,60 +47,60 @@ public class WolfCosmetics {
 	}
 
 	public enum backgrounds {
-		NONE("/wolf/bg/default-bg.png", "None"),
-		AURORA("/wolf/bg/aurora.png", "Aurora"),
-		SUNSET("/wolf/bg/sunset.png", "Sunset"),
-		COSMIC_DANCE("/wolf/bg/cosmic dance.png", "Cosmic Dance"),
-		WINTER("/wolf/bg/winter.png", "Winter"),
-		FINAL_DESTINATION("/wolf/bg/final destination.png", "Final Destination"),
-		BUNNY_HOP("/wolf/bg/bunny hop.png", "Bunny Hop"),
-		HEY_BABY("/wolf/bg/hey baby.png", "Hey Baby"),
-		SPACE_DANCE("/wolf/bg/space dance.png", "Space Dance"),
-		SPACE_DANCE_R3("/wolf/bg/space dance r3.png", "Space Dance (Remix 3)"),
-		TRAM_AND_PAULINE_R3("/wolf/bg/tram and pauline r3.png", "Tram and Pauline (Remix 3)"),
-		WIZARD_WALTZ("/wolf/bg/wizard's waltz.png", "Wizard's Waltz"),
-		MARCHING_ORDERS("/wolf/bg/marching orders.png", "Marching Orders"),
-		CROP_STOMP("/wolf/bg/crop stomp.png", "Crop Stomp"),
-		SPACEBALL("/wolf/bg/spaceball.png", "Spaceball"),
-		BON_ODORI("/wolf/bg/bon-odori.png", "Bon-Odori"),
-		BUILT_TO_SCALE_FEVER("/wolf/bg/built to scale fever.png", "Built to Scale Fever"),
-		CAFE("/wolf/bg/cafe.png", "Cafe"),
-		CHEER_READERS("/wolf/bg/cheer readers.png", "Cheer Readers"),
-		CLAPPY_TRIO("/wolf/bg/clappy trio.png", "Clappy Trio"),
-		DJ_SCHOOL("/wolf/bg/dj school.png", "DJ School"),
-		LIVING_ROOM("/wolf/bg/living room.png", "Living Room"),
-		NIGHT_WALK_FEVER("/wolf/bg/night walk fever.png", "Night Walk Fever"),
-		NINJA_BODYGUARD("/wolf/bg/ninja bodyguard.png", "Ninja Bodyguard"),
-		QUIZ_AUDIENCE("/wolf/bg/quiz audience.png", "Quiz Audience"),
-		RAP_MEN("/wolf/bg/Rap Men.png", "Rap Men"),
-		RINGSIDE_BG("/wolf/bg/ringside.png", "Ringside"),
-		SAMURAI_SLICE_FOGGY("/wolf/bg/samurai slice foggy.png", "Samurai Slice Foggy"),
-		SAMURAI_SLICE("/wolf/bg/samurai slice.png", "Samurai Slice"),
-		SNEAKY_SPIRITS("/wolf/bg/sneaky spirits.png", "Sneaky Spirits"),
-		TAP_TRIAL("/wolf/bg/tap trial.png", "Tap Trial"),
-		TENGAMI("/wolf/bg/tengami.png", "Tengami"),
-		TOSS_BOYS("/wolf/bg/toss boys.png", "Toss Boys"),
-		TRAM_AND_PAULINE("/wolf/bg/tram and pauline.png", "Tram and Pauline"),
-		BLUE("/wolf/bg/blue.png", "Blue"),
-		BAR("/wolf/bg/bar.png", "Bar"),
-		HEY_BABY_2("/wolf/bg/hey baby 2.png", "Hey Baby 2"),
-		NINJA_REINCARNATE("/wolf/bg/ninja reincarnate.png", "Ninja Reincarnate"),
-		SNAPPY_TRIO("/wolf/bg/snappy trio.png", "Snappy Trio"),
-		SNEAKY_SPIRITS_2("/wolf/bg/sneaky spirits 2.png", "Sneaky Spirits 2"),
-		RAP_WOMEN("/wolf/bg/rap women.png", "Rap Women"),
-		FLIPPER_FLOP("/wolf/bg/flipper-flop.png", "Flipper-Flop"),
-		DOG_NINJA("/wolf/bg/dog ninja.png", "Dog Ninja"),
-		DRUMMER_DUEL("/wolf/bg/drummer duel.png", "Drummer Duel"),
-		FAN_CLUB_2("/wolf/bg/fan club 2.png", "Fan Club 2"),
-		FRUIT_BASKET_2("/wolf/bg/fruit basket 2.png", "Fruit Basket 2"),
-		GLEE_CLUB_2("/wolf/bg/glee club 2.png", "Glee Club 2"),
-		SNEAKY_SPIRITS_STORY("/wolf/bg/sneaky spirits story.png", "Sneaky Spirits (Story)"),
-		SPACE_SOCCER("/wolf/bg/space soccer.png", "Space Soccer"),
-		FILLBOTS_BEE_REMIX("/wolf/bg/fillbots bee.png", "Fillbots (Bee Remix)"),
-		GLEE_CLUB_STORY("/wolf/bg/glee club 1.png", "Glee Club 1"),
-		SHOWTIME("/wolf/bg/showtime.png", "Showtime"),
-		FIREWORKS("/wolf/bg/fireworks.png", "Fireworks"),
-		FIREWORKS_SMILE("/wolf/bg/fireworks-smile.png", "Fireworks Smile");
+		NONE("/wolf/bg/default-bg.png", "NONE0"),
+		AURORA("/wolf/bg/aurora.png", "AURORA"),
+		SUNSET("/wolf/bg/sunset.png", "SUNSET"),
+		COSMIC_DANCE("/wolf/bg/cosmic-dance.png", "COSMIC DANCE"),
+		WINTER("/wolf/bg/winter.png", "WINTER"),
+		FINAL_DESTINATION("/wolf/bg/final-destination.png", "FINAL DESTINATION"),
+		BUNNY_HOP("/wolf/bg/bunny-hop.png", "BUNNY HOP"),
+		HEY_BABY("/wolf/bg/hey-baby.png", "HEY BABY"),
+		SPACE_DANCE("/wolf/bg/space-dance.png", "SPACE DANCE"),
+		SPACE_DANCE_R3("/wolf/bg/space-dance-r3.png", "SPACE DANCE R3"),
+		TRAM_AND_PAULINE_R3("/wolf/bg/tram-and-pauline-r3.png", "TRAM AND PAULINE R3"),
+		WIZARD_WALTZ("/wolf/bg/wizard's-waltz.png", "WIZARDS WALTZ"),
+		MARCHING_ORDERS("/wolf/bg/marching-orders.png", "MARCHING ORDER"),
+		CROP_STOMP("/wolf/bg/crop-stomp.png", "CROP STOMP"),
+		SPACEBALL("/wolf/bg/spaceball.png", "SPACEBALL"),
+		BON_ODORI("/wolf/bg/bon-odori.png", "BON-ODORI"),
+		BUILT_TO_SCALE_FEVER("/wolf/bg/built-to-scale-fever.png", "BUILT TO SCALE FEVER"),
+		CAFE("/wolf/bg/cafe.png", "CAFE"),
+		CHEER_READERS("/wolf/bg/cheer-readers.png", "CHEER READERS"),
+		CLAPPY_TRIO("/wolf/bg/clappy-trio.png", "CLAPPY TRIO"),
+		DJ_SCHOOL("/wolf/bg/dj-school.png", "DJ SCHOOL"),
+		LIVING_ROOM("/wolf/bg/living-room.png", "LIVING ROOM"),
+		NIGHT_WALK_FEVER("/wolf/bg/night-walk-fever.png", "NIGHT WALK FEVER"),
+		NINJA_BODYGUARD("/wolf/bg/ninja-bodyguard.png", "NINJA BODYGUARD"),
+		QUIZ_AUDIENCE("/wolf/bg/quiz-audience.png", "QUIZ AUDIENCE"),
+		RAP_MEN("/wolf/bg/rap-men.png", "RAP MEN"),
+		RINGSIDE_BG("/wolf/bg/ringside.png", "RINGSIDE"),
+		SAMURAI_SLICE_FOGGY("/wolf/bg/samurai-slice-foggy.png", "SAMURAI SLICE FOGGY"),
+		SAMURAI_SLICE("/wolf/bg/samurai-slice.png", "SAMURAI SLICE"),
+		SNEAKY_SPIRITS("/wolf/bg/sneaky-spirits.png", "SNEAKY SPIRITS"),
+		TAP_TRIAL("/wolf/bg/tap-trial.png", "TAP TRIAL"),
+		TENGAMI("/wolf/bg/tengami.png", "TENGAMI"),
+		TOSS_BOYS("/wolf/bg/toss-boys.png", "TOSS BOYS"),
+		TRAM_AND_PAULINE("/wolf/bg/tram-and-pauline.png", "TRAM AND PAULINE"),
+		BLUE("/wolf/bg/blue.png", "BLUE"),
+		BAR("/wolf/bg/bar.png", "BAR"),
+		HEY_BABY_2("/wolf/bg/hey-baby-2.png", "HEY BABY 2"),
+		NINJA_REINCARNATE("/wolf/bg/ninja-reincarnate.png", "NINJA REINCARNATE"),
+		SNAPPY_TRIO("/wolf/bg/snappy-trio.png", "SNAPPY TRIAL"),
+		SNEAKY_SPIRITS_2("/wolf/bg/sneaky-spirits-2.png", "SNEAKY SPIRITS 2"),
+		RAP_WOMEN("/wolf/bg/rap-women.png", "RAP WOMEN"),
+		FLIPPER_FLOP("/wolf/bg/flipper-flop.png", "FLIPPER FLOP"),
+		DOG_NINJA("/wolf/bg/dog-ninja.png", "DOG NINJA"),
+		DRUMMER_DUEL("/wolf/bg/drummer-duel.png", "DRUMMER DUEL"),
+		FAN_CLUB_2("/wolf/bg/fan-club-2.png", "FAN CLUB 2"),
+		FRUIT_BASKET_2("/wolf/bg/fruit-basket-2.png", "FRUIT BASKET 2"),
+		GLEE_CLUB_2("/wolf/bg/glee-club-2.png", "GLEE CLUB 2"),
+		SNEAKY_SPIRITS_STORY("/wolf/bg/sneaky-spirits-story.png", "SNEAKY SPIRITS STORY"),
+		SPACE_SOCCER("/wolf/bg/space-soccer.png", "SPACE SOCCER"),
+		FILLBOTS_BEE_REMIX("/wolf/bg/fillbots-bee.png", "FILLBOX BEE REMIX"),
+		GLEE_CLUB_STORY("/wolf/bg/glee-club-1.png", "GLEE CLUB 1"),
+		SHOWTIME("/wolf/bg/showtime.png", "SHOWTIME"),
+		FIREWORKS("/wolf/bg/fireworks.png", "FIREWORKS"),
+		FIREWORKS_SMILE("/wolf/bg/fireworks-smile.png", "FIREWORKS SMILE");
 
 		private final String file;
 		private final String name;
@@ -109,7 +120,7 @@ public class WolfCosmetics {
 	}
 
 	public enum hats {
-		NONE("/wolf/hats/none.png", "None");
+		NONE("/wolf/hats/none.png", "NONE1");
 
 		private final String file;
 		private final String name;
@@ -129,7 +140,7 @@ public class WolfCosmetics {
 	}
 
 	public enum bodies {
-		NONE("/wolf/bodies/none.png", "None");
+		NONE("/wolf/bodies/none.png", "NONE2");
 
 		private final String file;
 		private final String name;
@@ -149,7 +160,7 @@ public class WolfCosmetics {
 	}
 
 	public enum paws {
-		NONE("/wolf/paws/none.png", "None");
+		NONE("/wolf/paws/none.png", "NONE3");
 
 		private final String file;
 		private final String name;
@@ -169,8 +180,8 @@ public class WolfCosmetics {
 	}
 
 	public enum tails {
-		NONE("/wolf/tails/none.png", "None"),
-		CHRISTMAS_LIGHTS("/wolf/tails/christmas-lights.png", "Christmas Lights");
+		NONE("/wolf/tails/none.png", "NONE4"),
+		CHRISTMAS_LIGHTS("/wolf/tails/christmas-lights.png", "CHRISTMAS LIGHTS");
 
 		private final String file;
 		private final String name;
@@ -190,8 +201,8 @@ public class WolfCosmetics {
 	}
 
 	public enum shirts {
-		NONE("/wolf/shirts/none.png", "None"),
-		ANIME_SHIRT("/wolf/shirts/anime.png", "Anime Shirt");
+		NONE("/wolf/shirts/none.png", "NONE5"),
+		ANIME_SHIRT("/wolf/shirts/anime.png", "ANIME SHIRT");
 
 		private final String file;
 		private final String name;
@@ -211,8 +222,8 @@ public class WolfCosmetics {
 	}
 
 	public enum noses {
-		NONE("/wolf/noses/none.png", "None"),
-		CLOWNS_NOSE("/wolf/noses/clown-nose.png", "Clowns Nose");
+		NONE("/wolf/noses/none.png", "NONE6"),
+		CLOWNS_NOSE("/wolf/noses/clown-nose.png", "CLOWNS NOSE");
 
 		private final String file;
 		private final String name;
@@ -232,9 +243,9 @@ public class WolfCosmetics {
 	}
 
 	public enum eyes {
-		NONE("/wolf/eyes/none.png", "None"),
-		EYE_PATCH("/wolf/eyes/eye-patch.png", "Eye Patch"),
-		THUG_GLASSES("/wolf/eyes/thug-life.png", "Thug Glasses");
+		NONE("/wolf/eyes/none.png", "NONE7"),
+		EYE_PATCH("/wolf/eyes/eye-patch.png", "EYE PATCH"),
+		THUG_GLASSES("/wolf/eyes/thug-life.png", "THUG GLASSES");
 
 		private final String file;
 		private final String name;
@@ -254,9 +265,9 @@ public class WolfCosmetics {
 	}
 
 	public enum neck {
-		NONE("/wolf/neck/none.png", "None"),
-		SCARF("/wolf/neck/scarf-1.png", "Scarf"),
-		SCARF_2("/wolf/neck/scarf-2.png", "Scarf 2");
+		NONE("/wolf/neck/none.png", "NONE8"),
+		SCARF("/wolf/neck/scarf-1.png", "SCARF"),
+		SCARF_2("/wolf/neck/scarf-2.png", "SCARF 2");
 
 
 		private final String file;

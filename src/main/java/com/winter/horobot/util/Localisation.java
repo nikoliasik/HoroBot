@@ -31,6 +31,7 @@ public class Localisation {
 	private static ResourceBundle hiLang = ResourceBundle.getBundle("locale.hi");
 	private static ResourceBundle frLang = ResourceBundle.getBundle("locale.fr");
 	private static ResourceBundle deLang = ResourceBundle.getBundle("locale.de");
+	private static ResourceBundle ruLang = ResourceBundle.getBundle("locale.ru");
 
 	private static String checkLanguage(String guildID) {
 		return DataBase.guildQuery(guildID, "language");
@@ -58,6 +59,9 @@ public class Localisation {
 				return true;
 			case "de":
 				updateGuildLanguage(guildID, "de");
+				return true;
+			case "ru":
+				updateGuildLanguage(guildID, "ru");
 				return true;
 		}
 		return false;
@@ -92,6 +96,9 @@ public class Localisation {
 			case "de":
 				if (deLang.containsKey(str))
 					return deLang.getString(str);
+			case "ru":
+				if (ruLang.containsKey(str))
+					return ruLang.getString(str);
 		}
 		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}

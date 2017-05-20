@@ -18,7 +18,7 @@ public class WolfProfileBuilder {
 	private static final int width = 300;
 	private static final int height = 150;
 
-	private static final double multiplier = 2.5;
+	private static final double multiplier = 3;
 
 	public static EmbedObject generateEmbed(IUser user) {
 		final WolfTemplate template = DataBase.wolfQuery(user);
@@ -47,7 +47,7 @@ public class WolfProfileBuilder {
 		graphics.drawImage(wolf.getTemplate(), 0, 0, width, height, null);
 
 		// Draw the wolf
-		final double calc = wolf.getBase().getWidth() * multiplier;
+		final double calc = wolf.getBody().getWidth() * multiplier;
 		final int sizeWolf = (int) calc;
 		graphics.drawImage(generateAnimal(user), 175, 20, sizeWolf, sizeWolf, null);
 

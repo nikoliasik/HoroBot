@@ -20,11 +20,13 @@ package com.winter.horobot.util;
 
 import at.dhyan.open_imaging.GifDecoder;
 import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
+import com.winter.horobot.animals.Inventory;
 import com.winter.horobot.animals.Item;
 import com.winter.horobot.animals.wolf.WolfCosmetics;
 import com.winter.horobot.core.Config;
 import com.winter.horobot.core.Main;
 import com.winter.horobot.database.DataBase;
+import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
@@ -69,25 +71,290 @@ public class Utility {
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
 
-	public static Item dropItem() {
-		Random rand = new Random();
-		int category = rand.nextInt(WolfCosmetics.categories - 1);
+	public static Inventory assembleInventory(IUser user) {
+		List<Item> backgrounds = new ArrayList<>();
+		List<Item> hats = new ArrayList<>();
+		List<Item> bodies = new ArrayList<>();
+		List<Item> paws = new ArrayList<>();
+		List<Item> tails = new ArrayList<>();
+		List<Item> shirts = new ArrayList<>();
+		List<Item> noses = new ArrayList<>();
+		List<Item> eyes = new ArrayList<>();
+		List<Item> neck = new ArrayList<>();
 
-		switch (category) {
-			case 0:
-
+		List<Item> items = DataBase.queryItems(user);
+		if (items == null) return null;
+		for (Item item : items) {
+			int type = item.getType();
+			switch (type) {
+				case 0: {
+					backgrounds.add(item);
+					break;
+				}
+				case 1: {
+					hats.add(item);
+					break;
+				}
+				case 2: {
+					bodies.add(item);
+					break;
+				}
+				case 3: {
+					paws.add(item);
+					break;
+				}
+				case 4: {
+					tails.add(item);
+					break;
+				}
+				case 5: {
+					shirts.add(item);
+					break;
+				}
+				case 6: {
+					noses.add(item);
+					break;
+				}
+				case 7: {
+					eyes.add(item);
+					break;
+				}
+				case 8: {
+					neck.add(item);
+					break;
+				}
+			}
 		}
+		return new Inventory(user, backgrounds, hats, bodies, paws, tails, shirts, noses, eyes, neck);
 	}
 
-	public static Item pickItemFromEnum(Enum e) {
-		Item item = null;
-		if (e instanceof WolfCosmetics.backgrounds) {
-			List<WolfCosmetics.backgrounds> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.backgrounds.values()));
-			WolfCosmetics.backgrounds result = values.get(new Random().nextInt(values.size()));
-			item = new Item(result.getFile(), result.getName());
-		} 
+	public static boolean hasAllItems(IUser user) {
+		int itemCount = DataBase.queryItems(user).size();
+		return itemCount == WolfCosmetics.totalItems;
+	}
 
+	public static boolean hasAllItems(List<Item> items) {
+		int itemCount = items.size();
+		return itemCount >= WolfCosmetics.totalItems;
+	}
+
+	public static String getFoods() {
+		StringBuilder foods = new StringBuilder();
+		for (WolfCosmetics.foods food : WolfCosmetics.foods.values()) {
+			foods.append(WordUtils.capitalizeFully(food.getName())).append(", ");
+		}
+		return foods.substring(0, foods.length() - 2);
+	}
+
+	public static Item getItemByPath(String path) {
+		for (WolfCosmetics.backgrounds item : WolfCosmetics.backgrounds.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 0);
+		}
+		for (WolfCosmetics.hats item : WolfCosmetics.hats.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 1);
+		}
+		for (WolfCosmetics.bodies item : WolfCosmetics.bodies.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 2);
+		}
+		for (WolfCosmetics.paws item : WolfCosmetics.paws.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 3);
+		}
+		for (WolfCosmetics.tails item : WolfCosmetics.tails.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 4);
+		}
+		for (WolfCosmetics.shirts item : WolfCosmetics.shirts.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 5);
+		}
+		for (WolfCosmetics.noses item : WolfCosmetics.noses.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 6);
+		}
+		for (WolfCosmetics.eyes item : WolfCosmetics.eyes.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 7);
+		}
+		for (WolfCosmetics.neck item : WolfCosmetics.neck.values()) {
+			if (item.getFile().equals(path)) return new Item(item.getFile(), item.getName(), 8);
+		}
+
+		return null;
+	}
+
+	public static Item getItemByName(String name) {
+		for (WolfCosmetics.backgrounds item : WolfCosmetics.backgrounds.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 0);
+		}
+		for (WolfCosmetics.hats item : WolfCosmetics.hats.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 1);
+		}
+		for (WolfCosmetics.bodies item : WolfCosmetics.bodies.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 2);
+		}
+		for (WolfCosmetics.paws item : WolfCosmetics.paws.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 3);
+		}
+		for (WolfCosmetics.tails item : WolfCosmetics.tails.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 4);
+		}
+		for (WolfCosmetics.shirts item : WolfCosmetics.shirts.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 5);
+		}
+		for (WolfCosmetics.noses item : WolfCosmetics.noses.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 6);
+		}
+		for (WolfCosmetics.eyes item : WolfCosmetics.eyes.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 7);
+		}
+		for (WolfCosmetics.neck item : WolfCosmetics.neck.values()) {
+			if (item.getName().equals(name)) return new Item(item.getFile(), item.getName(), 8);
+		}
+
+		return null;
+	}
+
+	public static Item dropItem(IUser user) {
+		return randomItem(DataBase.queryItems(user));
+	}
+
+	public static List<Item> getAllItems() {
+		List<Item> items = new ArrayList<>();
+		for (WolfCosmetics.backgrounds item : WolfCosmetics.backgrounds.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 0));
+		}
+		for (WolfCosmetics.hats item : WolfCosmetics.hats.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 1));
+		}
+		for (WolfCosmetics.bodies item : WolfCosmetics.bodies.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 2));
+		}
+		for (WolfCosmetics.paws item : WolfCosmetics.paws.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 3));
+		}
+		for (WolfCosmetics.tails item : WolfCosmetics.tails.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 4));
+		}
+		for (WolfCosmetics.shirts item : WolfCosmetics.shirts.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 5));
+		}
+		for (WolfCosmetics.noses item : WolfCosmetics.noses.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 6));
+		}
+		for (WolfCosmetics.eyes item : WolfCosmetics.eyes.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 7));
+		}
+		for (WolfCosmetics.neck item : WolfCosmetics.neck.values()) {
+			items.add(new Item(item.getFile(), item.getName(), 8));
+		}
+		return items;
+	}
+
+	public static List<Item> getUnownedItems(List<Item> owned) {
+		List<Item> all = getAllItems();
+		List<Item> unowned = new ArrayList<>();
+		for (Item item : all) {
+			if (!owned.contains(item)) unowned.add(item);
+		}
+		return unowned;
+	}
+
+	public static Item randomItem(List<Item> items) {
+		Item item = null;
+		Random rand = new Random();
+
+		List<Item> unowned = Utility.getUnownedItems(items);
+		if (unowned.size() > 0) {
+			item = unowned.get(rand.nextInt(unowned.size()));
+		}
 		return item;
+		/*int category = rand.nextInt(WolfCosmetics.categories - 1);
+
+		switch (category) {
+			case 0: {
+				List<WolfCosmetics.backgrounds> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.backgrounds.values()));
+				WolfCosmetics.backgrounds result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 0);
+				break;
+			}
+			case 1: {
+				List<WolfCosmetics.hats> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.hats.values()));
+				WolfCosmetics.hats result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 1);
+				break;
+			}
+			case 2: {
+				List<WolfCosmetics.bodies> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.bodies.values()));
+				WolfCosmetics.bodies result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 2);
+				break;
+			}
+			case 3: {
+				List<WolfCosmetics.paws> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.paws.values()));
+				WolfCosmetics.paws result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 3);
+				break;
+			}
+			case 4: {
+				List<WolfCosmetics.tails> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.tails.values()));
+				WolfCosmetics.tails result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 4);
+				break;
+			}
+			case 5: {
+				List<WolfCosmetics.shirts> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.shirts.values()));
+				WolfCosmetics.shirts result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 5);
+				break;
+			}
+			case 6: {
+				List<WolfCosmetics.noses> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.noses.values()));
+				WolfCosmetics.noses result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 6);
+				break;
+			}
+			case 7: {
+				List<WolfCosmetics.eyes> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.eyes.values()));
+				WolfCosmetics.eyes result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 7);
+				break;
+			}
+			case 8: {
+				List<WolfCosmetics.neck> values = Collections.unmodifiableList(Arrays.asList(WolfCosmetics.neck.values()));
+				WolfCosmetics.neck result = values.get(new Random().nextInt(values.size()));
+				item = new Item(result.getFile(), result.getName(), 8);
+				break;
+			}
+		}*/
+	}
+
+	public static String getItemStringType(Item item) {
+		switch (item.getType()) {
+			case 0: {
+				return "background";
+			}
+			case 1: {
+				return "hats";
+			}
+			case 2: {
+				return "body";
+			}
+			case 3: {
+				return "paws";
+			}
+			case 4: {
+				return "tail";
+			}
+			case 5: {
+				return "shirt";
+			}
+			case 6: {
+				return "nose";
+			}
+			case 7: {
+				return "eyes";
+			}
+			case 8: {
+				return "neck";
+			}
+		}
+		return null;
 	}
 
 	public static EmbedObject scanMessageAndAction(IGuild guild, IMessage message) {
@@ -344,6 +611,17 @@ public class Utility {
 			builder.append(", ");
 		}
 		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "";
+	}
+
+	public static String itemsAsString(List<Item> items) {
+		StringBuilder builder = new StringBuilder();
+		for(Item item : items) {
+			if (!item.getName().contains("NONE")) {
+				builder.append(WordUtils.capitalizeFully(item.getName().toLowerCase()));
+				builder.append(", ");
+			}
+		}
+		return builder.length() > 0 ? builder.substring(0, builder.length() - 2) : "There's nothing here";
 	}
 
 	public static String permissionsAsString(EnumSet<Permissions> permissions) {

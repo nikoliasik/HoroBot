@@ -1,5 +1,6 @@
 package com.winter.horobot.command.commands.profile;
 
+import com.winter.horobot.animals.Item;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.database.DataBase;
@@ -67,16 +68,16 @@ public class CommandProfile implements Command {
 				switch (args[0]) {
 					case "background": {
 						String temp = Arrays.stream(args).skip(1).collect(Collectors.joining(" "));
-						if ("background".equals(WolfCosmetics.getType(temp))) {
-							String item = DataBase.queryItem(event.getAuthor(), temp);
-							if (item != null) {
+						Item item = DataBase.queryItem(event.getAuthor(), temp);
+						if (item != null) {
+							if (item.getType() == 0) {
 								DataBase.updateUser(event.getAuthor(), "background", temp);
 								Message.sendMessageInChannel(event.getChannel(), "background-updated", temp);
 							} else {
-								Message.sendMessageInChannel(event.getChannel(), "no-item");
+								Message.sendMessageInChannel(event.getChannel(), "invalid-item");
 							}
 						} else {
-							Message.sendMessageInChannel(event.getChannel(), "invalid-item");
+							Message.sendMessageInChannel(event.getChannel(), "no-item");
 						}
 						break;
 					}

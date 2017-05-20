@@ -1,6 +1,7 @@
 package com.winter.horobot.profile;
 
 import com.winter.horobot.animals.wolf.WolfCosmetics;
+import com.winter.horobot.util.Utility;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -28,7 +29,7 @@ public class ProfileTemplate {
 		this.foxCoins = foxCoins;
 		this.notifications = notifications;
 		try {
-			this.background = ImageIO.read(getClass().getResourceAsStream(background));
+			this.background = ImageIO.read(getClass().getResourceAsStream(Utility.getItemByName(background).getFile()));
 			this.template = ImageIO.read(getClass().getResourceAsStream("/profile/template.png"));
 			this.wolf = ImageIO.read(getClass().getResourceAsStream("/profile/wolf.png"));
 			this.lvlTemplate = ImageIO.read(getClass().getResourceAsStream("/profile/lvl-template.png"));
