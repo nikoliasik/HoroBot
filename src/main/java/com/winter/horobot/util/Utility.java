@@ -19,7 +19,6 @@
 package com.winter.horobot.util;
 
 import at.dhyan.open_imaging.GifDecoder;
-import com.sun.xml.internal.bind.v2.model.core.EnumConstant;
 import com.winter.horobot.animals.Inventory;
 import com.winter.horobot.animals.Item;
 import com.winter.horobot.animals.wolf.WolfCosmetics;
