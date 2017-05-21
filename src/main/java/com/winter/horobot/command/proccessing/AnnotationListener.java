@@ -87,10 +87,10 @@ public class AnnotationListener {
 		if(event.getClient().isReady()) {
 			if (event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
 				if (!event.getChannel().isPrivate()) {
-					EmbedObject scanned = Utility.scanMessageAndAction(event.getGuild(), event.getMessage());
-					if (scanned != null) {
-						Message.sendEmbed(event.getChannel(), "", scanned, false);
-					}
+					//EmbedObject scanned = Utility.scanMessageAndAction(event.getGuild(), event.getMessage());
+					//if (scanned != null) {
+					//	Message.sendEmbed(Utility.getLogChannel(event.getGuild(), event.getChannel()), "", scanned, false);
+					//}
 
 					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
 						if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {

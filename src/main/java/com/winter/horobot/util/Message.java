@@ -33,7 +33,6 @@ import java.io.InputStream;
 public class Message {
 
 	public static void sendFile(IChannel channel, String message, File file) {
-		// TODO: Add these modified checks in the rest of the Message class
 		if(channel.getModifiedPermissions(channel.getClient().getOurUser().getRolesForGuild(channel.getGuild()).get(0)).contains(Permissions.SEND_MESSAGES)) {
 			RequestBuffer.request(() -> {
 				try {

@@ -17,13 +17,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.util.EmbedBuilder;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class CommandWolf implements Command {
@@ -105,7 +101,6 @@ public class CommandWolf implements Command {
 												Message.sendPM(event.getAuthor(), "wolf-ready");
 											}
 										}.delay(food.getCooldown());
-										// TODO: Fix the feeding notifications and cooldown system
 									}
 									WolfTemplate template = DataBase.wolfQuery(event.getAuthor());
 									if (template == null) {
@@ -263,7 +258,7 @@ public class CommandWolf implements Command {
 						break;
 					}
 					case "foods": {
-						Message.sendRawMessageInChannel(event.getChannel(), Utility.getFoods());
+						Message.sendEmbed(event.getChannel(), "", Utility.getFoods(), false);
 						break;
 					}
 					case "help": {
@@ -271,7 +266,7 @@ public class CommandWolf implements Command {
 						break;
 					}
 					default: {
-						Message.sendMessageInChannel(event.getChannel(), "no-sub-command");
+						Message.sendMessageInChannel(event.getChannel(), help());
 						break;
 					}
 				}

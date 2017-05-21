@@ -130,21 +130,23 @@ public class Utility {
 	}
 
 	public static boolean hasAllItems(IUser user) {
-		int itemCount = DataBase.queryItems(user).size();
-		return itemCount == WolfCosmetics.totalItems;
+		List<Item> items = DataBase.queryItems(user);
+		if (items == null) return false;
+		return items.size() >= WolfCosmetics.totalItems;
 	}
 
 	public static boolean hasAllItems(List<Item> items) {
-		int itemCount = items.size();
-		return itemCount >= WolfCosmetics.totalItems;
+		return items.size() >= WolfCosmetics.totalItems;
 	}
 
-	public static String getFoods() {
-		StringBuilder foods = new StringBuilder();
+	public static EmbedObject getFoods() {
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withColor(Color.CYAN);
+		builder.withTitle("All Foods");
 		for (WolfCosmetics.foods food : WolfCosmetics.foods.values()) {
-			foods.append(WordUtils.capitalizeFully(food.getName())).append(", ");
+			builder.appendField(WordUtils.capitalizeFully(food.getName().toLowerCase()), "Value: " + food.getValue() + "\nCooldown: " + Utility.formatTime(food.getCooldown()), false);
 		}
-		return foods.substring(0, foods.length() - 2);
+		return builder.build();
 	}
 
 	public static Item getItemByPath(String path) {
@@ -311,10 +313,10 @@ public class Utility {
 		return null;
 	}
 
-	public static EmbedObject generateScanEmbed(IUser author, Color c, FilterReason reason) {
+	public static EmbedObject generateScanEmbed(IGuild guild, IUser author, Color c, FilterReason reason) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withColor(c);
-		builder.withTitle("Filtered a message sent by " + author.mention());
+		builder.withTitle(String.format(Localisation.getMessage(guild.getStringID(), "filtered-message"), author));
 		builder.appendField("Reason", reason.getHumanReadable(), true);
 
 		return builder.build();
@@ -408,6 +410,13 @@ public class Utility {
 			if (DataBase.channelQuery(channel.getStringID()).equals("log")) return channel;
 		}
 		return null;
+	}
+
+	public static IChannel getLogChannel(IGuild guild, IChannel defaultTo) {
+		for (IChannel channel : guild.getChannels()) {
+			if (DataBase.channelQuery(channel.getStringID()).equals("log")) return channel;
+		}
+		return defaultTo;
 	}
 
 	public static EmbedObject getStats(int shard, int shardCount, int serverCount) {
