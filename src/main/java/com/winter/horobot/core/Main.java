@@ -138,7 +138,7 @@ public class Main {
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
 		commands.put("volume", new CommandVolume());
-		commands.put("test", new CommandTest());
+		//commands.put("test", new CommandTest());
 		commands.put("server", new CommandServerInfo());
 		commands.put("logchannel", new CommandLogChannel());
 		commands.put("welcomemessage", new CommandWelcomeMessage());
