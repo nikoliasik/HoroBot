@@ -62,7 +62,7 @@ public class WolfCosmetics {
 		MARCHING_ORDERS("/wolf/bg/marching-orders.png", "MARCHING ORDER"),
 		CROP_STOMP("/wolf/bg/crop-stomp.png", "CROP STOMP"),
 		SPACEBALL("/wolf/bg/spaceball.png", "SPACEBALL"),
-		BON_ODORI("/wolf/bg/bon-odori.png", "BON-ODORI"),
+		BON_ODORI("/wolf/bg/bon-odori.png", "BON ODORI"),
 		BUILT_TO_SCALE_FEVER("/wolf/bg/built-to-scale-fever.png", "BUILT TO SCALE FEVER"),
 		CAFE("/wolf/bg/cafe.png", "CAFE"),
 		CHEER_READERS("/wolf/bg/cheer-readers.png", "CHEER READERS"),

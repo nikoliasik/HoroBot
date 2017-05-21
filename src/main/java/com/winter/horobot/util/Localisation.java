@@ -20,6 +20,13 @@ package com.winter.horobot.util;
 
 import com.winter.horobot.database.DataBase;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 public class Localisation {
@@ -30,8 +37,8 @@ public class Localisation {
 	private static ResourceBundle ptLang = ResourceBundle.getBundle("locale.pt");
 	private static ResourceBundle hiLang = ResourceBundle.getBundle("locale.hi");
 	private static ResourceBundle frLang = ResourceBundle.getBundle("locale.fr");
-	private static ResourceBundle deLang = ResourceBundle.getBundle("locale.de");
-	private static ResourceBundle ruLang = ResourceBundle.getBundle("locale.ru");
+	private static ResourceBundle deLang = ResourceBundle.getBundle("locale.de", new UTF8Control());
+	private static ResourceBundle ruLang = ResourceBundle.getBundle("locale.ru", new UTF8Control());
 
 	private static String checkLanguage(String guildID) {
 		return DataBase.guildQuery(guildID, "language");

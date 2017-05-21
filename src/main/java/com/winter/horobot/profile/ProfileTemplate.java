@@ -1,7 +1,9 @@
 package com.winter.horobot.profile;
 
 import com.winter.horobot.animals.wolf.WolfCosmetics;
+import com.winter.horobot.animals.wolf.WolfProfileBuilder;
 import com.winter.horobot.util.Utility;
+import sx.blah.discord.handle.obj.IUser;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,8 +22,8 @@ public class ProfileTemplate {
 	private BufferedImage wolf;
 	private BufferedImage lvlTemplate;
 
-	public ProfileTemplate(String name, String description, int level, int xp, int maxXp, int foxCoins, String background, boolean notifications) {
-		this.name = name;
+	public ProfileTemplate(IUser user, String description, int level, int xp, int maxXp, int foxCoins, String background, boolean notifications) {
+		this.name = user.getName();
 		this.description = description;
 		this.level = level;
 		this.xp = xp;
@@ -31,7 +33,7 @@ public class ProfileTemplate {
 		try {
 			this.background = ImageIO.read(getClass().getResourceAsStream(Utility.getItemByName(background).getFile()));
 			this.template = ImageIO.read(getClass().getResourceAsStream("/profile/template.png"));
-			this.wolf = ImageIO.read(getClass().getResourceAsStream("/profile/wolf.png"));
+			this.wolf = WolfProfileBuilder.generateAnimal(user);
 			this.lvlTemplate = ImageIO.read(getClass().getResourceAsStream("/profile/lvl-template.png"));
 		} catch(Exception e) {
 			e.printStackTrace();

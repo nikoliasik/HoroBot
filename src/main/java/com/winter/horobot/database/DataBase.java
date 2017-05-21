@@ -411,7 +411,7 @@ public class DataBase {
 			ResultSet set = statement.executeQuery(sql);
 			if(set.next()) {
 				template = new ProfileTemplate(
-						user.getName(),
+						user,
 						set.getString("description"),
 						set.getInt("level"),
 						set.getInt("xp"),
@@ -581,7 +581,7 @@ public class DataBase {
 		Connection con = null;
 		try {
 			con = source.getConnection();
-			String sql = "SELECT item FROM users.item WHERE id=? AND item=?;";
+			String sql = "SELECT item FROM users.item WHERE id=? AND UPPER(item)=UPPER(?);";
 			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(1, user.getStringID());
 			statement.setString(2, item);
@@ -611,7 +611,9 @@ public class DataBase {
 			ResultSet set = statement.executeQuery();
 			List<Item> list = new ArrayList<>();
 			while (set.next()) {
-				list.add(Utility.getItemByName(String.valueOf(set.getString("item").toUpperCase())));
+				Item item = Utility.getItemByName(String.valueOf(set.getString("item").toUpperCase()));
+				if (item != null)
+					list.add(item);
 			}
 			return list;
 		} catch(Exception e) {
@@ -1022,23 +1024,89 @@ public class DataBase {
 			String sql = String.format("SELECT * FROM wolves.wolf WHERE id='%s'", user.getStringID());
 			ResultSet set = statement.executeQuery(sql);
 
-			set.next();
-			template = new WolfTemplate(
-					set.getString("name"),
-					set.getInt("level"),
-					set.getInt("hunger"),
-					set.getInt("maxHunger"),
-					set.getInt("fedTimes"),
-					Utility.getItemByName(set.getString("background").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("hat").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("body").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("paws").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("tail").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("shirt").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("nose").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("eye").toUpperCase()).getFile(),
-					Utility.getItemByName(set.getString("neck").toUpperCase()).getFile()
-			);
+			if (set.next()) {
+				String background;
+				String hat;
+				String body;
+				String paws;
+				String tail;
+				String shirt;
+				String nose;
+				String eye;
+				String neck;
+				/*
+				hat = Utility.getItemByName(set.getString("hat").toUpperCase()).getFile();
+					body = Utility.getItemByName(set.getString("body").toUpperCase()).getFile();
+					paws = Utility.getItemByName(set.getString("paws").toUpperCase()).getFile();
+					tail = Utility.getItemByName(set.getString("tail").toUpperCase()).getFile();
+					shirt = Utility.getItemByName(set.getString("shirt").toUpperCase()).getFile();
+					nose = Utility.getItemByName(set.getString("nose").toUpperCase()).getFile();
+					eye = Utility.getItemByName(set.getString("eye").toUpperCase()).getFile();
+					neck = Utility.getItemByName(set.getString("neck").toUpperCase()).getFile();
+				 */
+				try {
+					background = Utility.getItemByName(set.getString("background").toUpperCase()).getFile();
+				} catch (Exception e) {
+					background = new Item("/wolf/none.png", "NONE0", 0).getFile();
+				}
+				try {
+					hat = Utility.getItemByName(set.getString("hat").toUpperCase()).getFile();
+				} catch (Exception e) {
+					hat = new Item("/wolf/none.png", "NONE1", 1).getFile();
+				}
+				try {
+					body = Utility.getItemByName(set.getString("body").toUpperCase()).getFile();
+				} catch (Exception e) {
+					body = new Item("/wolf/none.png", "NONE2", 0).getFile();
+				}
+				try {
+					paws = Utility.getItemByName(set.getString("paws").toUpperCase()).getFile();
+				} catch (Exception e) {
+					paws = new Item("/wolf/none.png", "NONE3", 0).getFile();
+				}
+				try {
+					tail = Utility.getItemByName(set.getString("tail").toUpperCase()).getFile();
+				} catch (Exception e) {
+					tail = new Item("/wolf/none.png", "NONE4", 0).getFile();
+				}
+				try {
+					shirt = Utility.getItemByName(set.getString("shirt").toUpperCase()).getFile();
+				} catch (Exception e) {
+					shirt = new Item("/wolf/none.png", "NONE5", 0).getFile();
+				}
+				try {
+					nose = Utility.getItemByName(set.getString("nose").toUpperCase()).getFile();
+				} catch (Exception e) {
+					nose = new Item("/wolf/none.png", "NONE6", 0).getFile();
+				}
+				try {
+					eye = Utility.getItemByName(set.getString("eye").toUpperCase()).getFile();
+				} catch (Exception e) {
+					eye = new Item("/wolf/none.png", "NONE7", 0).getFile();
+				}
+				try {
+					neck = Utility.getItemByName(set.getString("neck").toUpperCase()).getFile();
+				} catch (Exception e) {
+					neck = new Item("/wolf/none.png", "NONE8", 0).getFile();
+				}
+
+				template = new WolfTemplate(
+						set.getString("name"),
+						set.getInt("level"),
+						set.getInt("hunger"),
+						set.getInt("maxHunger"),
+						set.getInt("fedTimes"),
+						background,
+						hat,
+						body,
+						paws,
+						tail,
+						shirt,
+						nose,
+						eye,
+						neck
+				);
+			}
 			set.close();
 			statement.close();
 		} catch(Exception e) {
