@@ -1,5 +1,6 @@
 package com.winter.horobot.profile;
 
+import com.winter.horobot.animals.Item;
 import com.winter.horobot.animals.wolf.WolfCosmetics;
 import com.winter.horobot.animals.wolf.WolfProfileBuilder;
 import com.winter.horobot.util.Utility;
@@ -31,7 +32,11 @@ public class ProfileTemplate {
 		this.foxCoins = foxCoins;
 		this.notifications = notifications;
 		try {
-			this.background = ImageIO.read(getClass().getResourceAsStream(Utility.getItemByName(background).getFile()));
+			try {
+				this.background = ImageIO.read(getClass().getResourceAsStream(Utility.getItemByName(background.toUpperCase()).getFile()));
+			} catch (NullPointerException e) {
+				this.background = ImageIO.read(getClass().getResourceAsStream("/wolf/bg/default-bg.png"));
+			}
 			this.template = ImageIO.read(getClass().getResourceAsStream("/profile/template.png"));
 			this.wolf = WolfProfileBuilder.generateAnimal(user);
 			this.lvlTemplate = ImageIO.read(getClass().getResourceAsStream("/profile/lvl-template.png"));

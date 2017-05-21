@@ -417,7 +417,7 @@ public class DataBase {
 						set.getInt("xp"),
 						set.getInt("maxXp"),
 						set.getInt("foxCoins"),
-						set.getString("background"),
+						set.getString("background").toUpperCase(),
 						set.getBoolean("notifications")
 				);
 			}
