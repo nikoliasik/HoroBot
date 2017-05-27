@@ -47,6 +47,8 @@ public class CommandHelp implements Command {
 			for(int i = 0; i < CommandType.getTypeCount(); i++) {
 				CommandType c = CommandType.getTypes()[i];
 
+				if (c.getCommands(c).size() == 0) continue;
+
 				String help;
 				if(!event.getChannel().isPrivate()) {
 					help = c.getCommands(c)

@@ -30,7 +30,7 @@ public class CommandPlay implements Command {
 			}
 			try {
 				URL url = new URL(raw);
-				MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), args[0]);
+			//	MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), args[0]);
 			} catch(Exception e) {
 				String link;
 				try {
@@ -40,7 +40,7 @@ public class CommandPlay implements Command {
 					return;
 				}
 				if(link != null) {
-					MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
+				//	MusicUtils.loadAndPlay(event, event.getGuild().getConnectedVoiceChannel(), link);
 				} else {
 					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getStringID(), "html-no-results"));
 				}

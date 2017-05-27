@@ -26,11 +26,8 @@ import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
-import com.winter.horobot.util.music.GuildMusicManager;
-import com.winter.horobot.util.music.MusicUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 import sx.blah.discord.handle.impl.events.guild.GuildLeaveEvent;
@@ -50,7 +47,6 @@ import sx.blah.discord.util.RequestBuffer;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class AnnotationListener {
 	
@@ -91,7 +87,6 @@ public class AnnotationListener {
 					//if (scanned != null) {
 					//	Message.sendEmbed(Utility.getLogChannel(event.getGuild(), event.getChannel()), "", scanned, false);
 					//}
-
 					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
 						if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
 							return;
@@ -101,42 +96,45 @@ public class AnnotationListener {
 					String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
 					if (event.getMessage().getContent().startsWith(".horo")) {
 						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-					} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
-						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
-					}
-				} else {
-					if (event.getMessage().getContent().startsWith(".horo")) {
-						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-					}
-				}
-
-				DataBase.insertUser(event.getAuthor());
-				if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor())) {
-					Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor(), 120000);
-					DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
-					ProfileTemplate template = DataBase.queryUser(event.getAuthor());
-					if (template.getXp() >= template.getMaxXp()) {
-						DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
-						DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
-						DataBase.updateUser(event.getAuthor(), "xp", 0);
-						DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
-						if (!event.getChannel().isPrivate() && DataBase.queryLvlUp(event.getGuild().getStringID())) {
-							IChannel channel = null;
-							for (IChannel temp : event.getGuild().getChannels()) {
-								if (DataBase.channelQuery(temp.getStringID()).equals("log"))
-									channel = temp;
-							}
-							if (channel == null) channel = event.getChannel();
-							Message.sendFile(
-									channel,
-									"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
-											"**+100 Coins** for leveling up!",
-									"level-up.png",
-									new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
+						} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
+							Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+						}
+					} else {
+						if (event.getMessage().getContent().startsWith(".horo")) {
+							Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
 						}
 					}
-				}
+
+					DataBase.insertUser(event.getAuthor());
+					DataBase.insertWolf(event.getAuthor());
+					if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor())) {
+						Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor(), 120000);
+						DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
+						ProfileTemplate template = DataBase.queryUser(event.getAuthor());
+						if (template.getXp() >= template.getMaxXp()) {
+							DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
+							DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
+							DataBase.updateUser(event.getAuthor(), "xp", 0);
+							DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
+							if (!event.getChannel().isPrivate() && DataBase.queryLvlUp(event.getGuild().getStringID())) {
+								IChannel channel = null;
+								for (IChannel temp : event.getGuild().getChannels()) {
+									if (DataBase.channelQuery(temp.getStringID()).equals("log"))
+										channel = temp;
+								}
+								if (channel == null) channel = event.getChannel();
+								Message.sendFile(
+										channel,
+										"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
+												"**+100 Coins** for leveling up!",
+										"level-up.png",
+										new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
+							}
+						}
+					}
 				Utility.messagesReceived++;
+			} else {
+				RequestBuffer.request(() -> event.getMessage().addReaction("\uD83D\uDD10"));
 			}
 		}
 	}
@@ -155,8 +153,8 @@ public class AnnotationListener {
 	public void onVoiceLeaveEvent(UserVoiceChannelLeaveEvent event) {
 		if(event.getClient().isReady()) {
 			if (event.getUser() == event.getClient().getOurUser()) {
-				GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
-				manager.player.stopTrack();
+				//GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
+				//manager.player.stopTrack();
 			}
 		}
 	}

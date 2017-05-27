@@ -100,7 +100,8 @@ public class WolfCosmetics {
 		GLEE_CLUB_STORY("/wolf/bg/glee-club-1.png", "GLEE CLUB 1"),
 		SHOWTIME("/wolf/bg/showtime.png", "SHOWTIME"),
 		FIREWORKS("/wolf/bg/fireworks.png", "FIREWORKS"),
-		FIREWORKS_SMILE("/wolf/bg/fireworks-smile.png", "FIREWORKS SMILE");
+		FIREWORKS_SMILE("/wolf/bg/fireworks-smile.png", "FIREWORKS SMILE"),
+		SPACE_1("/wolf/bg/space-1.png", "SPACE 1");
 
 		private final String file;
 		private final String name;
@@ -267,8 +268,8 @@ public class WolfCosmetics {
 	public enum neck {
 		NONE("/wolf/neck/none.png", "NONE8"),
 		SCARF("/wolf/neck/scarf-1.png", "SCARF"),
-		SCARF_2("/wolf/neck/scarf-2.png", "SCARF 2");
-
+		SCARF_2("/wolf/neck/scarf-2.png", "SCARF 2"),
+		BELL_1("/wolf/neck/bell-1.png", "BELL 1");
 
 		private final String file;
 		private final String name;

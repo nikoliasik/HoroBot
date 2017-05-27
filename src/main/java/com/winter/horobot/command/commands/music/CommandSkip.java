@@ -17,12 +17,12 @@ public class CommandSkip implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
-			if(MusicUtils.getGuildAudioPlayer(event.getGuild()).player.getPlayingTrack() != null) {
-				MusicUtils.skipTrack(event.getChannel());
-				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "track-skipped"));
-			} else {
-				Message.sendMessageInChannel(event.getChannel(), "nothing-playing");
-			}
+			//if(MusicUtils.getGuildAudioPlayer(event.getGuild()).player.getPlayingTrack() != null) {
+				//MusicUtils.skipTrack(event.getChannel());
+			//	Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "track-skipped"));
+			//} else {
+			//	Message.sendMessageInChannel(event.getChannel(), "nothing-playing");
+			//}
 		} else {
 			Message.reply(help(), event.getMessage());
 		}

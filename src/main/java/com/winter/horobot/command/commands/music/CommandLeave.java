@@ -21,9 +21,9 @@ public class CommandLeave implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if(event.getGuild().getConnectedVoiceChannel() != null) {
-				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "left-voice"));
-				MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
-				event.getGuild().getConnectedVoiceChannel().leave();
+				//Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "left-voice"));
+				//MusicUtils.getGuildAudioPlayer(event.getGuild()).player.stopTrack();
+				//event.getGuild().getConnectedVoiceChannel().leave();
 			} else {
 				Message.reply("not-in-channel", event.getMessage());
 			}

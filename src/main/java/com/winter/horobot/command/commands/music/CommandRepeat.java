@@ -15,7 +15,7 @@ public class CommandRepeat implements Command {
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(args.length == 0) {
+		/*if(args.length == 0) {
 			if (event.getGuild().getConnectedVoiceChannel() != null) {
 				if(MusicUtils.getGuildAudioPlayer(event.getGuild()).scheduler.toggleRepeat()) {
 					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "repeat-on"));
@@ -27,7 +27,7 @@ public class CommandRepeat implements Command {
 			}
 		} else {
 			Message.reply(help(), event.getMessage());
-		}
+		}*/
 	}
 
 	public String help() {

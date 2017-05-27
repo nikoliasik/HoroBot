@@ -71,6 +71,29 @@ public class Utility {
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
 
+	public static EmbedObject submitReport(IUser author, IUser target, String reason) {
+		if (reason.length() > 1024) reason = reason.substring(0, 1024);
+
+		EmbedBuilder builder = new EmbedBuilder();
+		builder.withColor(Color.YELLOW);
+		builder.withTimestamp(LocalDateTime.now());
+		builder.withThumbnail(Utility.getAvatar(target));
+		builder.withAuthorIcon(Utility.getAvatar(target));
+		builder.withAuthorName(target.getName());
+		String reportID = DataBase.submitReport(author, target, reason);
+		builder.withTitle("Report submitted for " + target.getName() + " with report id `" + reportID + "`");
+		builder.appendField("Target", target.getName(), true);
+		builder.appendField("ID", target.getStringID(), true);
+		builder.appendField("Submitter", author.getName(), true);
+		builder.appendField("ID", author.getStringID(), true);
+		builder.appendField("Evidence", reason, false);
+
+		IMessage message = Message.sendEmbedGet(Main.INSTANCE.client.getGuildByID(288999138140356608L).getChannelByID(318002471878393856L), "", builder.build(), false);
+		DataBase.updateReport(reportID, "messageID", message.getStringID());
+
+		return builder.build();
+	}
+
 	public static Inventory assembleInventory(IUser user) {
 		List<Item> backgrounds = new ArrayList<>();
 		List<Item> hats = new ArrayList<>();
@@ -383,12 +406,12 @@ public class Utility {
 			});
 
 			builder.withAuthorIcon(Utility.getAvatar(user));
-			builder.withAuthorName("User " + user.getName() + " was banned");
+			builder.withAuthorName("User " + user.getName() + " was kicked");
 			builder.withColor(Color.RED);
 			builder.withTimestamp(LocalDateTime.now());
 			builder.withThumbnail(Utility.getAvatar(user));
 
-			builder.appendField("User banned", user.getName(), true);
+			builder.appendField("User kicked", user.getName(), true);
 			builder.appendField("ID", user.getStringID(), true);
 			builder.appendField("Banned by", author.getName(), true);
 			builder.appendField("ID", author.getStringID(), true);
@@ -396,9 +419,9 @@ public class Utility {
 		} catch (MissingPermissionsException e) {
 			builder.withTitle("Error");
 			if(e.getMissingPermissions().size() == 0) {
-				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), "Role hierarchy is too high"));
+				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-kick"), user.getName(), "Role hierarchy is too high"));
 			} else {
-				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), Utility.permissionsAsString(e.getMissingPermissions())));
+				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-kick"), user.getName(), Utility.permissionsAsString(e.getMissingPermissions())));
 			}
 		}
 		return builder.build();
