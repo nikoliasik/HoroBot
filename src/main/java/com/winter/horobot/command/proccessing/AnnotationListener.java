@@ -47,8 +47,17 @@ import sx.blah.discord.util.RequestBuffer;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class AnnotationListener {
+
+	private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(20, 50, 1, TimeUnit.SECONDS,
+			new ArrayBlockingQueue<>(300),
+			runnable -> new Thread(runnable, "Horo Message Handler"),
+			new ThreadPoolExecutor.AbortPolicy());
 	
 	@EventSubscriber
 	public void onReadyEvent(ReadyEvent event) {
@@ -80,60 +89,67 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onMessageReceivedEvent(MessageReceivedEvent event) {
-		if(event.getClient().isReady()) {
-			if (event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
-				if (!event.getChannel().isPrivate()) {
-					//EmbedObject scanned = Utility.scanMessageAndAction(event.getGuild(), event.getMessage());
-					//if (scanned != null) {
-					//	Message.sendEmbed(Utility.getLogChannel(event.getGuild(), event.getChannel()), "", scanned, false);
-					//}
-					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
-						if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
-							return;
-						}
-					}
-					DataBase.insertGuild(event.getGuild().getStringID());
-					String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
-					if (event.getMessage().getContent().startsWith(".horo")) {
-						Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-						} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
-							Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
-						}
-					} else {
-						if (event.getMessage().getContent().startsWith(".horo")) {
-							Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
-						}
-					}
-
-					DataBase.insertUser(event.getAuthor());
-					DataBase.insertWolf(event.getAuthor());
-					if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor())) {
-						Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor(), 120000);
-						DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
-						ProfileTemplate template = DataBase.queryUser(event.getAuthor());
-						if (template.getXp() >= template.getMaxXp()) {
-							DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
-							DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
-							DataBase.updateUser(event.getAuthor(), "xp", 0);
-							DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
-							if (!event.getChannel().isPrivate() && DataBase.queryLvlUp(event.getGuild().getStringID())) {
-								IChannel channel = null;
-								for (IChannel temp : event.getGuild().getChannels()) {
-									if (DataBase.channelQuery(temp.getStringID()).equals("log"))
-										channel = temp;
-								}
-								if (channel == null) channel = event.getChannel();
-								Message.sendFile(
-										channel,
-										"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
-												"**+100 Coins** for leveling up!",
-										"level-up.png",
-										new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
+		try {
+			threadPool.submit(() -> {
+				if(event.getClient().isReady()) {
+					if (event.getMessage().getAuthor() != event.getClient().getOurUser() && !event.getMessage().getAuthor().isBot()) {
+						if (!event.getChannel().isPrivate()) {
+							//EmbedObject scanned = Utility.scanMessageAndAction(event.getGuild(), event.getMessage());
+							//if (scanned != null) {
+							//	Message.sendEmbed(Utility.getLogChannel(event.getGuild(), event.getChannel()), "", scanned, false);
+							//}
+							//if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
+							//	if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
+							//		return;
+							//	}
+							//}
+							//DataBase.insertGuild(event.getGuild().getStringID());
+							String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
+							if (event.getMessage().getContent().startsWith(".horo")) {
+								Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
+							} else if (prefix != null && event.getMessage().getContent().startsWith(prefix)) {
+								Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), prefix, event));
+							}
+						} else {
+							if (event.getMessage().getContent().startsWith(".horo")) {
+								Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
 							}
 						}
+
+						DataBase.insertUser(event.getAuthor());
+						//DataBase.insertWolf(event.getAuthor());
+						if (!Cooldowns.onCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor())) {
+							Cooldowns.putOnCooldown("message-xp-" + event.getAuthor().getStringID(), event.getAuthor(), 120000);
+							DataBase.updateUser(event.getAuthor(), "xp", DataBase.queryUser(event.getAuthor()).getXp() + 30);
+							ProfileTemplate template = DataBase.queryUser(event.getAuthor());
+							if (template.getXp() >= template.getMaxXp()) {
+								DataBase.updateUser(event.getAuthor(), "foxCoins", (template.getFoxCoins() + 100));
+								DataBase.updateUser(event.getAuthor(), "level", (template.getLevel() + 1));
+								DataBase.updateUser(event.getAuthor(), "xp", 0);
+								DataBase.updateUser(event.getAuthor(), "maxXp", (template.getMaxXp() + 60));
+								if (!event.getChannel().isPrivate() && DataBase.queryLvlUp(event.getGuild().getStringID())) {
+									IChannel channel = null;
+									for (IChannel temp : event.getGuild().getChannels()) {
+										if (DataBase.channelQuery(temp.getStringID()).equals("log"))
+											channel = temp;
+									}
+									if (channel == null) channel = event.getChannel();
+									Message.sendFile(
+											channel,
+											"**" + event.getAuthor().getName() + " LEVELED UP!**\n" +
+													"**+100 Coins** for leveling up!",
+											"level-up.png",
+											new ByteArrayInputStream(ProfileBuilder.generateLevelUp(event.getAuthor(), (template.getLevel() + 1))));
+								}
+							}
+						}
+						Utility.messagesReceived++;
 					}
-				Utility.messagesReceived++;
-			}
+				}
+			});
+		} catch (RejectedExecutionException e) {
+			Message.sendRawMessageInChannel(event.getChannel(), "I'm sorry, but I can't keep up! Wait for a tiny bit and try again!");
+			e.printStackTrace();
 		}
 	}
 	

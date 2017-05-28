@@ -29,6 +29,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -71,7 +73,7 @@ public class Utility {
 			"1cbd08c76f8af6dddce02c5138971129"
 	};
 
-	public static String waitFor(IChannel channel, IUser user, long timeout, TimeUnit timeUnit) {
+	public static String waitForInput(IChannel channel, IUser user, long timeout, TimeUnit timeUnit) {
 		String obj = null;
 		try {
 			obj = Main.INSTANCE.client.getDispatcher().waitFor(
@@ -81,6 +83,45 @@ public class Utility {
 					timeout, timeUnit)
 					.getMessage()
 					.getContent();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (NullPointerException ignored) { }
+		return obj;
+	}
+
+	public static String waitForChoice(IChannel channel, IUser user, long timeout, TimeUnit timeUnit, String... choices) {
+		String obj = null;
+		try {
+			obj = Main.INSTANCE.client.getDispatcher().waitFor(
+					(MessageReceivedEvent e) ->
+							e.getChannel().equals(channel) &&
+							e.getAuthor().equals(user) &&
+							Arrays.asList(choices).contains(e.getMessage().getContent()),
+					timeout, timeUnit)
+					.getMessage()
+					.getContent();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (NullPointerException ignored) { }
+		return obj;
+	}
+
+	public static String waitForReaction(IMessage message, IUser user, long timeout, TimeUnit timeUnit, String... choises) {
+		String obj = null;
+		for (String reaction : choises) {
+			RequestBuffer.request(() -> message.addReaction(reaction)).get();
+		}
+
+		try {
+			obj = Main.INSTANCE.client.getDispatcher().waitFor(
+					(ReactionAddEvent e) ->
+							e.getMessage().equals(message) &&
+							e.getAuthor().equals(user) &&
+							Arrays.asList(choises).contains(e.getReaction().getUnicodeEmoji().toString()),
+					timeout, timeUnit)
+					.getReaction()
+					.getMessage()
+			.getContent();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (NullPointerException ignored) { }

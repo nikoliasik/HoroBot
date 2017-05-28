@@ -6,13 +6,16 @@ import com.winter.horobot.database.DataBase;
 import com.winter.horobot.profile.ProfileBuilder;
 import com.winter.horobot.profile.ProfileTemplate;
 import com.winter.horobot.util.Message;
+import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.MessageTokenizer;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.ByteArrayInputStream;
+import java.util.concurrent.TimeUnit;
 
 public class CommandTest implements Command {
 
@@ -24,9 +27,9 @@ public class CommandTest implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		//int calculated = 2 * (Integer.parseUnsignedInt(args[0]) + 1 ^ 2);
-		int calculated = (int)Math.exp(Integer.parseUnsignedInt(args[0]));
-		System.out.println(calculated);
+		IMessage message = RequestBuffer.request(() -> { return event.getChannel().sendMessage("Pick a choice"); }).get();
+		String choice = Utility.waitForReaction(message, event.getAuthor(), 30, TimeUnit.SECONDS, "\uD83D\uDD10");
+		Message.sendRawMessageInChannel(event.getChannel(), "You chose " + choice);
 	}
 
 	@Override

@@ -190,6 +190,11 @@ public class Main {
 	public static void handleCommand(CommandContainer cmd) {
 		if (commands.containsKey(cmd.invoke)) {
 			if (!DataBase.queryGlobalBan(cmd.event.getAuthor())) {
+				if (DataBase.queryIsBlacklisted(cmd.event.getGuild(), cmd.event.getAuthor())) {
+					if (DataBase.guildBooleanQuery(cmd.event.getGuild().getStringID(), "bignore")) {
+						return;
+					}
+				}
 				if (cmd.event.getChannel().isPrivate()) {
 					if (!cmd.invoke.equals("help") && !cmd.invoke.equals("invite")) {
 						Message.sendRawMessageInChannel(cmd.event.getChannel(), "I can only execute the commands `.horohelp` and `.horoinvite` in pm, sorry!");
@@ -212,22 +217,26 @@ public class Main {
 					try {
 						commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
 					} catch (Exception e) {
-						if (e instanceof RateLimitException || e instanceof MissingPermissionsException) throw e;
-						Message.sendMessageInChannel(cmd.event.getChannel(), "error");
-						EmbedBuilder builder = new EmbedBuilder();
-						builder.withColor(Color.RED);
-						builder.withTimestamp(LocalDateTime.now());
-						builder.appendField("Guild", cmd.event.getGuild().getName(), true);
-						builder.appendField("ID", cmd.event.getGuild().getStringID(), true);
-						builder.appendField("Command Invoked", cmd.invoke, true);
-						builder.appendField("Raw", cmd.raw, true);
-						StringWriter sw = new StringWriter();
-						PrintWriter pw = new PrintWriter(sw, true);
-						e.printStackTrace(pw);
-						builder.appendField("Stacktrace", sw.getBuffer().toString().substring(0, 1024), false);
-						Message.sendEmbed(cmd.event.getClient().getGuildByID(288999138140356608L).getChannelByID(316927422316412929L), "", builder.build(), false);
-						cmd.event.getChannel().setTypingStatus(false);
-						return;
+						if (!Config.debug) {
+							if (e instanceof RateLimitException || e instanceof MissingPermissionsException) throw e;
+							Message.sendMessageInChannel(cmd.event.getChannel(), "error");
+							EmbedBuilder builder = new EmbedBuilder();
+							builder.withColor(Color.RED);
+							builder.withTimestamp(LocalDateTime.now());
+							builder.appendField("Guild", cmd.event.getGuild().getName(), true);
+							builder.appendField("ID", cmd.event.getGuild().getStringID(), true);
+							builder.appendField("Command Invoked", cmd.invoke, true);
+							builder.appendField("Raw", cmd.raw, true);
+							StringWriter sw = new StringWriter();
+							PrintWriter pw = new PrintWriter(sw, true);
+							e.printStackTrace(pw);
+							builder.appendField("Stacktrace", sw.getBuffer().toString().substring(0, 1024), false);
+							Message.sendEmbed(cmd.event.getClient().getGuildByID(288999138140356608L).getChannelByID(316927422316412929L), "", builder.build(), false);
+							cmd.event.getChannel().setTypingStatus(false);
+							return;
+						} else {
+							e.printStackTrace();
+						}
 					}
 					commands.get(cmd.invoke).executed(true, cmd.event);
 					cmd.event.getChannel().setTypingStatus(false);
