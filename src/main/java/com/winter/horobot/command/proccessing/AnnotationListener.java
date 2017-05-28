@@ -133,8 +133,6 @@ public class AnnotationListener {
 						}
 					}
 				Utility.messagesReceived++;
-			} else {
-				RequestBuffer.request(() -> event.getMessage().addReaction("\uD83D\uDD10"));
 			}
 		}
 	}

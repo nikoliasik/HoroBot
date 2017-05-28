@@ -22,7 +22,7 @@ public class CommandSong implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if (event.getGuild().getConnectedVoiceChannel() != null) {
-				/*if(MusicUtils.getGuildAudioPlayer(event.getGuild()).player.getPlayingTrack() != null) {
+				if(MusicUtils.getGuildAudioPlayer(event.getGuild()).player.getPlayingTrack() != null) {
 					AudioPlayer player = MusicUtils.getGuildAudioPlayer(event.getGuild()).player;
 					String title = player.getPlayingTrack().getInfo().title;
 					String author = player.getPlayingTrack().getInfo().author;
@@ -44,7 +44,7 @@ public class CommandSong implements Command {
 					Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 				} else {
 					Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "no-song-playing"));
-				}*/
+				}
 			} else {
 				Message.sendRawMessageInChannel(event.getChannel(), Localisation.getMessage(event.getChannel().getGuild().getStringID(), "not-in-channel"));
 			}

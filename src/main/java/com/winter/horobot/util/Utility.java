@@ -28,6 +28,7 @@ import com.winter.horobot.database.DataBase;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -53,14 +54,6 @@ import java.util.stream.Collectors;
 
 public class Utility {
 
-	private static String[] defaults = {
-			"6debd47ed13483642cf09e832ed0bc1b",
-			"322c936a8c8be1b803cd94861bdfa868",
-			"dd4dbc0016779df1378e7812eabaa04d",
-			"0e291f67c9274a1abdddeb3fd919cbaa",
-			"1cbd08c76f8af6dddce02c5138971129"
-	};
-
 	public static String Discord4JVersion = Discord4J.VERSION;
 	public static long commandsExecuted = 0;
 	public static long totalCommands = 0;
@@ -70,6 +63,29 @@ public class Utility {
 	public static String memory;
 	public static long messagesReceived = 0;
 	public static long messagesSent = 0;
+	private static String[] defaults = {
+			"6debd47ed13483642cf09e832ed0bc1b",
+			"322c936a8c8be1b803cd94861bdfa868",
+			"dd4dbc0016779df1378e7812eabaa04d",
+			"0e291f67c9274a1abdddeb3fd919cbaa",
+			"1cbd08c76f8af6dddce02c5138971129"
+	};
+
+	public static String waitFor(IChannel channel, IUser user, long timeout, TimeUnit timeUnit) {
+		String obj = null;
+		try {
+			obj = Main.INSTANCE.client.getDispatcher().waitFor(
+					(MessageReceivedEvent e) ->
+							e.getChannel().equals(channel) &&
+									e.getAuthor().equals(user),
+					timeout, timeUnit)
+					.getMessage()
+					.getContent();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (NullPointerException ignored) { }
+		return obj;
+	}
 
 	public static EmbedObject submitReport(IUser author, IUser target, String reason) {
 		if (reason.length() > 1024) reason = reason.substring(0, 1024);
@@ -389,7 +405,7 @@ public class Utility {
 			builder.appendField("Reason", reason, false);
 		} catch (MissingPermissionsException e) {
 			builder.withTitle("Error");
-			if(e.getMissingPermissions().size() == 0) {
+			if (e.getMissingPermissions().size() == 0) {
 				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), "Role hierarchy is too high"));
 			} else {
 				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-ban"), user.getName(), Utility.permissionsAsString(e.getMissingPermissions())));
@@ -418,7 +434,7 @@ public class Utility {
 			builder.appendField("Reason", reason, false);
 		} catch (MissingPermissionsException e) {
 			builder.withTitle("Error");
-			if(e.getMissingPermissions().size() == 0) {
+			if (e.getMissingPermissions().size() == 0) {
 				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-kick"), user.getName(), "Role hierarchy is too high"));
 			} else {
 				builder.withDescription(String.format(Localisation.getMessage(guild.getStringID(), "failed-kick"), user.getName(), Utility.permissionsAsString(e.getMissingPermissions())));
@@ -576,7 +592,7 @@ public class Utility {
 
 	public static String listAsString(List<String> list) {
 		StringBuilder builder = new StringBuilder();
-		for(String string : list) {
+		for (String string : list) {
 			builder.append(string);
 			builder.append(", ");
 		}
@@ -585,7 +601,7 @@ public class Utility {
 
 	public static String itemsAsString(List<Item> items) {
 		StringBuilder builder = new StringBuilder();
-		for(Item item : items) {
+		for (Item item : items) {
 			if (!item.getName().contains("NONE")) {
 				builder.append(WordUtils.capitalizeFully(item.getName().toLowerCase()));
 				builder.append(", ");
@@ -596,7 +612,7 @@ public class Utility {
 
 	public static String permissionsAsString(EnumSet<Permissions> permissions) {
 		StringBuilder builder = new StringBuilder();
-		for(Permissions perm : permissions) {
+		for (Permissions perm : permissions) {
 			builder.append(perm.name());
 			builder.append(", ");
 		}
@@ -615,7 +631,7 @@ public class Utility {
 
 	public static void saveGifToStream(List<BufferedImage> images, OutputStream stream, int timeBetweenFrames, boolean loop) throws IOException {
 		GifSequenceWriter writer = new GifSequenceWriter(ImageIO.createImageOutputStream(stream), images.get(0).getType(), timeBetweenFrames, loop);
-		for(BufferedImage image : images) {
+		for (BufferedImage image : images) {
 			writer.writeToSequence(image);
 		}
 		writer.close();
@@ -624,7 +640,7 @@ public class Utility {
 	public static List<BufferedImage> getGifFramesFromStream(InputStream stream) throws IOException {
 		GifDecoder.GifImage image = GifDecoder.read(stream);
 		List<BufferedImage> frames = new ArrayList<>();
-		for(int i = 0; i < image.getFrameCount(); i++) {
+		for (int i = 0; i < image.getFrameCount(); i++) {
 			frames.add(image.getFrame(i));
 		}
 		return frames;

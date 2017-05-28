@@ -25,8 +25,8 @@ public class CommandVolume implements Command {
 				Message.sendMessageInChannel(event.getChannel(), "no-number");
 				return;
 			}
-			//MusicUtils.getGuildAudioPlayer(event.getGuild()).player.setVolume(volume);
-			//Message.sendMessageInChannel(event.getChannel(), "volume-changed", volume + "%");
+			MusicUtils.getGuildAudioPlayer(event.getGuild()).player.setVolume(volume);
+			Message.sendMessageInChannel(event.getChannel(), "volume-changed", volume + "%");
 		} else {
 			Message.sendMessageInChannel(event.getChannel(), help());
 		}

@@ -23,35 +23,35 @@ public class CommandQueue implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		//GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
-	//	if(manager.scheduler.getQueueSize() > 0) {
-		//	EmbedBuilder builder = new EmbedBuilder();
-		//	builder.withColor(Color.CYAN);
-		//	builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
-		//	builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
+		GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
+		if(manager.scheduler.getQueueSize() > 0) {
+			EmbedBuilder builder = new EmbedBuilder();
+			builder.withColor(Color.CYAN);
+			builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
+			builder.withAuthorName("Requested by @" + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator());
 
-		//	Iterator<AudioTrack> iterator = manager.scheduler.getQueue().iterator();
-		//	for(int i = 0; i < 10; i++) {
-		//		if(iterator.hasNext()) {
-		//			AudioTrack track = iterator.next();
-		//			String title = track.getInfo().title;
-		//			String author = track.getInfo().author;
-		//			String uri = track.getInfo().uri;
-		//			String length = formatDuration(track);
+			Iterator<AudioTrack> iterator = manager.scheduler.getQueue().iterator();
+			for(int i = 0; i < 10; i++) {
+				if(iterator.hasNext()) {
+					AudioTrack track = iterator.next();
+					String title = track.getInfo().title;
+					String author = track.getInfo().author;
+					String uri = track.getInfo().uri;
+					String length = formatDuration(track);
 
-		//			String string = "**Author:** " + author + "\n";
-		//			string += "**Length:** " + length + "\n";
-		//			string += "**URI:** " + uri;
-		//			builder.appendField(title, string, false);
-		//		}
-		//	}
-		//	Message.sendEmbed(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "heres-queue"), builder.build(), false);
-	//	} else {
-	//		Message.sendMessageInChannel(event.getChannel(), "queue-empty");
-	//	}
+					String string = "**Author:** " + author + "\n";
+					string += "**Length:** " + length + "\n";
+					string += "**URI:** " + uri;
+					builder.appendField(title, string, false);
+				}
+			}
+			Message.sendEmbed(event.getChannel(), Localisation.getMessage(event.getGuild().getStringID(), "heres-queue"), builder.build(), false);
+		} else {
+			Message.sendMessageInChannel(event.getChannel(), "queue-empty");
+		}
 	}
 
-	public static String formatDuration(AudioTrack track) {
+	private static String formatDuration(AudioTrack track) {
 		long totalSeconds = track.getDuration() / 1000;
 		long seconds = totalSeconds % 60;
 		long minutes = (totalSeconds / 60) % 60;

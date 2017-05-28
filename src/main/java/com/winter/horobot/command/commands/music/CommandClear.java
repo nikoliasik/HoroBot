@@ -16,8 +16,8 @@ public class CommandClear implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		//MusicUtils.getGuildAudioPlayer(event.getGuild()).scheduler.clearQueue();
-		//Message.sendMessageInChannel(event.getChannel(), "queue-success");
+		MusicUtils.getGuildAudioPlayer(event.getGuild()).scheduler.clearQueue();
+		Message.sendMessageInChannel(event.getChannel(), "queue-success");
 	}
 
 	@Override

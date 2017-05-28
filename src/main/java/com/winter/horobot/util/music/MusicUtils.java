@@ -13,7 +13,7 @@ import sx.blah.discord.handle.obj.IGuild;
 
 public class MusicUtils {
 
-	/*public static synchronized GuildMusicManager getGuildAudioPlayer(IGuild guild) {
+	public static synchronized GuildMusicManager getGuildAudioPlayer(IGuild guild) {
 		String guildID = guild.getStringID();
 		GuildMusicManager musicManager = null;
 		try {
@@ -79,5 +79,5 @@ public class MusicUtils {
 
 	public static void sendMessage(MessageReceivedEvent event, String message) {
 		Message.sendRawMessageInChannel(event.getChannel(), message);
-	}*/
+	}
 }

@@ -67,8 +67,8 @@ public class Main {
 	public static HashMap<String, Command> commands = new HashMap<>();
 	public static final CommandParser parser = new CommandParser();
 
-	//public static AudioPlayerManager playerManager;
-	//public static Map<String, GuildMusicManager> musicManagers;
+	public static AudioPlayerManager playerManager;
+	public static Map<String, GuildMusicManager> musicManagers;
 
 	public static String[] bannedTags = {"loli", "shota", "child", "young", "guro", "scat", "snuff"};
 
@@ -124,7 +124,7 @@ public class Main {
 		commands.put("cat", new CommandCat());
 		commands.put("ping", new CommandPing());
 		commands.put("github", new CommandGitHub());
-		//commands.put("channel", new CommandChannel());
+		commands.put("channel", new CommandChannel());
 		commands.put("kick", new CommandKick());
 		commands.put("ban", new CommandBan());
 		commands.put("rate", new CommandRate());
@@ -136,21 +136,21 @@ public class Main {
 		commands.put("anime", new CommandAnime());
 		commands.put("manga", new CommandManga());
 		commands.put("urban", new CommandUrban());
-		//commands.put("join", new CommandJoin());
-		//commands.put("leave", new CommandLeave());
-		//commands.put("play", new CommandPlay());
-		//commands.put("pause", new CommandPause());
-		//commands.put("resume", new CommandUnpause());
-		//commands.put("skip", new CommandSkip());
-		//commands.put("repeat", new CommandRepeat());
-		//commands.put("song", new CommandSong());
+		commands.put("join", new CommandJoin());
+		commands.put("leave", new CommandLeave());
+		commands.put("play", new CommandPlay());
+		commands.put("pause", new CommandPause());
+		commands.put("resume", new CommandUnpause());
+		commands.put("skip", new CommandSkip());
+		commands.put("repeat", new CommandRepeat());
+		commands.put("song", new CommandSong());
 		commands.put("eval", new CommandEval());
-		//commands.put("clear", new CommandClear());
-		//commands.put("queue", new CommandQueue());
+		commands.put("clear", new CommandClear());
+		commands.put("queue", new CommandQueue());
 		commands.put("translate", new CommandTranslate());
 		commands.put("wolf", new CommandWolf());
 		commands.put("profile", new CommandProfile());
-		//commands.put("volume", new CommandVolume());
+		commands.put("volume", new CommandVolume());
 		//commands.put("test", new CommandTest());
 		commands.put("server", new CommandServerInfo());
 		commands.put("logchannel", new CommandLogChannel());
@@ -167,10 +167,10 @@ public class Main {
 		commands.put("report", new CommandReport());
 		commands.put("reports", new CommandReports());
 
-		//musicManagers = new HashMap<>();
-		//playerManager = new DefaultAudioPlayerManager();
-		//AudioSourceManagers.registerRemoteSources(playerManager);
-		//AudioSourceManagers.registerLocalSource(playerManager);
+		musicManagers = new HashMap<>();
+		playerManager = new DefaultAudioPlayerManager();
+		AudioSourceManagers.registerRemoteSources(playerManager);
+		AudioSourceManagers.registerLocalSource(playerManager);
 
 		/*colors.put("black", Color.BLACK);
 		colors.put("blue", Color.BLUE);
@@ -188,8 +188,8 @@ public class Main {
 	}
 
 	public static void handleCommand(CommandContainer cmd) {
-		if (!DataBase.queryGlobalBan(cmd.event.getAuthor())) {
-			if (commands.containsKey(cmd.invoke)) {
+		if (commands.containsKey(cmd.invoke)) {
+			if (!DataBase.queryGlobalBan(cmd.event.getAuthor())) {
 				if (cmd.event.getChannel().isPrivate()) {
 					if (!cmd.invoke.equals("help") && !cmd.invoke.equals("invite")) {
 						Message.sendRawMessageInChannel(cmd.event.getChannel(), "I can only execute the commands `.horohelp` and `.horoinvite` in pm, sorry!");
@@ -236,10 +236,10 @@ public class Main {
 					commands.get(cmd.invoke).executed(false, cmd.event);
 				}
 			} else {
-				RequestBuffer.request(() -> cmd.event.getMessage().addReaction("❓"));
+				RequestBuffer.request(() -> cmd.event.getMessage().addReaction("\uD83D\uDD10"));
 			}
 		} else {
-			RequestBuffer.request(() -> cmd.event.getMessage().addReaction("\uD83D\uDD10"));
+			RequestBuffer.request(() -> cmd.event.getMessage().addReaction("❓"));
 		}
 	}
 }
