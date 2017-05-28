@@ -61,11 +61,13 @@ public class AnnotationListener {
 	
 	@EventSubscriber
 	public void onReadyEvent(ReadyEvent event) {
+		Main.LOGGER.info("Ready event fired! Everything appears to be functional");
 		event.getClient().changePlayingText(".horohelp | .horoinvite");
 	}
 
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
+		Main.LOGGER.info("Guild created!");
 		if(event.getClient().isReady()) {
 			if (DataBase.guildQuery(event.getGuild().getStringID(), "id") == null) { // People were getting spammed so just to prevent spam
 				for (IChannel channel : event.getGuild().getChannels()) {
