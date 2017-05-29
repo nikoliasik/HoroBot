@@ -48,8 +48,13 @@ Temporary Items
 *.jar
 *.class
 *.xml
+.idea/*
+!.idea/*.xml
 !src/main/resources/logback.xml
 !pom.xml
-target/*
 *.log
 src/main/java/com/winter/horobot/core/Config.java
+
+# Recommended IDEA Settings
+.idea/workspace.xml
+target/
