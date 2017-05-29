@@ -1347,7 +1347,7 @@ public class DataBase {
 			source.setDatabaseName("postgres");
 			source.setUser("postgres");
 			source.setPassword(Config.dataBasePassword);
-			source.setMaxConnections(300);
+			source.setMaxConnections(1000);
 		} catch(Exception ignored) {
 			ignored.printStackTrace();
 		}

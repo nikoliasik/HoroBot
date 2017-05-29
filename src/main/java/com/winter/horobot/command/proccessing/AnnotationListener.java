@@ -26,6 +26,8 @@ import com.winter.horobot.util.Cooldowns;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
+import com.winter.horobot.util.music.GuildMusicManager;
+import com.winter.horobot.util.music.MusicUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
@@ -55,35 +57,42 @@ import java.util.concurrent.TimeUnit;
 public class AnnotationListener {
 
 	private ThreadPoolExecutor threadPool = new ThreadPoolExecutor(20, 50, 1, TimeUnit.SECONDS,
-			new ArrayBlockingQueue<>(300),
+			new ArrayBlockingQueue<>(1000),
 			runnable -> new Thread(runnable, "Horo Message Handler"),
 			new ThreadPoolExecutor.AbortPolicy());
 	
 	@EventSubscriber
 	public void onReadyEvent(ReadyEvent event) {
-		Main.LOGGER.info("Ready event fired! Everything appears to be functional");
 		event.getClient().changePlayingText(".horohelp | .horoinvite");
+		Main.LOGGER.info("Ready event fired! Everything appears to be functional");
 	}
 
 	@EventSubscriber
 	public void onGuildCreateEvent(GuildCreateEvent event) {
-		Main.LOGGER.info("Guild created!");
-		if(event.getClient().isReady()) {
-			if (DataBase.guildQuery(event.getGuild().getStringID(), "id") == null) { // People were getting spammed so just to prevent spam
-				for (IChannel channel : event.getGuild().getChannels()) {
-					if (channel.getModifiedPermissions(event.getGuild().getEveryoneRole()).contains(Permissions.SEND_MESSAGES)) {
-						try {
-							Message.sendRawMessageInChannel(channel,
-									"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
-							break;
-						} catch (MissingPermissionsException e) { }
+		try {
+			threadPool.submit(() -> {
+				if (event.getClient().isReady()) {
+					if (DataBase.guildQuery(event.getGuild().getStringID(), "id") == null) {
+						DataBase.insertGuild(event.getGuild().getStringID());
+						for (IChannel channel : event.getGuild().getChannels()) {
+							if (channel.getModifiedPermissions(event.getGuild().getEveryoneRole()).contains(Permissions.SEND_MESSAGES)) {
+								try {
+									Message.sendRawMessageInChannel(channel,
+											"This seems like a nice place for me to be, thanks for bringing me in :3\nType `.horohelp` to see what I can do for you!");
+									break;
+								} catch (MissingPermissionsException e) {
+								}
+							}
+						}
 					}
 				}
-			}
+				Main.LOGGER.info("Guild created with name" + event.getGuild().getName() + "!");
+			});
+		} catch (RejectedExecutionException e) {
+			e.printStackTrace();
 		}
-		DataBase.insertGuild(event.getGuild().getStringID()); // DO NOT REMOVE THIS, I WANT TO BE 100% SURE IT WORKS
 	}
-	
+	 
 	@EventSubscriber
 	public void onGuildLeaveEvent(GuildLeaveEvent event) {
 		DataBase.deleteGuild(event.getGuild().getStringID());
@@ -100,12 +109,6 @@ public class AnnotationListener {
 							//if (scanned != null) {
 							//	Message.sendEmbed(Utility.getLogChannel(event.getGuild(), event.getChannel()), "", scanned, false);
 							//}
-							//if (DataBase.queryIsBlacklisted(event.getGuild(), event.getAuthor())) {
-							//	if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bignore")) {
-							//		return;
-							//	}
-							//}
-							//DataBase.insertGuild(event.getGuild().getStringID());
 							String prefix = DataBase.guildQuery(event.getGuild().getStringID(), "prefix");
 							if (event.getMessage().getContent().startsWith(".horo")) {
 								Main.handleCommand(Main.parser.parse(event.getMessage().getContent(), ".horo", event));
@@ -150,7 +153,6 @@ public class AnnotationListener {
 				}
 			});
 		} catch (RejectedExecutionException e) {
-			Message.sendRawMessageInChannel(event.getChannel(), "I'm sorry, but I can't keep up! Wait for a tiny bit and try again!");
 			e.printStackTrace();
 		}
 	}
@@ -169,82 +171,95 @@ public class AnnotationListener {
 	public void onVoiceLeaveEvent(UserVoiceChannelLeaveEvent event) {
 		if(event.getClient().isReady()) {
 			if (event.getUser() == event.getClient().getOurUser()) {
-				//GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
-				//manager.player.stopTrack();
+				GuildMusicManager manager = MusicUtils.getGuildAudioPlayer(event.getGuild());
+				manager.player.stopTrack();
 			}
 		}
 	}
 
 	@EventSubscriber
 	public void onUserJoinEvent(UserJoinEvent event) {
-		if(event.getClient().isReady()) {
-			IChannel channel = Utility.getLogChannel(event.getGuild());
-			if (channel != null) {
-				EmbedBuilder builder = new EmbedBuilder();
-				builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
-				builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
-				builder.withColor(Color.GREEN);
-				builder.withThumbnail(Utility.getAvatar(event.getUser()));
-				builder.withTimestamp(event.getJoinTime());
+		try {
+			threadPool.submit(() -> {
+				if (event.getClient().isReady()) {
+					IChannel channel = Utility.getLogChannel(event.getGuild());
+					if (channel != null) {
+						EmbedBuilder builder = new EmbedBuilder();
+						builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
+						builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
+						builder.withColor(Color.GREEN);
+						builder.withThumbnail(Utility.getAvatar(event.getUser()));
+						builder.withTimestamp(event.getJoinTime());
 
-				builder.appendField("Name", event.getUser().getName(), true);
-				builder.appendField("ID", event.getUser().getStringID(), true);
-				builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
-				builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
-				String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
-				if (!welcome.equals("none"))
-					builder.appendField("Welcome Message", Utility.formatWelcome(event.getGuild(), event.getUser(), welcome), false);
-				Message.sendEmbed(channel, "", builder.build(), false);
-			}
-			String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
-			if (!pm.equals("none"))
-				event.getUser().getOrCreatePMChannel().sendMessage(Utility.formatWelcome(event.getGuild(), event.getUser(), pm));
+						builder.appendField("Name", event.getUser().getName(), true);
+						builder.appendField("ID", event.getUser().getStringID(), true);
+						builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
+						builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
+						String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
+						if (!welcome.equals("none"))
+							builder.appendField("Welcome Message", Utility.formatWelcome(event.getGuild(), event.getUser(), welcome), false);
+						Message.sendEmbed(channel, "", builder.build(), false);
+					}
+					String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
+					if (!pm.equals("none"))
+						event.getUser().getOrCreatePMChannel().sendMessage(Utility.formatWelcome(event.getGuild(), event.getUser(), pm));
 
-			if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
-				if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban")) {
-					Message.sendEmbed(channel, "", Utility.banUser(event.getGuild(), event.getUser(), event.getClient().getOurUser(), "[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1")), false);
-				}
-			}
+					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
+						if (DataBase.guildBooleanQuery(event.getGuild().getStringID(), "bpresentban")) {
+							Message.sendEmbed(channel, "", Utility.banUser(event.getGuild(), event.getUser(), event.getClient().getOurUser(), "[Automated Blacklist Ban] " + Localisation.getMessage(event.getGuild().getStringID(), "quote-1")), false);
+						}
+					}
 
-			String roleID = DataBase.guildQuery(event.getGuild().getStringID(), "role");
-			if (roleID != null) {
-				IRole role = null;
-				try {
-					role = event.getGuild().getRoleByID(Long.parseUnsignedLong(roleID));
-				} catch (NumberFormatException ignored) { }
-				if (role != null) {
-					try {
-						final IRole temp = role;
-						RequestBuffer.request(() -> {
-							event.getUser().addRole(temp);
-						});
-					} catch (MissingPermissionsException e) {
-						Message.sendPM(event.getGuild().getOwner(), "missing-role-perm", event.getUser().getName());
+					String roleID = DataBase.guildQuery(event.getGuild().getStringID(), "role");
+					if (roleID != null) {
+						IRole role = null;
+						try {
+							role = event.getGuild().getRoleByID(Long.parseUnsignedLong(roleID));
+						} catch (NumberFormatException ignored) {
+						}
+						if (role != null) {
+							try {
+								final IRole temp = role;
+								RequestBuffer.request(() -> {
+									event.getUser().addRole(temp);
+								});
+							} catch (MissingPermissionsException e) {
+								Message.sendPM(event.getGuild().getOwner(), "missing-role-perm", event.getUser().getName());
+							}
+						}
 					}
 				}
-			}
+			});
+		} catch (RejectedExecutionException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@EventSubscriber
 	public void onUserLeaveEvent(UserLeaveEvent event) {
-		if (event.getClient().isReady()) {
-			for (IChannel channel : event.getGuild().getChannels()) {
-				if (DataBase.channelQuery(channel.getStringID()).equals("log")) {
-					EmbedBuilder builder = new EmbedBuilder();
-					builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
-					builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
-					builder.withColor(Color.RED);
-					builder.withThumbnail(Utility.getAvatar(event.getUser()));
-					builder.withTimestamp(LocalDateTime.now());
+		try {
+			threadPool.submit(() -> {
+				if (event.getClient().isReady()) {
+					for (IChannel channel : event.getGuild().getChannels()) {
+						if (DataBase.channelQuery(channel.getStringID()).equals("log")) {
+							EmbedBuilder builder = new EmbedBuilder();
+							builder.withAuthorIcon(Utility.getAvatar(event.getUser()));
+							builder.withAuthorName(event.getUser().getName() + "#" + event.getUser().getDiscriminator());
+							builder.withColor(Color.RED);
+							builder.withThumbnail(Utility.getAvatar(event.getUser()));
+							builder.withTimestamp(LocalDateTime.now());
 
-					builder.appendField("Name", event.getUser().getName(), true);
-					builder.appendField("ID", event.getUser().getStringID(), true);
-					builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
-					builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
-					Message.sendEmbed(channel, "", builder.build(), false);
+							builder.appendField("Name", event.getUser().getName(), true);
+							builder.appendField("ID", event.getUser().getStringID(), true);
+							builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
+							builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
+							Message.sendEmbed(channel, "", builder.build(), false);
+						}
+					}
 				}
-			}
+			});
+		} catch (RejectedExecutionException e) {
+			e.printStackTrace();
 		}
 	}
 }
