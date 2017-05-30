@@ -30,7 +30,7 @@ public class CommandPurge implements Command {
 			} catch (NumberFormatException e) { return; }
 
 			try {
-				//event.getChannel().getMessageHistory(messages).stream().filter(message -> message).collect(Collectors.toList());
+				event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages).stream().distinct().collect(Collectors.toList()));
 				Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
 				return;
 			} catch (MissingPermissionsException e) {
@@ -46,7 +46,7 @@ public class CommandPurge implements Command {
 				} catch (NumberFormatException e) { return; }
 
 				try {
-					event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages).stream().filter(message -> message.getAuthor().equals(user)).collect(Collectors.toList()));
+					event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages).stream().filter(message -> message.getAuthor().equals(user)).distinct().collect(Collectors.toList()));
 					Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
 					return;
 				} catch (MissingPermissionsException e) {
