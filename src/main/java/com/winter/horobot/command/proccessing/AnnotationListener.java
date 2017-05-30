@@ -196,12 +196,12 @@ public class AnnotationListener {
 						builder.appendField("Bot", WordUtils.capitalize(Boolean.toString(event.getUser().isBot())), true);
 						builder.appendField("Creation Date", "" + event.getUser().getCreationDate(), true);
 						String welcome = DataBase.guildQuery(event.getGuild().getStringID(), "welcome");
-						if (!welcome.equals("none"))
+						if (!"none".equals(welcome))
 							builder.appendField("Welcome Message", Utility.formatWelcome(event.getGuild(), event.getUser(), welcome), false);
 						Message.sendEmbed(channel, "", builder.build(), false);
 					}
 					String pm = DataBase.guildQuery(event.getGuild().getStringID(), "pm");
-					if (!pm.equals("none"))
+					if (!"none".equals(pm))
 						event.getUser().getOrCreatePMChannel().sendMessage(Utility.formatWelcome(event.getGuild(), event.getUser(), pm));
 
 					if (DataBase.queryIsBlacklisted(event.getGuild(), event.getUser())) {
