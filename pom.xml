@@ -127,5 +127,11 @@
             <artifactId>Open-Imaging</artifactId>
             <version>patch-1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.rtyley</groupId>
+            <artifactId>animated-gif-lib-for-java</artifactId>
+            <version>animated-gif-lib-1.2</version>
+        </dependency>
     </dependencies>
 </project>

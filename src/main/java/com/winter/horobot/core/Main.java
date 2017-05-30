@@ -164,6 +164,7 @@ public class Main {
 		commands.put("tag", new CommandTag());
 		commands.put("report", new CommandReport());
 		commands.put("reports", new CommandReports());
+		commands.put("trigger", new CommandTriggered());
 
 		musicManagers = new HashMap<>();
 		playerManager = new DefaultAudioPlayerManager();
