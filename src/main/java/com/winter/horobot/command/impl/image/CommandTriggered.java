@@ -34,6 +34,8 @@ public class CommandTriggered implements Command {
 		age.setRepeat(0);
 		if(args.length == 1) {
 			IUser u = event.getMessage().getMentions().get(0);
+			ByteArrayOutputStream o = new ByteArrayOutputStream();
+			age.start(o);
 			try {
 				List<BufferedImage> avatarFrames = null;
 				try {
@@ -59,9 +61,8 @@ public class CommandTriggered implements Command {
 					g.drawImage(triggeredFrames.get(i % triggeredFrames.size()), 0, 0, null);
 					age.addFrame(r);
 				}
-				ByteArrayOutputStream o = new ByteArrayOutputStream();
-				age.start(o);
-				Message.sendFile(event.getChannel(), "", "triggered", new ByteArrayInputStream(o.toByteArray()));
+				age.finish();
+				Message.sendFile(event.getChannel(), "", "triggered.gif", new ByteArrayInputStream(o.toByteArray()));
 			} catch (IOException e) {
 				e.printStackTrace(); // TODO correctly handle exceptions
 			} catch (URISyntaxException e) {
@@ -73,7 +74,7 @@ public class CommandTriggered implements Command {
 
 			}
 		} else {
-			// HELP
+			Message.sendMessageInChannel(event.getChannel(), help());
 		}
 	}
 
