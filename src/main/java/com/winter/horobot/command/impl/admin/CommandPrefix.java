@@ -12,11 +12,7 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandPrefix implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		if(event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR)) {
-			return true;
-		} else {
-			return false;
-		}
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {

@@ -14,8 +14,7 @@ public class CommandTest implements Command {
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getStringID().equals("288996157202497536")
-				|| event.getAuthor().getStringID().equals("155954930191040513");
+		return event.getAuthor().getStringID().equals("288996157202497536");
 	}
 
 	@Override

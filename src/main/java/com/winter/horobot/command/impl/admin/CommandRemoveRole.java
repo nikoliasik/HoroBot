@@ -26,6 +26,7 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import sx.blah.discord.handle.obj.IRole;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.handle.obj.Permissions;
+import sx.blah.discord.util.MissingPermissionsException;
 
 public class CommandRemoveRole implements Command {
 
@@ -35,60 +36,38 @@ public class CommandRemoveRole implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
-			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.MANAGE_ROLES)) {
-				IUser user = null;
-				if (event.getMessage().getMentions().size() == 1) {
-					user = event.getMessage().getMentions().get(0);
-				}
-				if (user == null) {
-					try {
-						user = event.getGuild().getUserByID(Long.parseUnsignedLong(args[0]));
-					} catch (NumberFormatException ignored) { }
-				}
-				if (user == null) {
-					if (event.getGuild().getUsersByName(args[0]).size() == 1) {
-						user = event.getGuild().getUsersByName(args[0]).get(0);
-					}
-				}
+			IUser user = null;
+			if (event.getMessage().getMentions().size() == 1)
+				user = event.getMessage().getMentions().get(0);
+			if (user == null)
+				user = Utility.getFirstUser(event.getGuild(), args[0]);
 
-				IRole role = null;
-				if (event.getMessage().getRoleMentions().size() == 1) {
-					role = event.getMessage().getRoleMentions().get(0);
-				}
-				if (role == null) {
-					try {
-						role = event.getGuild().getRoleByID(Long.parseUnsignedLong(args[1]));
-					} catch (NumberFormatException e) { }
-				}
-				if (role == null) {
-					if (event.getGuild().getRolesByName(args[1]).size() == 1) {
-						role = event.getGuild().getRolesByName(args[1]).get(0);
-					}
-				}
+			IRole role = null;
+			if (event.getMessage().getRoleMentions().size() == 1)
+				role = event.getMessage().getRoleMentions().get(0);
+			if (role == null)
+				role = Utility.getFirstRole(event.getGuild(), args[1]);
 
-				if (user != null) {
-					if (role != null) {
-						if (user.getRolesForGuild(event.getMessage().getGuild()).contains(role)) {
-							try {
-								user.removeRole(role);
-								Message.reply("user-role-removed", event.getMessage());
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						} else {
-							Message.reply("has-no-role", event.getMessage());
+			if (user != null) {
+				if (role != null) {
+					if (user.getRolesForGuild(event.getMessage().getGuild()).contains(role)) {
+						try {
+							user.removeRole(role);
+							Message.reply("user-role-removed", event.getMessage());
+						} catch (MissingPermissionsException e) {
+							Message.sendMessageInChannel(event.getChannel(), "missing-permissions", Utility.permissionsAsString(e.getMissingPermissions()));
 						}
 					} else {
-						Message.reply("user-not-found", event.getMessage());
+						Message.reply("has-no-role", event.getMessage());
 					}
 				} else {
-					Message.reply("no-role", event.getMessage());
+					Message.reply("user-not-found", event.getMessage());
 				}
 			} else {
-				Message.sendMessageInChannel(event.getChannel(), "missing-manage-roles-perm");
+				Message.reply("no-role", event.getMessage());
 			}
 		} else {
-			Message.reply(help(), event.getMessage());
+			Message.sendMessageInChannel(event.getChannel(), "missing-manage-roles-perm");
 		}
 	}
 
