@@ -18,7 +18,7 @@
 
 package com.winter.horobot.util;
 
-import at.dhyan.open_imaging.GifDecoder;
+import com.madgag.gif.fmsware.GifDecoder;
 import com.winter.horobot.animals.Inventory;
 import com.winter.horobot.animals.Item;
 import com.winter.horobot.animals.wolf.WolfCosmetics;
@@ -40,6 +40,8 @@ import sx.blah.discord.util.RequestBuffer;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -527,7 +529,7 @@ public class Utility {
 
 	public static EmbedObject getStats(int shard, int shardCount, int serverCount) {
 		updateStats();
-		if (!Config.debug) postStats(shard, shardCount, serverCount);
+		if (!Config.DEBUG) postStats(shard, shardCount, serverCount);
 
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withColor(Color.CYAN);
@@ -706,11 +708,20 @@ public class Utility {
 	}
 
 	public static List<BufferedImage> getGifFramesFromStream(InputStream stream) throws IOException {
-		GifDecoder.GifImage image = GifDecoder.read(stream);
-		List<BufferedImage> frames = new ArrayList<>();
-		for (int i = 0; i < image.getFrameCount(); i++) {
-			frames.add(image.getFrame(i));
+		GifDecoder gd = new GifDecoder();
+		gd.read(stream);
+		List<BufferedImage> frames = new ArrayList<>(gd.getFrameCount());
+		for(int i = 0; i < gd.getFrameCount(); i++) {
+			frames.add(gd.getFrame(i));
 		}
 		return frames;
 	}
+
+	public static BufferedImage copyImage(BufferedImage bi) {
+		ColorModel cm = bi.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = bi.copyData(null);
+		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+
 }

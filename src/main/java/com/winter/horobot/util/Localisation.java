@@ -89,30 +89,39 @@ public class Localisation {
 			case "en":
 				if (enLang.containsKey(str))
 					return enLang.getString(str);
+				break;
 			case "nl":
 				if (nlLang.containsKey(str))
 					return nlLang.getString(str);
+				break;
 			case "es":
 				if (esLang.containsKey(str))
 					return esLang.getString(str);
+				break;
 			case "pt":
 				if (ptLang.containsKey(str))
 					return ptLang.getString(str);
+				break;
 			case "hi":
 				if (hiLang.containsKey(str))
 					return hiLang.getString(str);
+				break;
 			case "fr":
 				if (frLang.containsKey(str))
 					return frLang.getString(str);
+				break;
 			case "de":
 				if (deLang.containsKey(str))
 					return deLang.getString(str);
+				break;
 			case "ru":
 				if (ruLang.containsKey(str))
 					return ruLang.getString(str);
+				break;
 			case "ro":
 				if (roLang.containsKey(str))
 					return roLang.getString(str);
+				break;
 		}
 		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
 	}

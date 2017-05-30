@@ -32,6 +32,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONException;
@@ -72,7 +73,7 @@ public class HTMLHandler {
 
 		try {
 			Unirest.post("https://bots.discord.pw/api/bots/289381714885869568/stats")
-					.header("Authorization", Config.discordBotsToken)
+					.header("Authorization", Config.DISCORD_BOTS_PW_TOKEN)
 					.header("Content-Type", "application/json")
 					.body(obj.toString())
 					.asJson();
@@ -81,7 +82,7 @@ public class HTMLHandler {
 		}
 		try {
 			Unirest.post("https://discordbots.org/api/bots/289381714885869568/stats")
-					.header("Authorization", Config.discordBotsOrgToken)
+					.header("Authorization", Config.DISCORD_BOTS_PW_TOKEN)
 					.header("Content-Type", "application/json")
 					.body(obj.toString())
 					.asJson();
@@ -99,7 +100,7 @@ public class HTMLHandler {
 
 	public static String searchYouTube(String search) throws UnirestException, UnsupportedEncodingException {
 		String temp = URLEncoder.encode(search, "UTF-8");
-		String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + temp + "&maxResults=10&key=" + Config.youtubeKey;
+		String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + temp + "&maxResults=10&key=" + Config.YOUTUBE_KEY;
 		HttpResponse<JsonNode> response = Unirest.get(url)
 				.header("Accept", "text/plain")
 				.asJson();
@@ -113,7 +114,7 @@ public class HTMLHandler {
 		String temp = URLEncoder.encode(text, "UTF-8");
 		String url = "http://www.transltr.org/api/translate?text=" + temp + "&to=" + to + "&from=" + from;
 		HttpResponse<JsonNode> response = Unirest.get(url)
-				.header("X-Mashape-Key", Config.mashapeKey)
+				.header("X-Mashape-Key", Config.MASHAPE_KEY)
 				.header("Accept", "text/plain")
 				.asJson();
 
@@ -145,7 +146,7 @@ public class HTMLHandler {
 			}
 
 			HttpResponse<JsonNode> response = Unirest.get(url)
-					.header("X-Mashape-Key", Config.mashapeKey)
+					.header("X-Mashape-Key", Config.MASHAPE_KEY)
 					.header("Accept", "text/plain")
 					.asJson();
 
@@ -251,7 +252,7 @@ public class HTMLHandler {
 		} else {
 			request = new HttpGet("https://myanimelist.net/api/manga/search.xml");
 		}
-		String auth = Config.malCredentials;
+		String auth = Config.MAL_CREDENTIALS;
 		byte[] encodedPath = Base64.encodeBase64(auth.getBytes(Charset.forName("ISO-8859-1")));
 		String authHeader = "Basic " + new String(encodedPath);
 		request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
@@ -382,17 +383,17 @@ public class HTMLHandler {
 	}
 
 	public static String requestKona(String[] tags, KONA_RATING rating) throws URISyntaxException, IOException, ParserConfigurationException, SAXException {
-		HttpClient client = HttpClients.createDefault();
+		CloseableHttpClient client = HttpClients.createDefault();
 		HttpGet request = new HttpGet("http://www.konachan.com/post.xml");
 		URIBuilder builder = new URIBuilder(request.getURI()).addParameter("limit", "100");
 
 		String msgSearch = "";
-		String searchOrig = "";
-		for(int i = 0; i < tags.length; i++) {
-			if(tags.length == 1) {
-				searchOrig += tags[i];
+		StringBuilder searchOrig = new StringBuilder();
+		for (String tag : tags) {
+			if (tags.length == 1) {
+				searchOrig.append(tag);
 			} else {
-				searchOrig += msgSearch + tags[i] + " ";
+				searchOrig.append(msgSearch).append(tag).append(" ");
 			}
 		}
 
@@ -414,6 +415,8 @@ public class HTMLHandler {
 
 		response = client.execute(request);
 		int status = response.getStatusLine().getStatusCode();
+
+		client.close();
 
 		if(status == 200) {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();

@@ -18,6 +18,7 @@ import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class CommandTriggered implements Command {
@@ -30,12 +31,12 @@ public class CommandTriggered implements Command {
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		AnimatedGifEncoder age = new AnimatedGifEncoder();
-		age.setFrameRate(15);
-		age.setRepeat(0);
 		if(args.length == 1) {
 			IUser u = event.getMessage().getMentions().get(0);
 			ByteArrayOutputStream o = new ByteArrayOutputStream();
 			age.start(o);
+			age.setDelay(30);
+			age.setRepeat(0);
 			try {
 				List<BufferedImage> avatarFrames = null;
 				try {
@@ -48,18 +49,15 @@ public class CommandTriggered implements Command {
 					avatarFrames = Collections.singletonList(ImageIO.read(conn.getInputStream()));
 				}
 				List<BufferedImage> triggeredFrames = Utility.getGifFramesFromStream(new URI("http://i.imgur.com/9WSux7S.gif").toURL().openStream());
-				for(int i = 0; i < 50; i++) {
-					int[] avatarFramePixels = new int[256 * 256];
-					BufferedImage r = avatarFrames.get(i % avatarFrames.size());
-					r.getRaster().getPixels(0, 0, 128, 128, avatarFramePixels);
-					List<Integer> redPixels = Arrays.stream(avatarFramePixels).mapToObj(p -> new Color(new Color(p).getRed(), new Color(p).getGreen() / 2, new Color(p).getBlue() / 2).getRGB()).collect(Collectors.toList());
-					for(int c = 0; c < redPixels.size(); c++) {
-						avatarFramePixels[c] = redPixels.get(c);
-					}
-					r.getRaster().setPixels(0, 0, 128, 128, avatarFramePixels);
-					Graphics g = r.getGraphics();
-					g.drawImage(triggeredFrames.get(i % triggeredFrames.size()), 0, 0, null);
-					age.addFrame(r);
+				for(int i = 0; i < 200; i++) {
+					BufferedImage avatarFrame = Utility.copyImage(avatarFrames.get(i % avatarFrames.size()));
+					BufferedImage triggeredFrame = triggeredFrames.get(i % triggeredFrames.size());
+					Graphics2D avatarGraphics = avatarFrame.createGraphics();
+					avatarGraphics.setColor(new Color(1.0f, 0.0f, 0.0f,i * 0.005f));
+					avatarGraphics.fillRect(0, 0, avatarFrame.getWidth(), avatarFrame.getHeight());
+					avatarGraphics.setColor(Color.WHITE);
+					avatarGraphics.drawImage(triggeredFrame, 0, 0, avatarFrame.getWidth(), avatarFrame.getHeight(), null);
+					age.addFrame(avatarFrame);
 				}
 				age.finish();
 				Message.sendFile(event.getChannel(), "", "triggered.gif", new ByteArrayInputStream(o.toByteArray()));
