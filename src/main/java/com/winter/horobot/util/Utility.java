@@ -31,6 +31,7 @@ import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -72,6 +73,33 @@ public class Utility {
 			"0e291f67c9274a1abdddeb3fd919cbaa",
 			"1cbd08c76f8af6dddce02c5138971129"
 	};
+
+	public static IUser getFirstUser(IGuild guild, String search) {
+		IUser user = null;
+		try {
+			user = guild.getUserByID(Long.parseUnsignedLong(search));
+		} catch (NumberFormatException ignored) { }
+
+		if (user == null) {
+			List<IUser> users = guild.getUsersByName(search);
+			if (users.size() == 1) {
+				user = users.get(0);
+			}
+		}
+		return user;
+	}
+
+	public static IRole getFirstRole(IGuild guild, String search) {
+		IRole role = null;
+		try {
+			role = guild.getRoleByID(Long.parseUnsignedLong(search));
+		} catch (NumberFormatException ignored) { }
+
+		if (role == null && guild.getRolesByName(search).size() == 1) {
+			role = guild.getRolesByName(search).get(0);
+		}
+		return role;
+	}
 
 	public static String waitForInput(IChannel channel, IUser user, long timeout, TimeUnit timeUnit) {
 		String obj = null;
@@ -116,12 +144,11 @@ public class Utility {
 			obj = Main.INSTANCE.client.getDispatcher().waitFor(
 					(ReactionAddEvent e) ->
 							e.getMessage().equals(message) &&
-							e.getAuthor().equals(user) &&
-							Arrays.asList(choises).contains(e.getReaction().getUnicodeEmoji().toString()),
+							e.getUser().equals(user) &&
+							Arrays.asList(choises).contains(e.getReaction().toString()),
 					timeout, timeUnit)
 					.getReaction()
-					.getMessage()
-			.getContent();
+					.toString();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (NullPointerException ignored) { }
