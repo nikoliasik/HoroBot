@@ -215,9 +215,10 @@ public class Main {
 					cmd.event.getChannel().setTypingStatus(true);
 					try {
 						commands.get(cmd.invoke).action(cmd.args, cmd.beheaded, cmd.event);
+					} catch (RateLimitException | MissingPermissionsException de) {
+						throw de;
 					} catch (Exception e) {
-						if (!Config.debug) {
-							if (e instanceof RateLimitException || e instanceof MissingPermissionsException) throw e;
+						if (!Config.DEBUG) {
 							Message.sendMessageInChannel(cmd.event.getChannel(), "error");
 							EmbedBuilder builder = new EmbedBuilder();
 							builder.withColor(Color.RED);
