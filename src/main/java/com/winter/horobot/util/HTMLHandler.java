@@ -26,21 +26,17 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.request.GetRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.http.HttpException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -82,7 +78,7 @@ public class HTMLHandler {
 		}
 		try {
 			Unirest.post("https://discordbots.org/api/bots/289381714885869568/stats")
-					.header("Authorization", Config.DISCORD_BOTS_PW_TOKEN)
+					.header("Authorization", Config.DISCORD_BOTS_ORG_TOKEN)
 					.header("Content-Type", "application/json")
 					.body(obj.toString())
 					.asJson();
@@ -204,7 +200,7 @@ public class HTMLHandler {
 			Element post = (Element) posts.getElementsByTagName("post").item(rand.nextInt(posts.getElementsByTagName("post").getLength()));
 			try {
 				URL urll = new URL("http:" + post.getAttribute("file_url"));
-				return "http:" + post.getAttribute("file_url");
+				return urll.toURI().toASCIIString();
 			} catch (Exception e) {
 				return "https:" + post.getAttribute("file_url");
 			}

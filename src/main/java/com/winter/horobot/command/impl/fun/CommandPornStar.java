@@ -38,8 +38,6 @@ public class CommandPornStar implements Command {
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
-			String guildID = event.getMessage().getGuild().getStringID();
-			
 			Random rand = new Random();
 			String prefix = pre[rand.nextInt(pre.length)];
 			String suffix = suf[rand.nextInt(suf.length)];

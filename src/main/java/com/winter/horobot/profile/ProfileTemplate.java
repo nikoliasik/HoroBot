@@ -1,7 +1,5 @@
 package com.winter.horobot.profile;
 
-import com.winter.horobot.animals.Item;
-import com.winter.horobot.animals.wolf.WolfCosmetics;
 import com.winter.horobot.animals.wolf.WolfProfileBuilder;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.obj.IUser;

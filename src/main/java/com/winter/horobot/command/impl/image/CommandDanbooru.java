@@ -34,7 +34,7 @@ public class CommandDanbooru implements Command {
 			try {
 				String image = HTMLHandler.requestDanbooru(args);
 				URL url = new URL(image);
-				builder.withImage(image);
+				builder.withImage(url.toURI().toASCIIString());
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 			} catch (Exception e) {
 				if (e instanceof UnirestException) {

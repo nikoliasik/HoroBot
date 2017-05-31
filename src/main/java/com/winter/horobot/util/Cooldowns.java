@@ -22,7 +22,6 @@ public class Cooldowns {
 	}
 
 	public static long getRemaining(String bucket, IUser user) {
-		HashMap<String, Long> bket = COOLDOWNS.computeIfAbsent(bucket, d-> new HashMap<>());
 		return getCooldownEndTime(bucket, user) - System.currentTimeMillis();
 	}
 
