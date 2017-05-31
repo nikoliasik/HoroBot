@@ -74,6 +74,10 @@ public class Utility {
 			"1cbd08c76f8af6dddce02c5138971129"
 	};
 
+	public static List<String> getPermissions(IGuild guild, IUser user) {
+
+	}
+
 	public static IUser getFirstUser(IGuild guild, String search) {
 		IUser user = null;
 		try {

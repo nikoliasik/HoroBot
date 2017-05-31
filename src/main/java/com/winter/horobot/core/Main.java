@@ -20,9 +20,7 @@ package com.winter.horobot.core;
 
 import com.winter.horobot.command.impl.admin.*;
 import com.winter.horobot.command.impl.dev.CommandEval;
-import com.winter.horobot.command.impl.dev.CommandReboot;
 import com.winter.horobot.command.impl.dev.CommandReports;
-import com.winter.horobot.command.impl.dev.CommandTest;
 import com.winter.horobot.command.impl.image.*;
 import com.winter.horobot.command.impl.misc.*;
 import com.winter.horobot.command.impl.profile.CommandProfile;
@@ -113,7 +111,6 @@ public class Main {
 		commands.put("ps", new CommandPornStar());
 		commands.put("8ball", new CommandEightball());
 		commands.put("stats", new CommandStats());
-		commands.put("reboot", new CommandReboot());
 		commands.put("assign", new CommandAssignRole());
 		commands.put("remove", new CommandRemoveRole());
 		commands.put("woop", new CommandWoop());
