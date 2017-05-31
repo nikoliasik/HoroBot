@@ -12,10 +12,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandAnime implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	@Override
 	public CommandType getType() {
 		return CommandType.FUN;

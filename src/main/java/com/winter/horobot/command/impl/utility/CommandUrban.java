@@ -10,10 +10,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandUrban implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {

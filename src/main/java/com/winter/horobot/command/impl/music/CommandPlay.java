@@ -13,10 +13,6 @@ import java.net.URL;
 
 public class CommandPlay implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
 			if (event.getGuild().getConnectedVoiceChannel() == null) {

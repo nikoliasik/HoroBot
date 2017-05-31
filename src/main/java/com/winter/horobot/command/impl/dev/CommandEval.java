@@ -20,6 +20,7 @@ import javax.script.ScriptException;
  * @author Apache the Attack Helicopter
  */
 public class CommandEval implements Command {
+
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		return event.getAuthor().getStringID().equals("288996157202497536")

@@ -11,11 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandAutoRole implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
-	}
-
-	@Override
 	public CommandType getType() {
 		return CommandType.ADMIN;
 	}

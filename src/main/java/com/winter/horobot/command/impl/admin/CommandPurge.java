@@ -13,10 +13,6 @@ import java.util.stream.Collectors;
 
 public class CommandPurge implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
-	}
-
 	@Override
 	public CommandType getType() {
 		return CommandType.ADMIN;
@@ -46,7 +42,7 @@ public class CommandPurge implements Command {
 				} catch (NumberFormatException e) { return; }
 
 				try {
-					event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages).stream().filter(message -> message.getAuthor().equals(user)).distinct().collect(Collectors.toList()));
+					event.getChannel().bulkDelete(event.getChannel().getMessageHistory(messages).stream().distinct().filter(message -> message.getAuthor().equals(user)).collect(Collectors.toList()));
 					Message.sendMessageInChannel(event.getChannel(), "purged-messages", messages);
 					return;
 				} catch (MissingPermissionsException e) {

@@ -19,11 +19,6 @@ import java.util.stream.Collectors;
 public class CommandProfile implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
-	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if(!Cooldowns.onCooldown("profile-stats-" + event.getAuthor().getStringID(), event.getAuthor())) {

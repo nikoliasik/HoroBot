@@ -65,6 +65,48 @@ public class DataBase {
 		}
 	}
 
+	public static void createPermissionSchema() {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = "CREATE SCHEMA IF NOT EXISTS permission;";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(Exception ignored) {
+			ignored.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignored) { }
+			}
+		}
+	}
+
+	public static void createUserPermissionTable() {
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			Statement statement = con.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS permission.user (" +
+					"guildID TEXT NOT NULL," +
+					"userID TEXT NOT NULL," +
+					"permission TEXT NOT NULL," +
+					"PRIMARY KEY (guildID, userID));";
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch(SQLException ignored) {
+			ignored.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignored) { }
+			}
+		}
+	}
+
 	public static void createGlobalBanSchema() {
 		Connection con = null;
 		try {
@@ -1336,6 +1378,32 @@ public class DataBase {
 		}
 	}
 
+	public static List<String> queryPermissions(IGuild guild, IUser user) {
+		List<String> permissions = new ArrayList<>();
+		Connection con = null;
+		try {
+			con = source.getConnection();
+			String sql = "SELECT permission FROM permission.user WHERE guildID=? AND userID=?;";
+			PreparedStatement statement = con.prepareStatement(sql);
+			statement.setString(1, guild.getStringID());
+			statement.setString(2, user.getStringID());
+			ResultSet set = statement.executeQuery();
+			while (set.next()) {
+				permissions.add(set.getString("permission"));
+			}
+			statement.close();
+		} catch(Exception ignored) {
+			ignored.printStackTrace();
+		} finally {
+			if(con != null) {
+				try {
+					con.close();
+				} catch (SQLException ignored) { }
+			}
+		}
+		return permissions;
+	}
+
 	public static void connect() {
 		try {
 			//Class.forName("org.postgresql.Driver");
@@ -1350,5 +1418,29 @@ public class DataBase {
 		} catch(Exception ignored) {
 			ignored.printStackTrace();
 		}
+	}
+
+	public static void init() {
+		DataBase.createGuildSchema();
+		DataBase.createGuildTable();
+		DataBase.createChannelSchema();
+		DataBase.createChannelTable();
+		DataBase.createWolfSchema();
+		DataBase.createWolfTable();
+		DataBase.createUserSchema();
+		DataBase.createItemTable();
+		DataBase.createUserTable();
+		DataBase.createFoxSchema();
+		DataBase.createFoxTable();
+		DataBase.createBlacklistSchema();
+		DataBase.createBlacklistTable();
+		DataBase.createTagSchema();
+		DataBase.createTagTable();
+		DataBase.createReportSchema();
+		DataBase.createReportTable();
+		DataBase.createGlobalBanSchema();
+		DataBase.createGlobalBanTable();
+		DataBase.createPermissionSchema();
+		DataBase.createUserPermissionTable();
 	}
 }

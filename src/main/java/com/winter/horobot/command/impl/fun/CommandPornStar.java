@@ -32,10 +32,6 @@ public class CommandPornStar implements Command {
 	
 	protected final String[] suf = { "God", "Hang", "Lad", "Penis", "Black", "RattleSnake", "Boy","Willie", "Missle", "Stick", "King", "Wanker", "Cock", "Queen", "BackSeat", "Johnson","Honey","Wiggle", "Ass" ,"Fat","Dick",  "Splash", "Titties", "Chode", "Commando" , "Shaft", "Swang", "Wizard", "Cobra", "Nasty", "Kardashian", "Slop", "Machine", "Cracker", "Sexy", "Slim", "Wet", "Drop", "Dip" };
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
 			Random rand = new Random();

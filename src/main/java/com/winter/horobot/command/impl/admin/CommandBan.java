@@ -11,10 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandBan implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.BAN);
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
 			IUser user = null;

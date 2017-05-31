@@ -76,25 +76,7 @@ public class Main {
 		template.loadFont();
 
 		DataBase.connect();
-		DataBase.createGuildSchema();
-		DataBase.createGuildTable();
-		DataBase.createChannelSchema();
-		DataBase.createChannelTable();
-		DataBase.createWolfSchema();
-		DataBase.createWolfTable();
-		DataBase.createUserSchema();
-		DataBase.createItemTable();
-		DataBase.createUserTable();
-		DataBase.createFoxSchema();
-		DataBase.createFoxTable();
-		DataBase.createBlacklistSchema();
-		DataBase.createBlacklistTable();
-		DataBase.createTagSchema();
-		DataBase.createTagTable();
-		DataBase.createReportSchema();
-		DataBase.createReportTable();
-		DataBase.createGlobalBanSchema();
-		DataBase.createGlobalBanTable();
+		DataBase.init();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
@@ -119,7 +101,6 @@ public class Main {
 		commands.put("cat", new CommandCat());
 		commands.put("ping", new CommandPing());
 		commands.put("github", new CommandGitHub());
-		commands.put("channel", new CommandChannel());
 		commands.put("kick", new CommandKick());
 		commands.put("ban", new CommandBan());
 		commands.put("rate", new CommandRate());
@@ -198,7 +179,7 @@ public class Main {
 					}
 				}
 				boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-				if (cmd.event.getAuthor().getStringID().equals("288996157202497536")) safe = true;
+				//if (cmd.event.getAuthor().getStringID().equals("288996157202497536")) safe = true;
 
 				if (safe) {
 					for (String arg : cmd.args) {

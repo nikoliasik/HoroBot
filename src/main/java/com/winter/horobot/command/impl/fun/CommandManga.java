@@ -11,10 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandManga implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	@Override
 	public CommandType getType() {
 		return CommandType.FUN;
@@ -23,7 +19,7 @@ public class CommandManga implements Command {
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
-				EmbedObject manga = null;
+				EmbedObject manga;
 				try {
 					manga = HTMLHandler.requestAnime(args, event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), Utility.getAvatar(event.getAuthor()), 1);
 				} catch (Exception e) {
