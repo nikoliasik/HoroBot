@@ -4,7 +4,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.database.DataBase;
-import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -33,7 +33,7 @@ public class CommandDanbooru implements Command {
 			builder.withAuthorName(event.getAuthor().getName());
 			builder.withColor(Color.CYAN);
 			try {
-				String image = HTMLHandler.requestDanbooru(args);
+				String image = HTTPHandler.requestDanbooru(args);
 				URL url = new URL(image);
 				builder.withImage(url.toURI().toASCIIString());
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);

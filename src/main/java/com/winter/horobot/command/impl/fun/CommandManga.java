@@ -2,7 +2,7 @@ package com.winter.horobot.command.impl.fun;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
-import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -21,7 +21,7 @@ public class CommandManga implements Command {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedObject manga;
 				try {
-					manga = HTMLHandler.requestAnime(args, event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), Utility.getAvatar(event.getAuthor()), 1);
+					manga = HTTPHandler.requestAnime(args, event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), Utility.getAvatar(event.getAuthor()), 1);
 				} catch (Exception e) {
 					Message.sendMessageInChannel(event.getChannel(), "html-error");
 					return;

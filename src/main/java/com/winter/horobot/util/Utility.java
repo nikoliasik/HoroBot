@@ -450,7 +450,7 @@ public class Utility {
 	}
 
 	public static void postStats(int shard, int shardCount, int serverCount) {
-		HTMLHandler.postStats(shard, shardCount, serverCount);
+		HTTPHandler.postStats(shard, shardCount, serverCount);
 	}
 
 	public static EmbedObject banUser(IGuild guild, IUser user, IUser author, String reason) {

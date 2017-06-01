@@ -53,7 +53,7 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Random;
 
-public class HTMLHandler {
+public class HTTPHandler {
 	
 	public enum KONA_RATING {
 		SAFE,

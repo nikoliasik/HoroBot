@@ -3,7 +3,7 @@ package com.winter.horobot.command.impl.image;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.database.DataBase;
-import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
@@ -32,7 +32,7 @@ public class CommandR34 implements Command {
 			builder.withAuthorName(event.getAuthor().getName());
 			builder.withColor(Color.CYAN);
 			try {
-				String image = HTMLHandler.requestR34(args);
+				String image = HTTPHandler.requestR34(args);
 				URL url = new URL(image);
 				builder.withImage(url.toURI().toASCIIString());
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
