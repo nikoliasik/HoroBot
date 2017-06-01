@@ -11,10 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandPrefix implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			Message.sendRawMessageInChannel(event.getChannel(), String.format(Localisation.getMessage(event.getGuild().getStringID(), "current-prefix"), DataBase.guildQuery(event.getGuild().getStringID(), "prefix")));

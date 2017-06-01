@@ -10,11 +10,6 @@ import sx.blah.discord.handle.obj.Permissions;
 public class CommandVolume implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
-	}
-
-	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
 			int volume;

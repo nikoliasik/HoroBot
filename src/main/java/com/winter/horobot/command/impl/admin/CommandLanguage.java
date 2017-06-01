@@ -28,10 +28,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandLanguage implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getMessage().getAuthor().getPermissionsForGuild(event.getMessage().getGuild()).contains(Permissions.MANAGE_SERVER);
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 1) {
 			if(Localisation.changeLanguage(event.getMessage().getGuild().getStringID(), args[0])) {

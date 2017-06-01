@@ -20,9 +20,7 @@ package com.winter.horobot.core;
 
 import com.winter.horobot.command.impl.admin.*;
 import com.winter.horobot.command.impl.dev.CommandEval;
-import com.winter.horobot.command.impl.dev.CommandReboot;
 import com.winter.horobot.command.impl.dev.CommandReports;
-import com.winter.horobot.command.impl.dev.CommandTest;
 import com.winter.horobot.command.impl.image.*;
 import com.winter.horobot.command.impl.misc.*;
 import com.winter.horobot.command.impl.profile.CommandProfile;
@@ -78,25 +76,7 @@ public class Main {
 		template.loadFont();
 
 		DataBase.connect();
-		DataBase.createGuildSchema();
-		DataBase.createGuildTable();
-		DataBase.createChannelSchema();
-		DataBase.createChannelTable();
-		DataBase.createWolfSchema();
-		DataBase.createWolfTable();
-		DataBase.createUserSchema();
-		DataBase.createItemTable();
-		DataBase.createUserTable();
-		DataBase.createFoxSchema();
-		DataBase.createFoxTable();
-		DataBase.createBlacklistSchema();
-		DataBase.createBlacklistTable();
-		DataBase.createTagSchema();
-		DataBase.createTagTable();
-		DataBase.createReportSchema();
-		DataBase.createReportTable();
-		DataBase.createGlobalBanSchema();
-		DataBase.createGlobalBanTable();
+		DataBase.init();
 
 		INSTANCE = ClientManager.createClient();
 		EventDispatcher dispatcher = INSTANCE.client.getDispatcher();
@@ -113,7 +93,6 @@ public class Main {
 		commands.put("ps", new CommandPornStar());
 		commands.put("8ball", new CommandEightball());
 		commands.put("stats", new CommandStats());
-		commands.put("reboot", new CommandReboot());
 		commands.put("assign", new CommandAssignRole());
 		commands.put("remove", new CommandRemoveRole());
 		commands.put("woop", new CommandWoop());
@@ -122,7 +101,6 @@ public class Main {
 		commands.put("cat", new CommandCat());
 		commands.put("ping", new CommandPing());
 		commands.put("github", new CommandGitHub());
-		commands.put("channel", new CommandChannel());
 		commands.put("kick", new CommandKick());
 		commands.put("ban", new CommandBan());
 		commands.put("rate", new CommandRate());
@@ -201,7 +179,7 @@ public class Main {
 					}
 				}
 				boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-				if (cmd.event.getAuthor().getStringID().equals("288996157202497536")) safe = true;
+				//if (cmd.event.getAuthor().getStringID().equals("288996157202497536")) safe = true;
 
 				if (safe) {
 					for (String arg : cmd.args) {

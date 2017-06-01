@@ -11,10 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandSkip implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return (event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR));
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if(MusicUtils.getGuildAudioPlayer(event.getGuild()).player.getPlayingTrack() != null) {

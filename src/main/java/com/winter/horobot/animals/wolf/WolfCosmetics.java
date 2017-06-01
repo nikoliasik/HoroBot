@@ -121,7 +121,9 @@ public class WolfCosmetics {
 	}
 
 	public enum hats {
-		NONE("/wolf/hats/none.png", "NONE1");
+		NONE("/wolf/hats/none.png", "NONE1"),
+		HORN("/wolf/hats/horn.png", "HORN"),
+		PARTY_HAT("/wolf/hats/party-hat.png", "PARTY HAT");
 
 		private final String file;
 		private final String name;
@@ -161,7 +163,8 @@ public class WolfCosmetics {
 	}
 
 	public enum paws {
-		NONE("/wolf/paws/none.png", "NONE3");
+		NONE("/wolf/paws/none.png", "NONE3"),
+		CHRISTMAS_SOCKS("/wolf/paws/christmas-socks.png", "CHRISTMAS SOCKS");
 
 		private final String file;
 		private final String name;

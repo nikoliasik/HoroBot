@@ -15,11 +15,6 @@ import java.util.ArrayList;
 public class CommandServerInfo implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
-	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.withThumbnail(event.getGuild().getIconURL());

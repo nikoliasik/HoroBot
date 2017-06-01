@@ -14,10 +14,6 @@ import java.util.Random;
 
 public class CommandHug implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(event.getMessage().getMentions().size() == 1) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {

@@ -28,10 +28,6 @@ import java.util.Random;
 
 public class CommandShoot implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		try {
 			if(args.length == 1) {

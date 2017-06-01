@@ -30,10 +30,6 @@ import sx.blah.discord.util.MissingPermissionsException;
 
 public class CommandRemoveRole implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.MANAGE_ROLES);
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 2) {
 			IUser user = null;
