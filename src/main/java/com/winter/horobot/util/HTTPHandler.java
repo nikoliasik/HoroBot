@@ -40,17 +40,18 @@ import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class HTTPHandler {
@@ -59,6 +60,28 @@ public class HTTPHandler {
 		SAFE,
 		ECCHI,
 		NSFW
+	}
+
+	public static String stringFromUrl(URL url) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		BufferedReader rd;
+		if (url.getProtocol().equals("https")) {
+			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2");
+			con.connect();
+			rd = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+		} else {
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2");
+			con.connect();
+			rd = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
+		}
+
+		String line;
+		while ((line = rd.readLine()) != null) {
+			sb.append(line);
+		}
+		return sb.toString();
 	}
 
 	public static void postStats(int shard, int shardCount, int serverCount) {
