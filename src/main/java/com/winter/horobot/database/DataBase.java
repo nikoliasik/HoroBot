@@ -11,6 +11,7 @@ import org.postgresql.ds.PGPoolingDataSource;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
+import javax.imageio.ImageIO;
 import java.sql.*;
 import java.util.*;
 

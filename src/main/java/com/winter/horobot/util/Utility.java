@@ -29,7 +29,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageUpdateEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionEvent;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -405,11 +407,11 @@ public class Utility {
 	}
 
 	public static EmbedObject scanMessageAndAction(IGuild guild, IMessage message) {
-		//String content = message.getContent();
-		//List<IMessage.Attachment> attachments = message.getAttachments();
-		//List<IChannel> channelMentions = message.getChannelMentions();
-		//List<IRole> roleMentions = message.getRoleMentions();
-		//List<IUser> userMentions = message.getMentions();
+		String content = message.getContent();
+		List<IMessage.Attachment> attachments = message.getAttachments();
+		List<IChannel> channelMentions = message.getChannelMentions();
+		List<IRole> roleMentions = message.getRoleMentions();
+		List<IUser> userMentions = message.getMentions();
 
 		/*for (String bannedString : DataBase.getBannedStrings(guild)) {
 			if (content.contains(bannedString)) {

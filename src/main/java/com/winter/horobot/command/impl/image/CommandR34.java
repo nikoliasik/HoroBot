@@ -34,7 +34,7 @@ public class CommandR34 implements Command {
 			try {
 				String image = HTTPHandler.requestR34(args);
 				URL url = new URL(image);
-				builder.withImage(url.toURI().toASCIIString());
+				builder.withImage(image);
 				Message.sendEmbed(event.getChannel(), "", builder.build(), false);
 			} catch (Exception e) {
 				Message.sendMessageInChannel(event.getChannel(), "html-error");
