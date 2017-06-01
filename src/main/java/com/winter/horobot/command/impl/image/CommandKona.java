@@ -19,7 +19,7 @@
 package com.winter.horobot.command.impl.image;
 
 import com.winter.horobot.command.proccessing.CommandType;
-import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -32,16 +32,12 @@ import java.awt.*;
 
 public class CommandKona implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedBuilder builder = new EmbedBuilder();
 				try {
-					builder.withImage(HTMLHandler.requestKona(args, HTMLHandler.KONA_RATING.SAFE));
+					builder.withImage(HTTPHandler.requestKona(args, HTTPHandler.KONA_RATING.SAFE));
 				} catch (Exception e) {
 					builder.appendField("Error", Localisation.getMessage(event.getGuild().getStringID(), "html-error"), false);
 				}

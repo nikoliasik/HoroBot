@@ -9,11 +9,6 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 public class CommandLoop implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
-	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 

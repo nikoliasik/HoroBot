@@ -16,11 +16,6 @@ import java.util.Map;
 public class CommandTag implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
-	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
 			EmbedBuilder builder = new EmbedBuilder();

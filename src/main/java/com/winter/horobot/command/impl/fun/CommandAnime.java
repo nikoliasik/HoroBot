@@ -2,7 +2,7 @@ package com.winter.horobot.command.impl.fun;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
-import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -11,10 +11,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 
 public class CommandAnime implements Command {
-
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
 
 	@Override
 	public CommandType getType() {
@@ -26,7 +22,7 @@ public class CommandAnime implements Command {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedObject anime;
 				try {
-					anime = HTMLHandler.requestAnime(args, event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), Utility.getAvatar(event.getAuthor()), 0);
+					anime = HTTPHandler.requestAnime(args, event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator(), Utility.getAvatar(event.getAuthor()), 0);
 				} catch (Exception e) {
 					Message.sendMessageInChannel(event.getChannel(), "html-error");
 					return;

@@ -25,11 +25,6 @@ import java.util.stream.Collectors;
 public class CommandWolf implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
-	@Override
 	public CommandType getType() {
 		return CommandType.ANIMAL;
 	}

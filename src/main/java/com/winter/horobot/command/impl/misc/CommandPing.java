@@ -26,10 +26,6 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 
 public class CommandPing implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			Message.sendMessageInChannel(event.getChannel(), "pong", event.getClient().getOurUser().getShard().getResponseTime() + " milliseconds");

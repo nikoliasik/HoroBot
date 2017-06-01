@@ -2,7 +2,7 @@ package com.winter.horobot.command.impl.music;
 
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
-import com.winter.horobot.util.HTMLHandler;
+import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Localisation;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -12,10 +12,6 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 import java.net.URL;
 
 public class CommandPlay implements Command {
-
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
-	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
@@ -34,7 +30,7 @@ public class CommandPlay implements Command {
 			} catch(Exception e) {
 				String link;
 				try {
-					link = HTMLHandler.searchYouTube(raw);
+					link = HTTPHandler.searchYouTube(raw);
 				} catch (Exception ee) {
 					Message.sendMessageInChannel(event.getChannel(), "html-error");
 					return;

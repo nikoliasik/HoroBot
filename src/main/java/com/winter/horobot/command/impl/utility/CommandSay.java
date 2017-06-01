@@ -27,14 +27,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandSay implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		if(event.getMessage().getAuthor().getPermissionsForGuild(event.getMessage().getGuild()).contains(Permissions.MANAGE_MESSAGES)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length > 0) {
 			Message.sendRawMessageInChannel(event.getChannel(), raw);

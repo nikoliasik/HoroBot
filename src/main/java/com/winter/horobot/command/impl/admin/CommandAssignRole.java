@@ -29,10 +29,6 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandAssignRole implements Command {
 
-	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.MANAGE_ROLES);
-	}
-
 	@Override
 	public CommandType getType() {
 		return CommandType.ADMIN;
