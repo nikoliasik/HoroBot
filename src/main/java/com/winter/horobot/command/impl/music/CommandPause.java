@@ -9,6 +9,10 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 
 public class CommandPause implements Command {
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return true;
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if (event.getGuild().getConnectedVoiceChannel() != null) {

@@ -16,51 +16,63 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.winter.horobot.command.impl.fun;
+package com.winter.horobot.command.impl.admin;
 
 import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.obj.IChannel;
+import sx.blah.discord.handle.obj.Permissions;
 
-import java.util.Random;
+public class CommandChannel implements Command {
 
-public class CommandShoot implements Command {
-
+	@Deprecated
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		return true;
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
 	}
 
+	@Deprecated
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		try {
-			if(args.length == 1) {
-				Random rand = new Random();
-				int result = rand.nextInt(2);
-
-				if(result == 0) {
-					int dmg = rand.nextInt(100);
-					Message.sendMessageInChannel(event.getChannel(), "shoot-hit", event.getAuthor().getName(), args[0], dmg);
-				} else if(result == 1) {
-					Message.reply("shoot-miss", event.getMessage());
+		if(args.length == 2) {
+			if (args[1].equals("ecchi") || args[1].equals("nsfw") || args[1].equals("none")) {
+				IChannel channel = null;
+				try {
+					channel = event.getGuild().getChannelByID(Long.parseUnsignedLong(args[0]));
+				} catch (NumberFormatException e) { }
+				if (channel != null) {
+					Utility.storeChannelMod(channel.getStringID(), args[1]);
+					Message.reply("mod-added", event.getMessage());
+				} else {
+					if (event.getGuild().getChannelsByName(args[0]).size() == 1) {
+						channel = event.getGuild().getChannelsByName(args[0]).get(0);
+						Utility.storeChannelMod(channel.getStringID(), args[1]);
+						Message.reply("mod-added", event.getMessage());
+					} else {
+						Message.reply("no-channels", event.getMessage());
+					}
 				}
 			} else {
-				Message.reply(help(), event.getMessage());
+				Message.reply("no-mods", event.getMessage());
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			Message.reply(help(), event.getMessage());
 		}
 	}
 
+	@Deprecated
 	public String help() {
-		return "shoot-help";
+		return "channel-help";
 	}
 
+	@Deprecated
 	@Override
 	public CommandType getType() {
-		return CommandType.FUN;
+		return CommandType.ADMIN;
 	}
 
+	@Deprecated
 	public void executed(boolean success, MessageReceivedEvent event) {
 		if(success)
 			Utility.commandsExecuted++;

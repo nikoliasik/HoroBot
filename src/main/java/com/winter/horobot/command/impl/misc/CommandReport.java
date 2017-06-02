@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 public class CommandReport implements Command {
 
 	@Override
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return true;
+	}
+
+	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length > 1) {
 			if (event.getMessage().getMentions().size() == 1) {

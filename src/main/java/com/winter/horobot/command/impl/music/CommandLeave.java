@@ -11,6 +11,13 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandLeave implements Command {
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		if(event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR)) {
+			return true;
+		}
+		return false;
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			if(event.getGuild().getConnectedVoiceChannel() != null) {

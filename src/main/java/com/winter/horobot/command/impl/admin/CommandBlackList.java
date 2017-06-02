@@ -20,6 +20,11 @@ import java.util.Map;
 public class CommandBlackList implements Command {
 
 	@Override
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.MANAGE_SERVER);
+	}
+
+	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
 			EmbedBuilder builder = new EmbedBuilder();

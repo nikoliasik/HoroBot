@@ -26,6 +26,10 @@ import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedE
 
 public class CommandInvite implements Command {
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return true;
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length == 0) {
 			Message.sendRawPM("https://discordapp.com/oauth2/authorize?client_id=289381714885869568&scope=bot&permissions=372435975", event.getAuthor());

@@ -18,34 +18,16 @@
 
 package com.winter.horobot.command.proccessing;
 
-import com.winter.horobot.core.Main;
-import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.Utility;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
-import java.util.Map;
-
 public interface Command {
-
 	default boolean called(String[] args, MessageReceivedEvent event) {
-		return DataBase.queryPermissions(event.getGuild(), event.getAuthor()).contains(getPermission());
+		return true;
 	}
-
 	void action(String[] args, String raw, MessageReceivedEvent event);
-
 	String help();
-
 	CommandType getType();
-
-	default String getPermission() {
-		for (Map.Entry<String, Command> set : Main.commands.entrySet()) {
-			if (set.getValue() == this) {
-				return "horobot." + getType().getDescription().toLowerCase() + "." + set.getKey();
-			}
-		}
-		return null;
-	}
-
 	default void executed(boolean success, MessageReceivedEvent event) {
 		if(success)
 			Utility.commandsExecuted++;

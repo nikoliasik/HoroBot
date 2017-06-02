@@ -33,6 +33,10 @@ import java.util.stream.Collectors;
 
 public class CommandHelp implements Command {
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return true;
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length == 0) {
 			for(int i = 0; i < CommandType.getTypeCount(); i++) {

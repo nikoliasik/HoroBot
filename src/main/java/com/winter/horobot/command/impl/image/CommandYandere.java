@@ -3,7 +3,6 @@ package com.winter.horobot.command.impl.image;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.winter.horobot.command.proccessing.Command;
 import com.winter.horobot.command.proccessing.CommandType;
-import com.winter.horobot.database.DataBase;
 import com.winter.horobot.util.HTTPHandler;
 import com.winter.horobot.util.Message;
 import com.winter.horobot.util.Utility;
@@ -17,7 +16,7 @@ public class CommandYandere implements Command {
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		return event.getChannel().isNSFW() && DataBase.queryPermissions(event.getGuild(), event.getAuthor()).contains(getPermission());
+		return event.getChannel().isNSFW();
 	}
 
 	@Override

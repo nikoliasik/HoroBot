@@ -32,6 +32,10 @@ import java.awt.*;
 
 public class CommandEcchi implements Command {
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return event.getChannel().isNSFW();
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (args.length > 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {

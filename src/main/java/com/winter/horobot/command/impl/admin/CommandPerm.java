@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.winter.horobot.command.impl.fun;
+package com.winter.horobot.command.impl.admin;
 
 import com.winter.horobot.command.proccessing.CommandType;
 import com.winter.horobot.util.Message;
@@ -24,41 +24,27 @@ import com.winter.horobot.util.Utility;
 import com.winter.horobot.command.proccessing.Command;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 
-import java.util.Random;
-
-public class CommandShoot implements Command {
+public class CommandPerm implements Command {
 
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		return true;
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		try {
-			if(args.length == 1) {
-				Random rand = new Random();
-				int result = rand.nextInt(2);
-
-				if(result == 0) {
-					int dmg = rand.nextInt(100);
-					Message.sendMessageInChannel(event.getChannel(), "shoot-hit", event.getAuthor().getName(), args[0], dmg);
-				} else if(result == 1) {
-					Message.reply("shoot-miss", event.getMessage());
-				}
-			} else {
-				Message.reply(help(), event.getMessage());
+		if(args.length == 2) {
+			if(event.getMessage().getMentions().size() == 1) {
+			//	Message.replyRaw("return: " + Permission.hasUserPermission(event.getMessage().getGuild(), event.getMessage().getAuthor(), args[1]), event.getMessage());
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
 	public String help() {
-		return "shoot-help";
+		return "ecchi-help";
 	}
 
 	@Override
 	public CommandType getType() {
-		return CommandType.FUN;
+		return CommandType.ADMIN;
 	}
 
 	public void executed(boolean success, MessageReceivedEvent event) {

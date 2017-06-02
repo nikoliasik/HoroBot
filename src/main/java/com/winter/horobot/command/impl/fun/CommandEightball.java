@@ -34,6 +34,10 @@ public class CommandEightball implements Command {
 	
 	protected final int responses = 20;
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return true;
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if(args.length >= 1) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {

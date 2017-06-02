@@ -24,6 +24,11 @@ import java.util.stream.Collectors;
 public class CommandTriggered implements Command {
 
 	@Override
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return true;
+	}
+
+	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		AnimatedGifEncoder age = new AnimatedGifEncoder();
 		if(args.length == 1) {

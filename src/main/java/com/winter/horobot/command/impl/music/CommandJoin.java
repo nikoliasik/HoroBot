@@ -11,6 +11,10 @@ import sx.blah.discord.handle.obj.Permissions;
 
 public class CommandJoin implements Command {
 
+	public boolean called(String[] args, MessageReceivedEvent event) {
+		return event.getAuthor().getPermissionsForGuild(event.getGuild()).contains(Permissions.ADMINISTRATOR);
+	}
+
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
 		if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.VOICE_CONNECT)) {
 			if (args.length == 1) {
