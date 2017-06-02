@@ -159,16 +159,16 @@ public class HTTPHandler {
 		builder.withAuthorName("Requested by @" + user.getName());
 		builder.withAuthorIcon(Utility.getAvatar(user));
 		try {
-			String url = "https://mashape-community-urban-dictionary.p.mashape.com/define?term=";
+			StringBuilder url = new StringBuilder("https://mashape-community-urban-dictionary.p.mashape.com/define?term=");
 			for(String tag : term) {
 				if(term.length == 1) {
-					url += tag;
+					url.append(tag);
 				} else {
-					url += tag + "+";
+					url.append(tag).append("+");
 				}
 			}
 
-			HttpResponse<JsonNode> response = Unirest.get(url)
+			HttpResponse<JsonNode> response = Unirest.get(url.toString())
 					.header("X-Mashape-Key", Config.MASHAPE_KEY)
 					.header("Accept", "text/plain")
 					.asJson();
@@ -205,50 +205,41 @@ public class HTTPHandler {
 
 	public static String requestR34(String[] tags) throws SAXException, ParserConfigurationException, URISyntaxException, IOException {
 		String url = "http://rule34.xxx/index.php?page=dapi&s=post&q=index";
-		String search = "";
+		StringBuilder search = new StringBuilder();
 		for(String tag : tags) {
-			search += tag + " ";
+			search.append(tag).append(" ");
 		}
 		URIBuilder builder = new URIBuilder(new URI(url));
 		builder.addParameter("limit", "100");
-		builder.addParameter("tags", search);
+		builder.addParameter("tags", search.toString());
 
 		HttpGet request = new HttpGet(builder.build());
-		HttpClient client = HttpClientBuilder.create().build();
+		CloseableHttpClient client = HttpClientBuilder.create().build();
 		org.apache.http.HttpResponse response = client.execute(request);
+		client.close();
 
-		if(response.getStatusLine().getStatusCode() == 200) {
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = db.parse(response.getEntity().getContent());
-
-			NodeList results = doc.getElementsByTagName("posts");
-			Element posts = (Element) results.item(0);
-			Random rand = new Random();
-			Element post = (Element) posts.getElementsByTagName("post").item(rand.nextInt(posts.getElementsByTagName("post").getLength()));
-			try {
-				URL urll = new URL("http:" + post.getAttribute("file_url"));
-				return "http:" + post.getAttribute("file_url");
-			} catch (Exception e) {
-				return "https:" + post.getAttribute("file_url");
-			}
-		}
-		return Localisation.getPMMessage("html-error");
+		return getImageFromTaggedSiteSearch(response);
 	}
 
 	public static String requestGelbooru(String[] tags) throws SAXException, ParserConfigurationException, URISyntaxException, IOException {
 		String url = "http://gelbooru.com/index.php?page=dapi&s=post&q=index";
-		String search = "";
+		StringBuilder search = new StringBuilder();
 		for(String tag : tags) {
-			search += tag + " ";
+			search.append(tag).append(" ");
 		}
 		URIBuilder builder = new URIBuilder(new URI(url));
 		builder.addParameter("limit", "100");
-		builder.addParameter("tags", search);
+		builder.addParameter("tags", search.toString());
 
 		HttpGet request = new HttpGet(builder.build());
-		HttpClient client = HttpClientBuilder.create().build();
+		CloseableHttpClient client = HttpClientBuilder.create().build();
 		org.apache.http.HttpResponse response = client.execute(request);
+		client.close();
 
+		return getImageFromTaggedSiteSearch(response);
+	}
+
+	public static String getImageFromTaggedSiteSearch(org.apache.http.HttpResponse response) throws ParserConfigurationException, SAXException, IOException {
 		if(response.getStatusLine().getStatusCode() == 200) {
 			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = db.parse(response.getEntity().getContent());
@@ -259,12 +250,11 @@ public class HTTPHandler {
 			Element post = (Element) posts.getElementsByTagName("post").item(rand.nextInt(posts.getElementsByTagName("post").getLength()));
 			try {
 				URL urll = new URL("http:" + post.getAttribute("file_url"));
-				return "http:" + post.getAttribute("file_url");
+				return urll.toString();
 			} catch (Exception e) {
 				return "https:" + post.getAttribute("file_url");
 			}
 		}
-
 		return Localisation.getPMMessage("html-error");
 	}
 
@@ -280,83 +270,84 @@ public class HTTPHandler {
 		String authHeader = "Basic " + new String(encodedPath);
 		request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
 
-		String searchOrig = "";
+		StringBuilder searchOrig = new StringBuilder();
 		for(String tag : tags) {
-			searchOrig += tag + " ";
+			searchOrig.append(tag).append(" ");
 		}
-		searchOrig = searchOrig.substring(0, searchOrig.length() - 1);
+		searchOrig = new StringBuilder(searchOrig.substring(0, searchOrig.length() - 1));
 
 		URIBuilder builder = new URIBuilder(request.getURI());
-		builder.addParameter("q", searchOrig);
+		builder.addParameter("q", searchOrig.toString());
 		request.setURI(builder.build());
 
-		HttpClient client = HttpClientBuilder.create().build();
-		org.apache.http.HttpResponse response = client.execute(request);
+		try(CloseableHttpClient client = HttpClientBuilder.create().build()) {
+			org.apache.http.HttpResponse response = client.execute(request);
 
-		int status = response.getStatusLine().getStatusCode();
+			int status = response.getStatusLine().getStatusCode();
 
-		if (status == 200) {
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = db.parse(response.getEntity().getContent());
+			if (status == 200) {
+				DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				Document doc = db.parse(response.getEntity().getContent());
 
-			EmbedBuilder embedBuilder = new EmbedBuilder();
-			embedBuilder.withColor(Color.CYAN);
-			embedBuilder.withAuthorName("Requested by @" + author);
-			embedBuilder.withAuthorIcon(authorIcon);
+				EmbedBuilder embedBuilder = new EmbedBuilder();
+				embedBuilder.withColor(Color.CYAN);
+				embedBuilder.withAuthorName("Requested by @" + author);
+				embedBuilder.withAuthorIcon(authorIcon);
 
-			NodeList results = doc.getElementsByTagName("entry");
-			if(results.getLength() == 0) {
-				return null;
-			}
-
-			Element thumb = (Element) results.item(0);
-			embedBuilder.withThumbnail(thumb.getElementsByTagName("image").item(0).getTextContent());
-
-			int cycle = results.getLength();
-			if(results.getLength() > 5) cycle = 5;
-			for(int i = 0; i < cycle; i++) {
-				Element element = (Element) results.item(i);
-
-				StringBuilder stringBuilder = new StringBuilder();
-
-				if(searchType == 0) {
-					String episodes = element.getElementsByTagName("episodes").item(0).getTextContent();
-					stringBuilder.append("**Episodes:** " + episodes + "\n");
+				NodeList results = doc.getElementsByTagName("entry");
+				if (results.getLength() == 0) {
+					return null;
 				}
 
-				String type = element.getElementsByTagName("type").item(0).getTextContent();
-				stringBuilder.append("**Type:** " + type + "\n");
+				Element thumb = (Element) results.item(0);
+				embedBuilder.withThumbnail(thumb.getElementsByTagName("image").item(0).getTextContent());
 
-				String animeStatus = element.getElementsByTagName("status").item(0).getTextContent();
-				stringBuilder.append("**Status:** " + animeStatus + "\n");
+				int cycle = results.getLength();
+				if (results.getLength() > 5) cycle = 5;
+				for (int i = 0; i < cycle; i++) {
+					Element element = (Element) results.item(i);
 
-				String desc = element.getElementsByTagName("synopsis").item(0).getTextContent();
-				stringBuilder.append("**Description:** " + desc + "\n");
+					StringBuilder stringBuilder = new StringBuilder();
 
-				String unescaped = stringBuilder.toString();
-				unescaped = StringEscapeUtils.unescapeXml(unescaped);
-				unescaped = unescaped.replaceAll("\\<.*?>","");
-				unescaped = unescaped.replaceAll("\\[.*?]","");
+					if (searchType == 0) {
+						String episodes = element.getElementsByTagName("episodes").item(0).getTextContent();
+						stringBuilder.append("**Episodes:** ").append(episodes).append("\n");
+					}
 
-				unescaped = unescaped.substring(0, Math.min(unescaped.length(), 1000));
-				embedBuilder.appendField(StringEscapeUtils.unescapeXml(element.getElementsByTagName("title").item(0).getTextContent()), unescaped, false);
+					String type = element.getElementsByTagName("type").item(0).getTextContent();
+					stringBuilder.append("**Type:** ").append(type).append("\n");
+
+					String animeStatus = element.getElementsByTagName("status").item(0).getTextContent();
+					stringBuilder.append("**Status:** ").append(animeStatus).append("\n");
+
+					String desc = element.getElementsByTagName("synopsis").item(0).getTextContent();
+					stringBuilder.append("**Description:** ").append(desc).append("\n");
+
+					String unescaped = stringBuilder.toString();
+					unescaped = StringEscapeUtils.unescapeXml(unescaped);
+					unescaped = unescaped.replaceAll("<.*?>", "");
+					unescaped = unescaped.replaceAll("\\[.*?]", "");
+
+					unescaped = unescaped.substring(0, Math.min(unescaped.length(), 1000));
+					embedBuilder.appendField(StringEscapeUtils.unescapeXml(element.getElementsByTagName("title").item(0).getTextContent()), unescaped, false);
+				}
+				return embedBuilder.build();
 			}
-			return embedBuilder.build();
+			return null;
 		}
-		return null;
 	}
 
-	public static String requestDanbooru(String[] tags) throws URISyntaxException, UnirestException {
-		String url = "https://danbooru.donmai.us/posts.json?limit=100?tags=";
+	public static String requestDanbooru(String[] tags) throws UnirestException {
+		StringBuilder url = new StringBuilder("https://danbooru.donmai.us/posts.json?limit=100?tags=");
 		for(String tag : tags) {
 			if(tags.length == 1) {
-				url += tag;
+				url.append(tag);
 			} else {
-				url += tag + "+";
+				url.append(tag).append("+");
 			}
 		}
 
-		HttpResponse<JsonNode> response = Unirest.get(url)
+		HttpResponse<JsonNode> response = Unirest.get(url.toString())
 				.header("Accept", "text/plain")
 				.asJson();
 
@@ -378,13 +369,13 @@ public class HTTPHandler {
 
 	public static String requestYandere(String[] tags) throws URISyntaxException, UnirestException {
 		String url = "https://yande.re/post.json";
-		String search = "";
+		StringBuilder search = new StringBuilder();
 		for(String tag : tags) {
-			search += tag + " ";
+			search.append(tag).append(" ");
 		}
 		URIBuilder builder = new URIBuilder(new URI(url));
 		builder.addParameter("limit", "100");
-		builder.addParameter("tags", search);
+		builder.addParameter("tags", search.toString());
 
 		HttpResponse<JsonNode> response = Unirest.get(builder.build().toASCIIString())
 				.header("Accept", "text/plain")
@@ -405,61 +396,60 @@ public class HTTPHandler {
 		return Localisation.getPMMessage("html-error");
 	}
 
-	public static String requestKona(String[] tags, KONA_RATING rating) throws URISyntaxException, IOException, ParserConfigurationException, SAXException {
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpGet request = new HttpGet("http://www.konachan.com/post.xml");
-		URIBuilder builder = new URIBuilder(request.getURI()).addParameter("limit", "100");
+	public static String requestKona(String[] tags, KONA_RATING rating) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+		try(CloseableHttpClient client = HttpClients.createDefault()) {
+			HttpGet request = new HttpGet("http://www.konachan.com/post.xml");
+			URIBuilder builder = new URIBuilder(request.getURI()).addParameter("limit", "100");
 
-		String msgSearch = "";
-		StringBuilder searchOrig = new StringBuilder();
-		for (String tag : tags) {
-			if (tags.length == 1) {
-				searchOrig.append(tag);
-			} else {
-				searchOrig.append(msgSearch).append(tag).append(" ");
+			String msgSearch = "";
+			StringBuilder searchOrig = new StringBuilder();
+			for (String tag : tags) {
+				if (tags.length == 1) {
+					searchOrig.append(tag);
+				} else {
+					searchOrig.append(msgSearch).append(tag).append(" ");
+				}
 			}
-		}
 
-		if (rating == KONA_RATING.SAFE) {
-			msgSearch = "order:score rating:safe " + searchOrig;
-		} else if (rating == KONA_RATING.ECCHI) {
-			msgSearch = "order:score rating:questionable " + searchOrig;
-		} else if (rating == KONA_RATING.NSFW) {
-			msgSearch = "order:score rating:explicit " + searchOrig;
-		}
-
-		builder.addParameter("tags", msgSearch);
-
-		URI uri = builder.build();
-
-		request.setURI(uri);
-
-		org.apache.http.HttpResponse response;
-
-		response = client.execute(request);
-		int status = response.getStatusLine().getStatusCode();
-
-		client.close();
-
-		if(status == 200) {
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = db.parse(response.getEntity().getContent());
-
-			NodeList list = doc.getElementsByTagName("post");
-			int index;
-			if(list.getLength() == 1) {
-				index = 0;
-			} else if(list.getLength() > 1) {
-				Random rand = new Random();
-				index = rand.nextInt(list.getLength());
-			} else {
-				return Localisation.getPMMessage("html-no-results");
+			if (rating == KONA_RATING.SAFE) {
+				msgSearch = "order:score rating:safe " + searchOrig;
+			} else if (rating == KONA_RATING.ECCHI) {
+				msgSearch = "order:score rating:questionable " + searchOrig;
+			} else if (rating == KONA_RATING.NSFW) {
+				msgSearch = "order:score rating:explicit " + searchOrig;
 			}
-			Node node = list.item(index);
-			NamedNodeMap map = node.getAttributes();
-			Node url = map.getNamedItem("file_url");
-			return "http:" + url.getNodeValue();
+
+			builder.addParameter("tags", msgSearch);
+
+			URI uri = builder.build();
+
+			request.setURI(uri);
+
+			org.apache.http.HttpResponse response;
+
+			response = client.execute(request);
+			int status = response.getStatusLine().getStatusCode();
+
+			if (status == 200) {
+				DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				Document doc = db.parse(response.getEntity().getContent());
+
+				NodeList list = doc.getElementsByTagName("post");
+				int index;
+				if (list.getLength() == 1) {
+					index = 0;
+				} else if (list.getLength() > 1) {
+					Random rand = new Random();
+					index = rand.nextInt(list.getLength());
+				} else {
+					return Localisation.getPMMessage("html-no-results");
+				}
+				Node node = list.item(index);
+				NamedNodeMap map = node.getAttributes();
+				Node url = map.getNamedItem("file_url");
+				return "http:" + url.getNodeValue();
+			}
+			return Localisation.getPMMessage("html-error");
 		}
-		return Localisation.getPMMessage("html-error");
 	}
 }
