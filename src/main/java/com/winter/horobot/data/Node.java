@@ -1,11 +1,16 @@
 package com.winter.horobot.data;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Node<T> {
+
+	public static Logger LOGGER = LoggerFactory.getLogger(Node.class);
 
 	private final T data;
 	private final List<Node<T>> children;
@@ -49,6 +54,7 @@ public class Node<T> {
 	}
 
 	public <U> Node<T> traverseThis(Function<Node<T>, U> converter, U toMatch) {
+		LOGGER.debug(String.format("`%s`", converter.apply(this).toString()));
 		if (converter.apply(this).equals(toMatch)) {
 			return this;
 		} else {
