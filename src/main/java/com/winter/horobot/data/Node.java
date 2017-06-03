@@ -63,5 +63,4 @@ public class Node<T> {
 		}
 		return null;
 	}
-
 }
