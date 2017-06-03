@@ -7,24 +7,30 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
+import java.time.ZoneId;
 
 public class StatusUtil {
 
 	public static Logger LOGGER = LoggerFactory.getLogger(StatusUtil.class);
 
 	public static boolean ping(MessageReceivedEvent e) {
+		long gatewayPing = e.getClient().getOurUser().getShard().getResponseTime();
+		long messageSent = e.getMessage().getTimestamp().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() - 1000;
+		LOGGER.debug("Message sent at `" + messageSent + "`...");
 		long beforeSend = System.currentTimeMillis();
-		IMessage m = e.getChannel().sendMessage("Pinging...");
+		IMessage m = e.getChannel().sendMessage("Receive latency: **" + (beforeSend - messageSent) + "ms**");
 		long afterSend = System.currentTimeMillis();
-		m.edit("Send latency: **" + (afterSend - beforeSend) + "ms**");
+		m.edit("Receive latency: **" + (beforeSend - messageSent) + "ms**\nSend latency: **" + (afterSend - beforeSend) + "ms**");
 		long afterEdit = System.currentTimeMillis();
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.withColor(Color.getHSBColor(((float) (afterEdit - beforeSend)) / 360.0f, 1.0f, 1.0f));
-		LOGGER.debug(String.format("Hue of Ping embed: %f", ((float) (afterEdit - beforeSend)) / 360.0f));
-		eb.appendDescription(">Before send: " + beforeSend + "\n>");
+		eb.withColor(Color.getHSBColor(((float) (afterEdit - messageSent)) / 360.0f, 1.0f, 1.0f));
+		LOGGER.debug(String.format("Hue of Ping embed: %f", ((float) (afterEdit - messageSent)) / 360.0f));
+		eb.appendDescription(">Message timestamp: " + messageSent + "\n>");
+		eb.appendDescription("Before send: " + beforeSend + "\n>");
 		eb.appendDescription("After send: " + afterSend + "\n>");
-		eb.appendDescription("After edit: " + afterEdit);
-		m.edit("Send latency: **" + (afterSend - beforeSend) + "ms**\nEdit latency: **" + (afterEdit - afterSend) + "ms**", eb.build());
+		eb.appendDescription("After edit: " + afterEdit + "\n\n**");
+		eb.appendDescription("Gateway response time: " + gatewayPing + "ms**");
+		m.edit("Receive latency: **" + (beforeSend - messageSent) + "ms**\nSend latency: **" + (afterSend - beforeSend) + "ms**\nEdit latency: **" + (afterEdit - afterSend) + "ms**", eb.build());
 		return true;
 	}
 
