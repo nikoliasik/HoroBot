@@ -57,7 +57,7 @@ public class Commands implements IListener<MessageReceivedEvent> {
 
 	@Override
 	public void handle(MessageReceivedEvent e) {
-		if (e.getMessage().getContent().startsWith(".horo ")) {
+		if (e.getMessage().getContent().startsWith(".horo")) {
 			String lookingFor = MessageUtil.args(e.getMessage());
 			LOGGER.debug(String.format("Looking for `%s` in the tree...", lookingFor));
 			commands.forEach(n -> {
