@@ -1,12 +1,16 @@
 package com.winter.horobot;
 
+import com.winter.horobot.command.Commands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class Main {
 
@@ -37,7 +41,7 @@ public class Main {
 			b.withToken(config.get(ConfigValue.DEBUG_TOKEN));
 		}
 
-		// TODO register listeners here
+		b.registerListener(new Commands());
 
 		client = b.login();
 	}
