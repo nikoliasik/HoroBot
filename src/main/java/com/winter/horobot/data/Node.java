@@ -3,9 +3,10 @@ package com.winter.horobot.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 public class Node<T> {
@@ -38,28 +39,24 @@ public class Node<T> {
 		return parent;
 	}
 
-	public <U> U compileTopDown(Function<T, U> converter, BiFunction<U, U, U> concatenator) {
-		List<Node<T>> me = new ArrayList<>();
+	public <U> U compileTopDown(Function<T, U> converter, BinaryOperator<U> concatenator) {
+		List<Node<T>> me = new LinkedList<>();
 		me.add(this);
 		Node<T> current = this;
 		while (current.getParent() != null) {
-			me.add(current.getParent());
+			me.add(0, current.getParent());
 			current = current.getParent();
 		}
-		U currentU = converter.apply(me.get(0).getData());
-		for (int i = 1; i < me.size(); i++) {
-			currentU = concatenator.apply(converter.apply(me.get(i).getData()), currentU);
-		}
-		return currentU;
+		return me.stream().map(t -> converter.apply(t.getData())).reduce(concatenator).orElse(converter.apply(this.getData()));
 	}
 
-	public <U> Node<T> traverseThis(Function<Node<T>, U> converter, U toMatch) {
+	public <U> Node<T> traverseThis(Function<Node<T>, U> converter, U toMatch, BiPredicate<U, U> equalityCheck) {
 		LOGGER.debug(String.format("`%s`", converter.apply(this).toString()));
-		if (converter.apply(this).equals(toMatch)) {
+		if (equalityCheck.test(converter.apply(this), toMatch)) {
 			return this;
 		} else {
 			for (Node<T> child : getChildren()) {
-				if (child.traverseThis(converter, toMatch).equals(toMatch)) {
+				if (equalityCheck.test(converter.apply(child.traverseThis(converter, toMatch, equalityCheck)), (toMatch))) {
 					return child;
 				}
 			}

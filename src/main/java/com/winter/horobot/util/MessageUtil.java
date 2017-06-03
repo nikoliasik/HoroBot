@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class MessageUtil {
 
 	public static String[] argsArray(IMessage m) {
-		return Arrays.copyOfRange(m.getContent().split("\\s+"), 1, m.getContent().split("\\s+").length);
+		return m.getContent().substring(GuildUtil.getPrefix(m.getGuild()).length()).split("\\s+");
 	}
 
 	public static String args(IMessage m) {
