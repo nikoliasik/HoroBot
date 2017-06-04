@@ -15,6 +15,13 @@ public class Localisation {
 	private static ResourceBundle deLang = ResourceBundle.getBundle("locale.de", new UTF8Control());
 	private static ResourceBundle ruLang = ResourceBundle.getBundle("locale.ru", new UTF8Control());
 	private static ResourceBundle roLang = ResourceBundle.getBundle("locale.ro");
+  
+  public static final Logger LOGGER = LoggerFactory.getLogger(Localisation.class);
+
+	public static String of(String v, IGuild g) {
+		LOGGER.debug(String.format("Translation of `%s` requested...", v));
+		return "[" + v + "]"; // TODO wintery-sama pls
+	}
 
 	private static String checkLanguage(IGuild guild) {
 		return (String) Database.get("SELECT language FROM guilds.guild WHERE id=?;", guild.getStringID()).get("language");

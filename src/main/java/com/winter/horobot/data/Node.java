@@ -5,13 +5,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 public class Node<T> {
 
-	public static Logger LOGGER = LoggerFactory.getLogger(Node.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
 
 	private final T data;
 	private final List<Node<T>> children;
@@ -56,11 +57,29 @@ public class Node<T> {
 			return this;
 		} else {
 			for (Node<T> child : getChildren()) {
-				if (equalityCheck.test(converter.apply(child.traverseThis(converter, toMatch, equalityCheck)), (toMatch))) {
+				if (equalityCheck.test(converter.apply(child.traverseThis(converter, toMatch, equalityCheck)), toMatch)) {
 					return child;
 				}
 			}
 		}
 		return null;
 	}
+
+	public <U> Node<T> traverseThis(Function<Node<T>, Set<U>> converter, U toMatch, BiPredicate<U, U> equalityCheck, boolean unused) {
+		for (U thing : converter.apply(this)) {
+			if (equalityCheck.test(thing, toMatch)) {
+				return this;
+			} else {
+				for (Node<T> child : getChildren()) {
+					for (U childThing : converter.apply(child)) {
+						if (equalityCheck.test(childThing, toMatch)) {
+							return child;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 }

@@ -7,7 +7,7 @@ import sx.blah.discord.handle.obj.IUser;
 
 public class ParsingUtil {
 
-	public static Logger LOGGER = LoggerFactory.getLogger(ParsingUtil.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(ParsingUtil.class);
 
 	public static IUser getUser(String s) {
 		LOGGER.debug(String.format("Passed in with `%s`...", s));
