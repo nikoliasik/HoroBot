@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public class Node<T> {
 
-	public static Logger LOGGER = LoggerFactory.getLogger(Node.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(Node.class);
 
 	private final T data;
 	private final List<Node<T>> children;

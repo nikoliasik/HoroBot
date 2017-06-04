@@ -11,7 +11,7 @@ import java.time.ZoneId;
 
 public class StatusUtil {
 
-	public static Logger LOGGER = LoggerFactory.getLogger(StatusUtil.class);
+	public static final Logger LOGGER = LoggerFactory.getLogger(StatusUtil.class);
 
 	public static boolean ping(MessageReceivedEvent e) {
 		long gatewayPing = e.getClient().getOurUser().getShard().getResponseTime();

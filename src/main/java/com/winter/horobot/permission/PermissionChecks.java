@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 public class PermissionChecks {
 
 	public static Predicate<MessageReceivedEvent> hasPermision(Permissions p) {
-		return e -> e.getChannel().getModifiedPermissions(e.getAuthor()).contains(p);
+		return e -> e.getChannel().getModifiedPermissions(e.getAuthor()).contains(p) && e.getChannel().getModifiedPermissions(e.getClient().getOurUser()).contains(p);
 	}
 
 }
