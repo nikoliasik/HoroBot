@@ -6,11 +6,6 @@ import org.postgresql.ds.PGPoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class Database {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Database.class);
@@ -38,15 +33,20 @@ public class Database {
 	 * @param sql The SQL query string following a prepared statement format
 	 * @param params The parameters to fill the query with
 	 * @return The resulting ResultSet
-	 * @throws NoResultsException If there were no results
 	 */
-	public static ResultSet get(String sql, Object... params) throws NoResultsException {
+	public static HashMap<String, Object> get(String sql, Object... params) {
+		HashMap<String, Object> results = null;
+		Connection con = null;
+		PreparedStatement statement = null;
 		ResultSet set = null;
 		try (Connection con = poolingDataSource.getConnection(); PreparedStatement statement = con.prepareStatement(sql)) {
 			setStatementParams(statement, params);
 			set = statement.executeQuery();
-			if (!set.next())
-				throw new NoResultsException("Index not found in database");
+			ResultSetMetaData md = set.getMetaData();
+			int columns = md.getColumnCount();
+			if (set.next())
+				for (int i = 1; i <= columns; i++)
+					results.put(md.getColumnName(i), set.getObject(i));
 		} catch (SQLException e) {
 			LOGGER.error("Caught an SQLException!", e);
 		} finally {
@@ -57,7 +57,7 @@ public class Database {
 				}
 			}
 		}
-		return set;
+		return results;
 	}
 
 	// TODO GetOrElse
