@@ -1,6 +1,7 @@
 package com.winter.horobot;
 
 import com.winter.horobot.command.Commands;
+import com.winter.horobot.data.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.api.ClientBuilder;
@@ -42,6 +43,8 @@ public class Main {
 		}
 
 		b.registerListener(new Commands());
+
+		Database.connect();
 
 		client = b.login();
 	}

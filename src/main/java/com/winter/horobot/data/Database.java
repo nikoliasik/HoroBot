@@ -5,6 +5,7 @@ import com.winter.horobot.exceptions.NoResultsException;
 import org.postgresql.ds.PGPoolingDataSource;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class Database {
 
@@ -57,9 +58,9 @@ public class Database {
 	 * @param sql The SQL query string following a prepared statement format
 	 * @param params The parameters to fill the query with
 	 * @return The resulting ResultSet
-	 * @throws NoResultsException If there were no results
 	 */
-	public static ResultSet get(String sql, Object... params) throws NoResultsException {
+	public static HashMap<String, Object> get(String sql, Object... params) {
+		HashMap<String, Object> results = null;
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet set = null;
@@ -79,8 +80,11 @@ public class Database {
 					statement.setDouble(i, (double) params[i]);
 			}
 			set = statement.executeQuery();
-			if (!set.next())
-				throw new NoResultsException("Index not found in database");
+			ResultSetMetaData md = set.getMetaData();
+			int columns = md.getColumnCount();
+			if (set.next())
+				for (int i = 1; i <= columns; i++)
+					results.put(md.getColumnName(i), set.getObject(i));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -100,7 +104,7 @@ public class Database {
 				} catch (SQLException ignored) { }
 			}
 		}
-		return set;
+		return results;
 	}
 
 	/**
