@@ -50,7 +50,7 @@ public class Main {
 		return client;
 	}
 
-	enum ConfigValue {
+	public enum ConfigValue {
 		DEBUG("debug"),
 		TOKEN("token"),
 		DEBUG_TOKEN("debug-token"),
