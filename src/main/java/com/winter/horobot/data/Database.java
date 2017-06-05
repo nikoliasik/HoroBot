@@ -21,8 +21,9 @@ public class Database {
 	/**
 	 * Executes an update to the database
 	 * @param sql String containing an SQL statement to be executed.
+	 * @return true on success, false on failure
 	 */
-	public static void set(String sql, Object... params) {
+	public static boolean set(String sql, Object... params) {
 		Connection con = null;
 		PreparedStatement statement = null;
 		try {
@@ -30,6 +31,7 @@ public class Database {
 			statement = con.prepareStatement(sql);
 			setStatementParams(statement, params);
 			statement.executeUpdate();
+			return true;
 		} catch (SQLException e) {
 			LOGGER.error("Caught an SQL exception!", e);
 		} finally {
@@ -44,6 +46,7 @@ public class Database {
 				} catch (SQLException ignored) { }
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -124,5 +127,14 @@ public class Database {
 		poolingDataSource.setUser("postgres");
 		poolingDataSource.setPassword(Main.config.get(Main.ConfigValue.DB_PASS));
 		poolingDataSource.setMaxConnections(1000);
+	}
+
+	/**
+	 * Sets up the database for bot use, creating all schemas and tables required
+	 * @return true upon successful setup and false on failure
+	 */
+	public static boolean setup() {
+		// TODO: Create all schemas and tables that are used by the bot here
+		return true;
 	}
 }
