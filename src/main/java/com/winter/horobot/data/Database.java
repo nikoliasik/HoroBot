@@ -92,9 +92,6 @@ public class Database {
 		return results;
 	}
 
-	// TODO GetOrElse
-	// TODO ^ what do you mean by this? :Thonk:
-
 	/**
 	 * Sets the statement parameters for a prepared statement
 	 * @param statement PreparedStatement with parameters that need to be set

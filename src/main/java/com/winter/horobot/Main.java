@@ -48,6 +48,7 @@ public class Main {
 		}
 
 		b.registerListener(new Commands());
+		b.registerListener(new HoroEventListener());
 
 		Database.connect();
 		if (!Database.setup()) {
@@ -58,10 +59,17 @@ public class Main {
 		client = b.login();
 	}
 
+	/**
+	 * Get the discord client
+	 * @return Returns the IDiscordClient instance
+	 */
 	public static IDiscordClient getClient() {
 		return client;
 	}
 
+	/**
+	 * Values that are inside of the config and directly read from the config
+	 */
 	public enum ConfigValue {
 		DEBUG("debug"),
 		TOKEN("token"),
