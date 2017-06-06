@@ -23,7 +23,7 @@ public class GuildMeta extends Guild {
 
 	public GuildMeta(IGuild guild) {
 		super(guild.getShard(), guild.getName(), guild.getLongID(), guild.getIcon(), guild.getOwnerLongID(), Optional.ofNullable(guild.getAFKChannel()).orElse(
-				new VoiceChannel((DiscordClientImpl) Main.getClient(), "", -1L, guild, "", -1, -1, -1, null, null)
+				new VoiceChannel((DiscordClientImpl) Main.getClient(), "", 0L, guild, "", -1, -1, -1, null, null)
 		).getLongID(), guild.getAFKTimeout(), guild.getRegion().getID(), guild.getVerificationLevel().ordinal());
 		Map<String, Object> settings = Database.get("SELECT * FROM guilds.guild WHERE id=?", guild.getStringID());
 		this.prefix = (String) settings.getOrDefault("prefix", ".horo");
