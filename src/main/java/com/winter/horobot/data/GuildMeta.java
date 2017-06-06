@@ -1,10 +1,14 @@
 package com.winter.horobot.data;
 
+import com.winter.horobot.Main;
 import com.winter.horobot.exceptions.UpdateFailedException;
+import sx.blah.discord.api.internal.DiscordClientImpl;
 import sx.blah.discord.handle.impl.obj.Guild;
+import sx.blah.discord.handle.impl.obj.VoiceChannel;
 import sx.blah.discord.handle.obj.IGuild;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class GuildMeta extends Guild {
 
@@ -18,7 +22,9 @@ public class GuildMeta extends Guild {
 	private boolean botIgnore;
 
 	public GuildMeta(IGuild guild) {
-		super(guild.getShard(), guild.getName(), guild.getLongID(), guild.getIcon(), guild.getOwnerLongID(), guild.getAFKChannel().getLongID(), guild.getAFKTimeout(), guild.getRegion().getID(), guild.getVerificationLevel().ordinal());
+		super(guild.getShard(), guild.getName(), guild.getLongID(), guild.getIcon(), guild.getOwnerLongID(), Optional.ofNullable(guild.getAFKChannel()).orElse(
+				new VoiceChannel((DiscordClientImpl) Main.getClient(), "", -1L, guild, "", -1, -1, -1, null, null)
+		).getLongID(), guild.getAFKTimeout(), guild.getRegion().getID(), guild.getVerificationLevel().ordinal());
 		Map<String, Object> settings = Database.get("SELECT * FROM guilds.guild WHERE id=?", guild.getStringID());
 		this.prefix = (String) settings.getOrDefault("prefix", ".horo");
 		this.language = (String) settings.getOrDefault("language", "en");

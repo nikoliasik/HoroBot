@@ -1,7 +1,6 @@
 package com.winter.horobot.data;
 
 import com.winter.horobot.Main;
-import com.winter.horobot.exceptions.NoResultsException;
 import org.postgresql.ds.PGPoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,27 +23,14 @@ public class Database {
 	 * @return true on success, false on failure
 	 */
 	public static boolean set(String sql, Object... params) {
-		Connection con = null;
-		PreparedStatement statement = null;
-		try {
-			con = poolingDataSource.getConnection();
-			statement = con.prepareStatement(sql);
-			setStatementParams(statement, params);
+		try (
+				Connection con = poolingDataSource.getConnection();
+				PreparedStatement statement = setStatementParams(con.prepareStatement(sql), params)
+		) {
 			statement.executeUpdate();
 			return true;
 		} catch (SQLException e) {
 			LOGGER.error("Caught an SQL exception!", e);
-		} finally {
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException ignored) { }
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException ignored) { }
-			}
 		}
 		return false;
 	}
@@ -56,15 +42,12 @@ public class Database {
 	 * @return The resulting ResultSet
 	 */
 	public static HashMap<String, Object> get(String sql, Object... params) {
-		HashMap<String, Object> results = null;
-		Connection con = null;
-		PreparedStatement statement = null;
-		ResultSet set = null;
-		try {
-			con = poolingDataSource.getConnection();
-			statement = con.prepareStatement(sql);
-			setStatementParams(statement, params);
-			set = statement.executeQuery();
+		HashMap<String, Object> results = new HashMap<>();
+		try (
+				Connection con = poolingDataSource.getConnection();
+				PreparedStatement statement = setStatementParams(con.prepareStatement(sql), params);
+				ResultSet set = statement.executeQuery()
+		) {
 			ResultSetMetaData md = set.getMetaData();
 			int columns = md.getColumnCount();
 			if (set.next())
@@ -72,22 +55,6 @@ public class Database {
 					results.put(md.getColumnName(i), set.getObject(i));
 		} catch (SQLException e) {
 			LOGGER.error("Caught an SQL exception!", e);
-		} finally {
-			if (set != null) {
-				try {
-					set.close();
-				} catch (SQLException ignored) { }
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException ignored) { }
-			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (SQLException ignored) { }
-			}
 		}
 		return results;
 	}
@@ -98,19 +65,20 @@ public class Database {
 	 * @param params Array of parameters that need to be set
 	 * @throws SQLException Upon failing to set a parameter
 	 */
-	public static void setStatementParams(PreparedStatement statement, Object[] params) throws SQLException {
-		for (int i = 1; i <= params.length; i++) {
+	public static PreparedStatement setStatementParams(PreparedStatement statement, Object[] params) throws SQLException {
+		for (int i = 0; i < params.length; i++) {
 			if (params[i] instanceof String)
-				statement.setString(i, (String) params[i]);
+				statement.setString(i + 1, (String) params[i]);
 			else if (params[i] instanceof Integer)
-				statement.setInt(i, (int) params[i]);
+				statement.setInt(i + 1, (int) params[i]);
 			else if (params[i] instanceof Boolean)
-				statement.setBoolean(i, (boolean) params[i]);
+				statement.setBoolean(i + 1, (boolean) params[i]);
 			else if (params[i] instanceof Long)
-				statement.setLong(i, (long) params[i]);
+				statement.setLong(i + 1, (long) params[i]);
 			else if (params[i] instanceof Double)
-				statement.setDouble(i, (double) params[i]);
+				statement.setDouble(i + 1, (double) params[i]);
 		}
+		return statement;
 	}
 
 	/**

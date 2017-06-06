@@ -1,5 +1,6 @@
 package com.winter.horobot.data;
 
+import com.winter.horobot.exceptions.UpdateFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.obj.IGuild;
@@ -8,8 +9,7 @@ import java.util.ResourceBundle;
 
 public class Localisation {
 
-	// TODO
-	/**
+	/* TODO
 	 * IMPORTANT: THIS CLASS IS TEMPORARY AND SHOULD NOT BE MODIFIED!!!!
 	 * LET WINTER DO THIS PLEASE!!!!!!!!
 	 */
@@ -35,7 +35,7 @@ public class Localisation {
 	 * @return Returns the 2 letter code for the language
 	 */
 	private static String checkLanguage(IGuild guild) {
-		return (String) Database.get("SELECT language FROM guilds.guild WHERE id=?;", guild.getStringID()).get("language");
+		return HoroCache.get(guild).getLanguage();
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class Localisation {
 	 * @param language The language to change to
 	 * @return true on success, false on failure
 	 */
-	public static boolean changeLanguage (IGuild guild, String language) {
+	public static boolean changeLanguage(IGuild guild, String language) throws UpdateFailedException {
 		switch (language) {
 			case "en":
 				updateGuildLanguage(guild, "en");
@@ -82,8 +82,8 @@ public class Localisation {
 	 * @param guild The guild to update
 	 * @param language The language to update to
 	 */
-	private static void updateGuildLanguage (IGuild guild, String language) {
-		Database.set("UPDATE guilds.guild SET language=? WHERE id=?", language, guild.getStringID());
+	private static void updateGuildLanguage(IGuild guild, String language) throws UpdateFailedException {
+		HoroCache.get(guild).setLanguage(language);
 	}
 
 	/**
@@ -133,6 +133,17 @@ public class Localisation {
 				break;
 		}
 		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
+	}
+
+	/**
+	 * Shortcut for getMessage
+	 *
+	 * @param key
+	 * @param g
+	 * @return
+	 */
+	public static String of(String key, IGuild g) {
+		return getMessage(g, key);
 	}
 
 	/**
