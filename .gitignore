@@ -58,3 +58,4 @@ src/main/resources/config.properties
 # Recommended IDEA Settings
 .idea/workspace.xml
 target/
+/src/main/resources/config.properties

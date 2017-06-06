@@ -19,6 +19,11 @@ public class Main {
 	public static Map<ConfigValue, String> config = new EnumMap<>(ConfigValue.class);
 	private static IDiscordClient client = null;
 
+	/**
+	 *
+	 * @param args Args taken in from the run parameters
+	 * @throws IOException Upon failure to read the config
+	 */
 	public static void main(String[] args) throws IOException {
 		InputStream configProperties = null;
 		if(args.length > 0) {
@@ -43,16 +48,28 @@ public class Main {
 		}
 
 		b.registerListener(new Commands());
+		b.registerListener(new HoroEventListener());
 
 		Database.connect();
+		if (!Database.setup()) {
+			LOGGER.error("Failed to setup database for bot use!");
+			System.exit(1);
+		}
 
 		client = b.login();
 	}
 
+	/**
+	 * Get the discord client
+	 * @return Returns the IDiscordClient instance
+	 */
 	public static IDiscordClient getClient() {
 		return client;
 	}
 
+	/**
+	 * Values that are inside of the config and directly read from the config
+	 */
 	public enum ConfigValue {
 		DEBUG("debug"),
 		TOKEN("token"),
