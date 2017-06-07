@@ -24,7 +24,7 @@ public class MessageUtil {
 	 * @param messageKey The localisation key of the message
 	 * @param params The replacements for %s in the message
 	 */
-	public static void sendMessage(IChannel channel, String messageKey, String... params) {
-		RequestBuffer.request(() -> channel.sendMessage(String.format(Localisation.getMessage(channel.getGuild(), messageKey), (Object) params)));
+	public static void sendMessage(IChannel channel, String messageKey, Object... params) {
+		RequestBuffer.request(() -> channel.sendMessage(Localisation.getMessage(channel.getGuild(), messageKey, params)));
 	}
 }

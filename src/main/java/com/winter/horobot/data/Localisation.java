@@ -77,14 +77,15 @@ public class Localisation {
 	 * Get a localised message
 	 * @param guild The guild to get the message for
 	 * @param messageKey The key of the message to get
+	 * @param params The params to replace in the message
 	 * @return Returns a localised message
 	 */
-	public static String getMessage(IGuild guild, String messageKey) {
+	public static String getMessage(IGuild guild, String messageKey, Object... params) {
 		String lang = checkLanguage(guild);
 		switch (lang) {
 			case "en":
 				if (enLang.containsKey(messageKey))
-					return enLang.getString(messageKey);
+					return String.format(enLang.getString(messageKey), params);
 				break;
 		}
 		LOGGER.error("Missing message for key '" + messageKey + "' in translation '" + lang + "'");
@@ -95,10 +96,11 @@ public class Localisation {
 	 * Shortcut for getMessage
 	 * @param guild The guild to grab the message for
 	 * @param messageKey The key of the message to get
+	 * @param params The params to replace in the message
 	 * @return localised message
 	 */
-	public static String of(IGuild guild, String messageKey) {
-		return getMessage(guild, messageKey);
+	public static String of(IGuild guild, String messageKey, Object... params) {
+		return getMessage(guild, messageKey, params);
 	}
 
 	/**
