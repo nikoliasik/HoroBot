@@ -21,6 +21,10 @@ public class GuildMeta extends Guild {
 	private boolean presentBan;
 	private boolean botIgnore;
 
+	/**
+	 * Constructor for guild metadata object
+	 * @param guild The guild object to construct metadata for
+	 */
 	public GuildMeta(IGuild guild) {
 		super(guild.getShard(), guild.getName(), guild.getLongID(), guild.getIcon(), guild.getOwnerLongID(), Optional.ofNullable(guild.getAFKChannel()).orElse(
 				new VoiceChannel((DiscordClientImpl) Main.getClient(), "", 0L, guild, "", -1, -1, -1, null, null)

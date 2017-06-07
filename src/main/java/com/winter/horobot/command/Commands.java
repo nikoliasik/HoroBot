@@ -59,7 +59,7 @@ public class Commands implements IListener<MessageReceivedEvent> {
 						"hi",
 						PermissionChecks.hasPermision(Permissions.SEND_MESSAGES),
 						e -> {
-							e.getChannel().sendMessage(Localisation.of("hello", e.getGuild()));
+							e.getChannel().sendMessage(Localisation.of(e.getGuild(), "hello"));
 							return true;
 						}
 				), Collections.emptyList())
@@ -73,7 +73,7 @@ public class Commands implements IListener<MessageReceivedEvent> {
 							float upper = Float.parseFloat(MessageUtil.argsArray(e.getMessage())[2]);
 							Color c = ColorUtil.withinTwoHues(lower, upper);
 							EmbedBuilder eb = new EmbedBuilder();
-							eb.appendDescription(String.format(Localisation.of("get", e.getGuild()), "#" + Integer.toHexString(c.getRGB()).substring(2, 8)));
+							eb.appendDescription(String.format(Localisation.of(e.getGuild(), "get"), "#" + Integer.toHexString(c.getRGB()).substring(2, 8)));
 							eb.withColor(c);
 							e.getChannel().sendMessage(eb.build());
 							return true;
@@ -102,7 +102,7 @@ public class Commands implements IListener<MessageReceivedEvent> {
 			for (Category c : COMMAND_MAP.keySet()) {
 				EmbedBuilder eb = new EmbedBuilder();
 				eb.withColor(Color.MAGENTA.darker());
-				eb.withTitle(Localisation.of(c.getName(), e.getGuild()) + " " + Localisation.of("command", e.getGuild()));
+				eb.withTitle(Localisation.of(e.getGuild(), c.getName()) + " " + Localisation.of(e.getGuild(), "command"));
 				StringBuilder desc = new StringBuilder();
 				for (Node<Command> n : COMMAND_MAP.get(c)) {
 					desc.append("`").append(n.getData().getName()).append("`\n");

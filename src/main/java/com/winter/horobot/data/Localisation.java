@@ -9,23 +9,10 @@ import java.util.ResourceBundle;
 
 public class Localisation {
 
-	/* TODO
-	 * IMPORTANT: THIS CLASS IS TEMPORARY AND SHOULD NOT BE MODIFIED!!!!
-	 * LET WINTER DO THIS PLEASE!!!!!!!!
-	 */
-
 	/**
 	 * All of the languages available, some with UTF8Control for out of range characters
 	 */
 	private static ResourceBundle enLang = ResourceBundle.getBundle("locale.en");
-	private static ResourceBundle nlLang = ResourceBundle.getBundle("locale.nl");
-	private static ResourceBundle esLang = ResourceBundle.getBundle("locale.es");
-	private static ResourceBundle ptLang = ResourceBundle.getBundle("locale.pt");
-	private static ResourceBundle hiLang = ResourceBundle.getBundle("locale.hi");
-	private static ResourceBundle frLang = ResourceBundle.getBundle("locale.fr");
-	private static ResourceBundle deLang = ResourceBundle.getBundle("locale.de", new UTF8Control());
-	private static ResourceBundle ruLang = ResourceBundle.getBundle("locale.ru", new UTF8Control());
-	private static ResourceBundle roLang = ResourceBundle.getBundle("locale.ro");
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Localisation.class);
 
@@ -78,7 +65,7 @@ public class Localisation {
 	}
 
 	/**
-	 * Update a guilds language in the database
+	 * Update a guilds language
 	 * @param guild The guild to update
 	 * @param language The language to update to
 	 */
@@ -87,10 +74,10 @@ public class Localisation {
 	}
 
 	/**
-	 * Get a localized message
+	 * Get a localised message
 	 * @param guild The guild to get the message for
 	 * @param messageKey The key of the message to get
-	 * @return Returns a localized message
+	 * @return Returns a localised message
 	 */
 	public static String getMessage(IGuild guild, String messageKey) {
 		String lang = checkLanguage(guild);
@@ -99,61 +86,29 @@ public class Localisation {
 				if (enLang.containsKey(messageKey))
 					return enLang.getString(messageKey);
 				break;
-			case "nl":
-				if (nlLang.containsKey(messageKey))
-					return nlLang.getString(messageKey);
-				break;
-			case "es":
-				if (esLang.containsKey(messageKey))
-					return esLang.getString(messageKey);
-				break;
-			case "pt":
-				if (ptLang.containsKey(messageKey))
-					return ptLang.getString(messageKey);
-				break;
-			case "hi":
-				if (hiLang.containsKey(messageKey))
-					return hiLang.getString(messageKey);
-				break;
-			case "fr":
-				if (frLang.containsKey(messageKey))
-					return frLang.getString(messageKey);
-				break;
-			case "de":
-				if (deLang.containsKey(messageKey))
-					return deLang.getString(messageKey);
-				break;
-			case "ru":
-				if (ruLang.containsKey(messageKey))
-					return ruLang.getString(messageKey);
-				break;
-			case "ro":
-				if (roLang.containsKey(messageKey))
-					return roLang.getString(messageKey);
-				break;
 		}
-		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
+		LOGGER.error("Missing message for key '" + messageKey + "' in translation '" + lang + "'");
+		return "Missing message for key '" + messageKey + "' in translation '" + lang + "'. This should be reported to the respective translator in the guild, (s)he should have a role with the language (s)he translates to. Simply shoot them a message, or just message Fox, whichever you fancy; https://discord.gg/MCUTSZz";
 	}
 
 	/**
 	 * Shortcut for getMessage
-	 *
-	 * @param key
-	 * @param g
-	 * @return
+	 * @param guild The guild to grab the message for
+	 * @param messageKey The key of the message to get
+	 * @return localised message
 	 */
-	public static String of(String key, IGuild g) {
-		return getMessage(g, key);
+	public static String of(IGuild guild, String messageKey) {
+		return getMessage(guild, messageKey);
 	}
 
 	/**
-	 * If it's not a guild you wish to get the message for, get the default English localization for the message
+	 * If it's not a guild you wish to get the message for, get the default English localisation for the message
 	 * @param messageKey The key of the message you wish to get
-	 * @return Returns the localized message
+	 * @return Returns the localised message
 	 */
 	public static String getDefaultMessage(String messageKey) {
 		if(enLang.containsKey(messageKey))
 			return enLang.getString(messageKey);
-		return "Localisation error please report this error in the Discord server so it can be fixed as quickly as possible; https://discord.gg/MCUTSZz";
+		return null;
 	}
 }

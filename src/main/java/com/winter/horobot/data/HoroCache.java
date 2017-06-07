@@ -15,6 +15,10 @@ public class HoroCache {
 	private static Map<IGuild, GuildMeta> guildCache = Collections.synchronizedMap(new WeakHashMap<>());
 
 	public static GuildMeta get(IGuild guild) {
-		return guildCache.getOrDefault(guild, new GuildMeta(guild));
+		if (!guildCache.containsKey(guild)) {
+			Database.set("INSERT INTO guilds.guild;");
+			guildCache.put(guild, new GuildMeta(guild));
+		}
+		return guildCache.get(guild);
 	}
 }
