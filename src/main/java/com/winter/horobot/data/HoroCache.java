@@ -8,6 +8,10 @@ import java.util.WeakHashMap;
 
 public class HoroCache {
 
+	public static Map<IGuild, GuildMeta> getGuildCache() {
+		return guildCache;
+	}
+
 	private static Map<IGuild, GuildMeta> guildCache = Collections.synchronizedMap(new WeakHashMap<>());
 
 	public static GuildMeta get(IGuild guild) {
