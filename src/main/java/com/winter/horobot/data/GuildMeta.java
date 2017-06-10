@@ -12,14 +12,14 @@ import java.util.Optional;
 
 public class GuildMeta extends Guild {
 
-	private String prefix;
-	private String language;
-	private String welcome;
-	private String pm;
-	private long autorole;
-	private boolean levelupNotifications;
-	private boolean presentBan;
-	private boolean botIgnore;
+	private volatile String prefix;
+	private volatile String language;
+	private volatile String welcome;
+	private volatile String pm;
+	private volatile long autorole;
+	private volatile boolean levelupNotifications;
+	private volatile boolean presentBan;
+	private volatile boolean botIgnore;
 
 	/**
 	 * Constructor for guild metadata object
@@ -44,7 +44,7 @@ public class GuildMeta extends Guild {
 		return prefix;
 	}
 
-	public void setPrefix(String prefix) throws UpdateFailedException {
+	public synchronized void setPrefix(String prefix) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET prefix=? WHERE id=?", prefix, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.prefix = prefix;
@@ -54,7 +54,7 @@ public class GuildMeta extends Guild {
 		return language;
 	}
 
-	public void setLanguage(String language) throws UpdateFailedException {
+	public synchronized void setLanguage(String language) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET language=? WHERE id=?", language, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.language = language;
@@ -64,7 +64,7 @@ public class GuildMeta extends Guild {
 		return welcome;
 	}
 
-	public void setWelcome(String welcome) throws UpdateFailedException {
+	public synchronized void setWelcome(String welcome) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET welcome=? WHERE id=?", welcome, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.welcome = welcome;
@@ -74,7 +74,7 @@ public class GuildMeta extends Guild {
 		return pm;
 	}
 
-	public void setPm(String pm) throws UpdateFailedException {
+	public synchronized void setPm(String pm) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET pm=? WHERE id=?", pm, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.pm = pm;
@@ -84,7 +84,7 @@ public class GuildMeta extends Guild {
 		return autorole;
 	}
 
-	public void setAutorole(long autorole) throws UpdateFailedException {
+	public synchronized void setAutorole(long autorole) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET role=? WHERE id=?", String.valueOf(autorole), this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.autorole = autorole;
@@ -94,7 +94,7 @@ public class GuildMeta extends Guild {
 		return levelupNotifications;
 	}
 
-	public void setLevelupNotifications(boolean levelupNotifications) throws UpdateFailedException {
+	public synchronized void setLevelupNotifications(boolean levelupNotifications) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET lvlup=? WHERE id=?", levelupNotifications, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.levelupNotifications = levelupNotifications;
@@ -104,7 +104,7 @@ public class GuildMeta extends Guild {
 		return presentBan;
 	}
 
-	public void setPresentBan(boolean presentBan) throws UpdateFailedException {
+	public synchronized void setPresentBan(boolean presentBan) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET bpresentban=? WHERE id=?", presentBan, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.presentBan = presentBan;
@@ -114,7 +114,7 @@ public class GuildMeta extends Guild {
 		return botIgnore;
 	}
 
-	public void setBotIgnore(boolean botIgnore) throws UpdateFailedException {
+	public synchronized void setBotIgnore(boolean botIgnore) throws UpdateFailedException {
 		if (!Database.set("UPDATE guilds.guild SET bignore=? WHERE id=?", botIgnore, this.getStringID()))
 			throw new UpdateFailedException("Failed to update guild metadata");
 		this.botIgnore = botIgnore;
