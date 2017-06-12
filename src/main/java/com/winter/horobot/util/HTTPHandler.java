@@ -18,29 +18,28 @@
 
 package com.winter.horobot.util;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.winter.horobot.core.Config;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
+import com.tsunderebug.lewdlib.jsonapis.KonaChan;
+import com.tsunderebug.lewdlib.jsonapis.Rule34;
+import com.tsunderebug.lewdlib.jsonapis.Yandere;
+import com.winter.horobot.core.Config;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.http.HttpException;
 import org.apache.http.HttpHeaders;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;
 
@@ -59,8 +58,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class HTTPHandler {
-	
-	public enum KONA_RATING {
+
+	public enum KonaRating {
 		SAFE,
 		ECCHI,
 		NSFW
@@ -204,21 +203,7 @@ public class HTTPHandler {
 	}
 
 	public static String requestR34(String[] tags) throws SAXException, ParserConfigurationException, URISyntaxException, IOException {
-		String url = "http://rule34.xxx/index.php?page=dapi&s=post&q=index";
-		StringBuilder search = new StringBuilder();
-		for(String tag : tags) {
-			search.append(tag).append(" ");
-		}
-		URIBuilder builder = new URIBuilder(new URI(url));
-		builder.addParameter("limit", "100");
-		builder.addParameter("tags", search.toString());
-
-		HttpGet request = new HttpGet(builder.build());
-		CloseableHttpClient client = HttpClientBuilder.create().build();
-		org.apache.http.HttpResponse response = client.execute(request);
-		client.close();
-
-		return getImageFromTaggedSiteSearch(response);
+		return new Rule34.Builder().withTags(tags).build().randomURL().toString();
 	}
 
 	public static String requestGelbooru(String[] tags) throws SAXException, ParserConfigurationException, URISyntaxException, IOException {
@@ -368,88 +353,22 @@ public class HTTPHandler {
 	}
 
 	public static String requestYandere(String[] tags) throws URISyntaxException, UnirestException {
-		String url = "https://yande.re/post.json";
-		StringBuilder search = new StringBuilder();
-		for(String tag : tags) {
-			search.append(tag).append(" ");
-		}
-		URIBuilder builder = new URIBuilder(new URI(url));
-		builder.addParameter("limit", "100");
-		builder.addParameter("tags", search.toString());
-
-		HttpResponse<JsonNode> response = Unirest.get(builder.build().toASCIIString())
-				.header("Accept", "text/plain")
-				.asJson();
-
-		if(response.getStatus() == 200) {
-			if(response.getBody().getArray().length() > 0) {
-				if(response.getBody().getArray().length() == 1) {
-					return response.getBody().getArray().getJSONObject(0).getString("file_url");
-				} else {
-					Random rand = new Random();
-					return response.getBody().getArray().getJSONObject(rand.nextInt(response.getBody().getArray().length())).getString("file_url");
-				}
-			} else {
-				return "html-no-results";
-			}
-		}
-		return Localisation.getPMMessage("html-error");
+		return new Yandere.Builder().withTags(tags).build().randomURL().toString();
 	}
 
-	public static String requestKona(String[] tags, KONA_RATING rating) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
-		try(CloseableHttpClient client = HttpClients.createDefault()) {
-			HttpGet request = new HttpGet("http://www.konachan.com/post.xml");
-			URIBuilder builder = new URIBuilder(request.getURI()).addParameter("limit", "100");
-
-			String msgSearch = "";
-			StringBuilder searchOrig = new StringBuilder();
-			for (String tag : tags) {
-				if (tags.length == 1) {
-					searchOrig.append(tag);
-				} else {
-					searchOrig.append(msgSearch).append(tag).append(" ");
-				}
-			}
-
-			if (rating == KONA_RATING.SAFE) {
-				msgSearch = "order:score rating:safe " + searchOrig;
-			} else if (rating == KONA_RATING.ECCHI) {
-				msgSearch = "order:score rating:questionable " + searchOrig;
-			} else if (rating == KONA_RATING.NSFW) {
-				msgSearch = "order:score rating:explicit " + searchOrig;
-			}
-
-			builder.addParameter("tags", msgSearch);
-
-			URI uri = builder.build();
-
-			request.setURI(uri);
-
-			org.apache.http.HttpResponse response;
-
-			response = client.execute(request);
-			int status = response.getStatusLine().getStatusCode();
-
-			if (status == 200) {
-				DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-				Document doc = db.parse(response.getEntity().getContent());
-
-				NodeList list = doc.getElementsByTagName("post");
-				int index;
-				if (list.getLength() == 1) {
-					index = 0;
-				} else if (list.getLength() > 1) {
-					Random rand = new Random();
-					index = rand.nextInt(list.getLength());
-				} else {
-					return Localisation.getPMMessage("html-no-results");
-				}
-				Node node = list.item(index);
-				NamedNodeMap map = node.getAttributes();
-				Node url = map.getNamedItem("file_url");
-				return "http:" + url.getNodeValue();
-			}
-			return Localisation.getPMMessage("html-error");
+	public static String requestKona(String[] tags, KonaRating rating) throws IOException, ParserConfigurationException, SAXException, URISyntaxException {
+		KonaChan.Builder kb = new KonaChan.Builder().withTags(tags);
+		switch (rating) {
+			case SAFE:
+				kb.withRating(KonaChan.KonaRating.SAFE);
+				break;
+			case ECCHI:
+				kb.withRating(KonaChan.KonaRating.QUESTIONABLE);
+				break;
+			case NSFW:
+				kb.withRating(KonaChan.KonaRating.EXPLICIT);
+				break;
 		}
+		return kb.build().randomURL().toString();
 	}
 }

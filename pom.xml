@@ -82,8 +82,14 @@
     <dependencies>
         <dependency>
             <groupId>com.github.austinv11</groupId>
-            <artifactId>Discord4j</artifactId>
-            <version>828a456e41d6a54cfa39e0e4d3d824b39a195888</version>
+            <artifactId>Discord4J</artifactId>
+            <version>986c918143</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.TsundereBug</groupId>
+            <artifactId>IAmAshamedToMakeThis</artifactId>
+            <version>b3af4c7</version>
         </dependency>
 
         <dependency>
