@@ -1,6 +1,6 @@
 package com.winter.horobot.command;
 
-import com.winter.horobot.data.Localisation;
+import com.winter.horobot.data.locale.Localisation;
 import com.winter.horobot.data.Node;
 import com.winter.horobot.permission.PermissionChecks;
 import com.winter.horobot.util.*;

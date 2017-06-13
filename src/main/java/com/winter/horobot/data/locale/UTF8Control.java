@@ -1,4 +1,4 @@
-package com.winter.horobot.data;
+package com.winter.horobot.data.locale;
 
 import java.io.IOException;
 import java.io.InputStream;

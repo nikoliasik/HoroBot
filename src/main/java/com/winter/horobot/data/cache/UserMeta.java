@@ -1,5 +1,6 @@
-package com.winter.horobot.data;
+package com.winter.horobot.data.cache;
 
+import com.winter.horobot.data.Database;
 import com.winter.horobot.exceptions.UpdateFailedException;
 import sx.blah.discord.handle.impl.obj.User;
 import sx.blah.discord.handle.obj.IUser;

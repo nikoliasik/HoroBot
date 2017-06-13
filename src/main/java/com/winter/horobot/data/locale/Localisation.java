@@ -1,5 +1,6 @@
-package com.winter.horobot.data;
+package com.winter.horobot.data.locale;
 
+import com.winter.horobot.data.cache.HoroCache;
 import com.winter.horobot.exceptions.UpdateFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

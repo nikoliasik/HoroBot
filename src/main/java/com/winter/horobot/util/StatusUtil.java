@@ -1,6 +1,6 @@
 package com.winter.horobot.util;
 
-import com.winter.horobot.data.Localisation;
+import com.winter.horobot.data.locale.Localisation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;

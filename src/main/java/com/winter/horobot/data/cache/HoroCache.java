@@ -1,5 +1,6 @@
-package com.winter.horobot.data;
+package com.winter.horobot.data.cache;
 
+import com.winter.horobot.data.Database;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
