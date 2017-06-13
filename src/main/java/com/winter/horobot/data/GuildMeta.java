@@ -34,7 +34,11 @@ public class GuildMeta extends Guild {
 		this.language = (String) settings.getOrDefault("language", "en");
 		this.welcome = (String) settings.getOrDefault("welcome", "none");
 		this.pm = (String) settings.getOrDefault("pm", "none");
-		this.autorole = (long) settings.getOrDefault("role", 0L);
+		// TODO vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+		String temp = (String) settings.getOrDefault("role", "none");
+		if (temp.equalsIgnoreCase("none")) this.autorole = 0L;
+		else this.autorole = Long.parseUnsignedLong(temp);
+		// TODO ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ This is a no-go obviously but it is a temporary solution
 		this.levelupNotifications = (boolean) settings.getOrDefault("lvlup", true);
 		this.presentBan = (boolean) settings.getOrDefault("bpresentban", true);
 		this.botIgnore = (boolean) settings.getOrDefault("bignore", false);
