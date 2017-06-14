@@ -1,5 +1,6 @@
-package com.winter.horobot.data;
+package com.winter.horobot.data.cache;
 
+import com.winter.horobot.data.Database;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
@@ -19,8 +20,7 @@ public class HoroCache {
 
 	public static GuildMeta get(IGuild guild) {
 		if (!guildCache.containsKey(guild)) {
-			Database.set("INSERT INTO guilds.guild;");
-			// TODO: This won't work obviously ^
+			Database.set("INSERT INTO guilds.guild (id, language, prefix, welcome, role) VALUES (?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;", guild.getStringID(), "en", ".horo", "none", 0L);
 			guildCache.put(guild, new GuildMeta(guild));
 		}
 		return guildCache.get(guild);
@@ -28,8 +28,7 @@ public class HoroCache {
 
 	public static UserMeta get(IUser user) {
 		if (!userCache.containsKey(user)) {
-			Database.set("INSERT INTO users.user;");
-			// TODO: Nor will this ^
+			Database.set("INSERT INTO users.user (id) VALUES (?) ON CONFLICT DO NOTHING;", user.getStringID());
 			userCache.put(user, new UserMeta(user));
 		}
 		return userCache.get(user);

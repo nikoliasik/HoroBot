@@ -1,7 +1,7 @@
 package com.winter.horobot;
 
-import com.winter.horobot.data.GuildMeta;
-import com.winter.horobot.data.HoroCache;
+import com.winter.horobot.data.cache.GuildMeta;
+import com.winter.horobot.data.cache.HoroCache;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.GuildCreateEvent;
 

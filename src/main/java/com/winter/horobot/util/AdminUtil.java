@@ -1,7 +1,7 @@
 package com.winter.horobot.util;
 
 import com.winter.horobot.Main;
-import com.winter.horobot.data.Localisation;
+import com.winter.horobot.data.locale.Localisation;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.util.EmbedBuilder;

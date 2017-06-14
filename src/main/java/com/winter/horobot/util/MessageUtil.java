@@ -1,6 +1,6 @@
 package com.winter.horobot.util;
 
-import com.winter.horobot.data.Localisation;
+import com.winter.horobot.data.locale.Localisation;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.RequestBuffer;
