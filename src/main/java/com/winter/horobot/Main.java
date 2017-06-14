@@ -43,8 +43,11 @@ public class Main {
 		ClientBuilder b = new ClientBuilder();
 		if(config.get(ConfigValue.DEBUG).equals("false")) {
 			b.withToken(config.get(ConfigValue.TOKEN));
-		} else {
+		} else if (config.get(ConfigValue.DEBUG).equals("true")) {
 			b.withToken(config.get(ConfigValue.DEBUG_TOKEN));
+		} else {
+			LOGGER.error("Invalid debug value, it must be 'true' or 'false'");
+			System.exit(1);
 		}
 
 		b.registerListener(new Commands());
