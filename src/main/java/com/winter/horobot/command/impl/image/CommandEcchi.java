@@ -41,7 +41,7 @@ public class CommandEcchi implements Command {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedBuilder builder = new EmbedBuilder();
 				try {
-					builder.withImage(HTTPHandler.requestKona(args, HTTPHandler.KONA_RATING.ECCHI));
+					builder.withImage(HTTPHandler.requestKona(args, HTTPHandler.KonaRating.ECCHI));
 				} catch (Exception e) {
 					builder.appendField("Error", Localisation.getMessage(event.getGuild().getStringID(), "html-error"), false);
 				}
