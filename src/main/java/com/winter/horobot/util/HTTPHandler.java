@@ -104,7 +104,7 @@ public class HTTPHandler {
 		}
 		try {
 			Unirest.post("https://discordbots.org/api/bots/289381714885869568/stats")
-					.header("Authorization", Config.DISCORD_BOTS_PW_TOKEN)
+					.header("Authorization", Config.DISCORD_BOTS_ORG_TOKEN)
 					.header("Content-Type", "application/json")
 					.body(obj.toString())
 					.asJson();
