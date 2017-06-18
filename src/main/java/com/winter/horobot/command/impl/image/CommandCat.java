@@ -37,7 +37,7 @@ public class CommandCat implements Command {
 	}
 
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(args.length == 0) {
+		/*if(args.length == 0) {
 			if (Utility.checkUserPermission(event.getGuild(), event.getClient().getOurUser(), Permissions.EMBED_LINKS)) {
 				EmbedBuilder builder = new EmbedBuilder();
 				try {
@@ -55,7 +55,8 @@ public class CommandCat implements Command {
 			}
 		} else {
 			Message.reply(help(), event.getMessage());
-		}
+		}*/
+		Message.sendRawMessageInChannel(event.getChannel(), "This command is currently locked from public use because of a very nasty and persistent issue, check back later! Also spam Fox with encouraging words to help speed up the process of fixing this. He also loves to be petted... Oh! And belly rubs, give him those too!");
 	}
 
 	public String help() {

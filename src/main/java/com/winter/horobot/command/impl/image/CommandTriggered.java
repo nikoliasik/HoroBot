@@ -30,7 +30,7 @@ public class CommandTriggered implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		AnimatedGifEncoder age = new AnimatedGifEncoder();
+		/*AnimatedGifEncoder age = new AnimatedGifEncoder();
 		if(args.length == 1) {
 			IUser u = event.getMessage().getMentions().get(0);
 			ByteArrayOutputStream o = new ByteArrayOutputStream();
@@ -103,7 +103,8 @@ public class CommandTriggered implements Command {
 			}
 		} else {
 			Message.sendMessageInChannel(event.getChannel(), help());
-		}
+		}*/
+		Message.sendRawMessageInChannel(event.getChannel(), "This command is currently locked from public use because of a very nasty and persistent issue, check back later! Also spam Fox with encouraging words to help speed up the process of fixing this. He also loves to be petted... Oh! And belly rubs, give him those too!");
 	}
 
 	@Override

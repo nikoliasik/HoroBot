@@ -26,7 +26,7 @@ public class CommandYandere implements Command {
 
 	@Override
 	public void action(String[] args, String raw, MessageReceivedEvent event) {
-		if(args.length > 0) {
+		/*if(args.length > 0) {
 			EmbedBuilder builder = new EmbedBuilder();
 			builder.withAuthorIcon(Utility.getAvatar(event.getAuthor()));
 			builder.withAuthorName(event.getAuthor().getName());
@@ -45,7 +45,8 @@ public class CommandYandere implements Command {
 			}
 		} else {
 			Message.sendMessageInChannel(event.getChannel(), help());
-		}
+		}*/
+		Message.sendRawMessageInChannel(event.getChannel(), "This command is currently locked from public use because of a very nasty and persistent issue, check back later! Also spam Fox with encouraging words to help speed up the process of fixing this. He also loves to be petted... Oh! And belly rubs, give him those too!");
 	}
 
 	@Override

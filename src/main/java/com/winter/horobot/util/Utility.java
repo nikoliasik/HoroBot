@@ -634,9 +634,9 @@ public class Utility {
 		NumberFormat format = NumberFormat.getInstance();
 		StringBuilder builder = new StringBuilder();
 
-		int mb = 1024 * 1024;
-		builder.append(format.format((int) (runtime.totalMemory() - runtime.freeMemory()) / mb)).append("Mb / ");
-		builder.append(format.format((int) (runtime.totalMemory()) / mb)).append("Mb");
+		long mb = 1024 * 1024;
+		builder.append(format.format((runtime.totalMemory() - runtime.freeMemory()) / mb)).append("Mb / ");
+		builder.append(format.format(runtime.totalMemory() / mb)).append("Mb");
 		return builder.toString();
 	}
 
