@@ -40,7 +40,7 @@ public class CommandShoot implements Command {
 				int result = rand.nextInt(2);
 
 				if(result == 0) {
-					int dmg = rand.nextInt(100);
+					int dmg = rand.nextInt(100)+1;
 					Message.sendMessageInChannel(event.getChannel(), "shoot-hit", event.getAuthor().getName(), args[0], dmg);
 				} else if(result == 1) {
 					Message.reply("shoot-miss", event.getMessage());
